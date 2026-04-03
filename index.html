@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="cs" data-lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-itunes-app" content="app-id=6760430871" />
+  <meta
+    name="description"
+    id="metaDesc"
+    data-desc-cs="NÁKUPIČKA — přehled nákupů, třeba i když nakupujete pro rodinu — a snadné vyúčtování."
+    data-desc-en="NÁKUPIČKA — shopping overview, even when you buy for family — with easy billing."
+    content="NÁKUPIČKA — přehled nákupů, třeba i když nakupujete pro rodinu — a snadné vyúčtování."
+  />
+  <meta name="theme-color" content="#ff2d55" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0d0d0f" media="(prefers-color-scheme: dark)" />
+  <title
+    id="pageTitle"
+    data-title-cs="NÁKUPIČKA — přehled nákupů"
+    data-title-en="NÁKUPIČKA — shopping overview"
+  >
+    NÁKUPIČKA — přehled nákupů
+  </title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <a class="skip-link" href="#main"
+    ><span class="i18n-cs">Přeskočit na obsah</span><span class="i18n-en">Skip to content</span></a
+  >
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="index.html">NÁKUPIČKA</a>
+      <nav
+        class="nav nav-main"
+        id="siteNav"
+        data-nav-aria-cs="Hlavní menu"
+        data-nav-aria-en="Main menu"
+        aria-label="Hlavní menu"
+      >
+        <a href="index.html" aria-current="page"
+          ><span class="i18n-cs">Domů</span><span class="i18n-en">Home</span></a
+        >
+        <a href="premium.html"><span class="i18n-cs">Premium</span><span class="i18n-en">Premium</span></a>
+        <a href="podpora.html"><span class="i18n-cs">Podpora</span><span class="i18n-en">Support</span></a>
+        <a href="privacy.html"><span class="i18n-cs">Soukromí</span><span class="i18n-en">Privacy</span></a>
+      </nav>
+      <div class="lang-switch" role="group" aria-label="Jazyk / Language">
+        <button type="button" class="lang-btn" data-set-lang="cs" aria-pressed="true">CS</button>
+        <button type="button" class="lang-btn" data-set-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <button type="button" class="theme-toggle" id="themeToggle"></button>
+      <button type="button" class="nav-menu-btn" id="navMenuBtn" aria-expanded="false" aria-controls="siteNav" aria-label="Menu"></button>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ===== HERO ===== -->
+    <section class="hero hero-compact reveal" aria-labelledby="hero-title">
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="hero-content">
+        <p class="eyebrow">
+          <span class="i18n-cs">iPhone aplikace</span>
+          <span class="i18n-en">iPhone app</span>
+        </p>
+        <h1 id="hero-title">NÁKUPIČKA</h1>
+        <p class="hero-lead">
+          <span class="i18n-cs"
+            >Přehled nákupů — kolik utrácíte, za co, a kde ušetřit.
+            Nakupujete i pro prarodiče? Máte přehled a jednoduše jim pošlete vyúčtování.</span
+          >
+          <span class="i18n-en"
+            >Stay on top of your shopping — how much, on what, and where to save.
+            Shopping for grandparents too? Keep a clear overview and send them a billing summary.</span
+          >
+        </p>
+        <div class="hero-actions">
+          <a
+            class="btn btn-primary btn-large"
+            href="https://apps.apple.com/cz/app/n%C3%A1kupi%C4%8Dka/id6760430871"
+            rel="noopener noreferrer"
+            target="_blank"
+            ><span class="i18n-cs">Stáhnout v App Store</span><span class="i18n-en">Download on the App Store</span></a
+          >
+          <a class="btn btn-ghost" href="premium.html">Premium</a>
+        </div>
+        <p class="hero-note">
+          <span class="i18n-cs">Na sítích:</span><span class="i18n-en">On social:</span>
+          <span class="handle">@nakupickaapp</span>
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== APP PREVIEW ===== -->
+    <section class="app-preview-section reveal reveal-delay-1" aria-labelledby="preview-heading">
+      <h2 id="preview-heading" class="visually-hidden">
+        <span class="i18n-cs">Náhled aplikace</span><span class="i18n-en">App preview</span>
+      </h2>
+      <p class="preview-intro">
+        <span class="i18n-cs"
+          >Klikněte na spodní lištu v náhledu telefonu — změní se obrázek obrazovky.</span
+        >
+        <span class="i18n-en">Tap the tab bar on the phone preview to change the screen.</span>
+      </p>
+      <div class="app-preview-layout">
+        <div class="preview-phone-wrap">
+          <div class="phone-frame preview-phone">
+            <div class="phone-screen preview-screen">
+              <img
+                id="previewImage"
+                src="images/screen-domu.png"
+                width="1206"
+                height="2622"
+                alt=""
+                decoding="async"
+              />
+              <div
+                class="phone-dock-overlay"
+                role="tablist"
+                data-dock-aria-cs="Části aplikace"
+                data-dock-aria-en="App sections"
+                aria-label="Části aplikace"
+              >
+                <button
+                  type="button"
+                  class="phone-dock-hit"
+                  role="tab"
+                  aria-selected="true"
+                  id="tab-domu"
+                  data-aria-cs="Otevřít náhled Domů"
+                  data-aria-en="Show Home preview"
+                  aria-label="Otevřít náhled Domů"
+                  data-src="images/screen-domu.png"
+                  data-alt-cs="Náhled obrazovky Domů"
+                  data-alt-en="Home screen preview"
+                  data-caption-cs="Domů — přehled a grafy podle kategorií."
+                  data-caption-en="Home — overview and charts by category."
+                ></button>
+                <button
+                  type="button"
+                  class="phone-dock-hit"
+                  role="tab"
+                  aria-selected="false"
+                  id="tab-produkty"
+                  data-aria-cs="Otevřít náhled Produkty"
+                  data-aria-en="Show Products preview"
+                  aria-label="Otevřít náhled Produkty"
+                  data-src="images/screen-produkty.png"
+                  data-alt-cs="Náhled seznamu nákupů"
+                  data-alt-en="Purchase list preview"
+                  data-caption-cs="Produkty — seznam nákupů, vyhledávání a úpravy."
+                  data-caption-en="Products — list, search, and edits."
+                ></button>
+                <button
+                  type="button"
+                  class="phone-dock-hit"
+                  role="tab"
+                  aria-selected="false"
+                  id="tab-ai"
+                  data-aria-cs="Otevřít náhled AI"
+                  data-aria-en="Show AI preview"
+                  aria-label="Otevřít náhled AI"
+                  data-src="images/screen-ai.png"
+                  data-alt-cs="Náhled AI asistenta"
+                  data-alt-en="AI assistant preview"
+                  data-caption-cs="AI — asistent nad vašimi nákupy."
+                  data-caption-en="AI — assistant over your shopping data."
+                ></button>
+                <button
+                  type="button"
+                  class="phone-dock-hit"
+                  role="tab"
+                  aria-selected="false"
+                  id="tab-nastaveni"
+                  data-aria-cs="Otevřít náhled Nastavení"
+                  data-aria-en="Show Settings preview"
+                  aria-label="Otevřít náhled Nastavení"
+                  data-src="images/screen-nastaveni.png"
+                  data-alt-cs="Náhled nastavení"
+                  data-alt-en="Settings preview"
+                  data-caption-cs="Nastavení — účet, měny, O aplikaci."
+                  data-caption-en="Settings — account, currencies, About."
+                ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="preview-caption" id="previewCaption" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <!-- ===== FEATURE CARDS ===== -->
+    <section class="section section-simple reveal reveal-delay-2" aria-labelledby="features-heading">
+      <h2 id="features-heading">
+        <span class="i18n-cs">Co z toho máte</span>
+        <span class="i18n-en">What you get</span>
+      </h2>
+
+      <div class="feature-cards">
+        <div class="feat-card reveal reveal-delay-1">
+          <span class="feat-icon">📊</span>
+          <h3><span class="i18n-cs">Přehled útrat</span><span class="i18n-en">Spending overview</span></h3>
+          <p>
+            <span class="i18n-cs">Grafy a kategorie — přesně víte, kolik jde za co.</span>
+            <span class="i18n-en">Charts and categories — know exactly where money goes.</span>
+          </p>
+        </div>
+        <div class="feat-card reveal reveal-delay-2">
+          <span class="feat-icon">👵</span>
+          <h3><span class="i18n-cs">Nákupy pro rodinu</span><span class="i18n-en">Shopping for others</span></h3>
+          <p>
+            <span class="i18n-cs">Nakupujete pro prarodiče? Pošlete jim přehled nebo export jedním klepnutím.</span>
+            <span class="i18n-en">Shopping for grandparents? Send them a summary or export in one tap.</span>
+          </p>
+        </div>
+        <div class="feat-card reveal reveal-delay-3">
+          <span class="feat-icon">✨</span>
+          <h3><span class="i18n-cs">AI asistent</span><span class="i18n-en">AI assistant</span></h3>
+          <p>
+            <span class="i18n-cs">Sken účtenky, odhad košíku, dotazy nad vašimi daty.</span>
+            <span class="i18n-en">Receipt scan, basket estimate, questions over your data.</span>
+          </p>
+        </div>
+        <div class="feat-card reveal reveal-delay-4">
+          <span class="feat-icon">🔒</span>
+          <h3><span class="i18n-cs">Vaše data</span><span class="i18n-en">Your data</span></h3>
+          <p>
+            <span class="i18n-cs">Data zůstávají u vás. Žádné sledování, žádné zbytečnosti.</span>
+            <span class="i18n-en">Data stays with you. No tracking, no bloat.</span>
+          </p>
+        </div>
+      </div>
+
+      <p class="section-outro">
+        <span class="i18n-cs"
+          >Chcete víc o placených funkcích? Podívejte se na stránku <a href="premium.html">Premium</a>.
+          Potřebujete pomoc? Jsme na stránce <a href="podpora.html">Podpora</a>.</span
+        >
+        <span class="i18n-en"
+          >Want more about paid features? See the <a href="premium.html">Premium</a> page. Need help? Visit
+          <a href="podpora.html">Support</a>.</span
+        >
+      </p>
+    </section>
+
+    <!-- ===== CTA ===== -->
+    <section class="section cta-block reveal reveal-delay-3">
+      <h2><span class="i18n-cs">Stáhnout zdarma</span><span class="i18n-en">Download free</span></h2>
+      <p>
+        <span class="i18n-cs">Stáhněte NÁKUPIČKU v App Store (Česko).</span>
+        <span class="i18n-en">Get NÁKUPIČKA on the App Store (Czech storefront).</span>
+      </p>
+      <a
+        class="btn btn-primary btn-large app-store-btn"
+        href="https://apps.apple.com/cz/app/n%C3%A1kupi%C4%8Dka/id6760430871"
+        id="appStoreLink"
+        rel="noopener noreferrer"
+        target="_blank"
+        ><span class="i18n-cs">Stáhnout v App Store</span><span class="i18n-en">Download on the App Store</span></a
+      >
+      <p class="cta-author">
+        <span class="i18n-cs">Vytvořil Adam Portl.</span>
+        <span class="i18n-en">Made by Adam Portl.</span>
+      </p>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-brand">NÁKUPIČKA</span>
+      <nav
+        class="footer-nav"
+        data-footer-aria-cs="Patička"
+        data-footer-aria-en="Footer"
+        aria-label="Patička"
+      >
+        <a href="index.html"><span class="i18n-cs">Domů</span><span class="i18n-en">Home</span></a>
+        <a href="premium.html">Premium</a>
+        <a href="podpora.html"><span class="i18n-cs">Podpora</span><span class="i18n-en">Support</span></a>
+        <a href="privacy.html"><span class="i18n-cs">Soukromí</span><span class="i18n-en">Privacy</span></a>
+        <a href="https://apps.apple.com/cz/app/n%C3%A1kupi%C4%8Dka/id6760430871" rel="noopener noreferrer" target="_blank"
+          >App Store</a
+        >
+        <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" rel="noopener noreferrer">EULA (Apple)</a>
+      </nav>
+      <span class="footer-meta">© Adam Portl</span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

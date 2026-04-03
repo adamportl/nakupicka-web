@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="cs" data-lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta
+    name="description"
+    id="metaDesc"
+    data-desc-cs="NÁKUPIČKA — Free a Premium v kostce."
+    data-desc-en="NÁKUPIČKA — Free vs Premium at a glance."
+    content="NÁKUPIČKA — Free a Premium v kostce."
+  />
+  <meta name="theme-color" content="#ff2d55" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0d0d0f" media="(prefers-color-scheme: dark)" />
+  <title data-title-cs="Premium — NÁKUPIČKA" data-title-en="Premium — NÁKUPIČKA">Premium — NÁKUPIČKA</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <a class="skip-link" href="#main"
+    ><span class="i18n-cs">Přeskočit na obsah</span><span class="i18n-en">Skip to content</span></a
+  >
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="index.html">NÁKUPIČKA</a>
+      <nav
+        class="nav nav-main"
+        id="siteNav"
+        data-nav-aria-cs="Hlavní menu"
+        data-nav-aria-en="Main menu"
+        aria-label="Hlavní menu"
+      >
+        <a href="index.html"><span class="i18n-cs">Domů</span><span class="i18n-en">Home</span></a>
+        <a href="premium.html" aria-current="page">Premium</a>
+        <a href="podpora.html"><span class="i18n-cs">Podpora</span><span class="i18n-en">Support</span></a>
+        <a href="privacy.html"><span class="i18n-cs">Soukromí</span><span class="i18n-en">Privacy</span></a>
+      </nav>
+      <div class="lang-switch" role="group" aria-label="Jazyk / Language">
+        <button type="button" class="lang-btn" data-set-lang="cs" aria-pressed="true">CS</button>
+        <button type="button" class="lang-btn" data-set-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <button type="button" class="theme-toggle" id="themeToggle"></button>
+      <button type="button" class="nav-menu-btn" id="navMenuBtn" aria-expanded="false" aria-controls="siteNav" aria-label="Menu"></button>
+    </div>
+  </header>
+
+  <main id="main" class="page-main">
+    <header class="page-hero">
+      <h1><span class="i18n-cs">Free a Premium</span><span class="i18n-en">Free and Premium</span></h1>
+      <p class="page-lead">
+        <span class="i18n-cs"
+          >Základní aplikace je zdarma. Premium přidá funkce pro ty, kdo chtějí hlídat rozpočet do hloubky nebo sdílet
+          nákupy v rodině. Přesnou cenu uvidíte v App Store — tam se bere z Apple.</span
+        >
+        <span class="i18n-en"
+          >The core app is free. Premium adds features for deeper budget tracking or sharing purchases with family. The
+          exact price is shown in the App Store — pricing comes from Apple.</span
+        >
+      </p>
+    </header>
+
+    <div class="compare-simple">
+      <div class="compare-col">
+        <h2>Free</h2>
+        <ul>
+          <li>
+            <span class="i18n-cs">Přehled výdajů, grafy, základní práce s nákupy</span>
+            <span class="i18n-en">Spending overview, charts, basic purchase management</span>
+          </li>
+          <li>
+            <span class="i18n-cs"
+              ><strong>2 AI použití týdně</strong> — společně na <strong>sken účtenky</strong> i
+              <strong>odhad košíku</strong> (součet se resetuje každý týden)</span
+            >
+            <span class="i18n-en"
+              ><strong>2 AI uses per week</strong> — shared between <strong>receipt scans</strong> and
+              <strong>basket estimate</strong> (resets every week)</span
+            >
+          </li>
+        </ul>
+      </div>
+      <div class="compare-col compare-col-premium">
+        <h2>Premium <span class="crown-inline" aria-hidden="true">👑</span></h2>
+        <ul>
+          <li>
+            <span class="i18n-cs">Neomezené AI skeny</span><span class="i18n-en">Unlimited AI scans</span>
+          </li>
+          <li>
+            <span class="i18n-cs">Košík (odhad ceny) bez týdenního limitu AI</span>
+            <span class="i18n-en">Basket (price estimate) without the weekly AI cap</span>
+          </li>
+          <li>
+            <span class="i18n-cs">Limity kategorií</span><span class="i18n-en">Category limits</span>
+          </li>
+          <li>
+            <span class="i18n-cs">Smart ceny (upozornění na zdražení)</span>
+            <span class="i18n-en">Smart prices (price increase alerts)</span>
+          </li>
+          <li>
+            <span class="i18n-cs">Rodinné sdílení</span><span class="i18n-en">Family sharing</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="page-note">
+      <span class="i18n-cs"
+        >Předplatné je měsíční a obnovuje se samo — přesně podle toho, jak to nastavíte v App Store.</span
+      >
+      <span class="i18n-en">Subscription is monthly and renews automatically — as you set in the App Store.</span>
+    </p>
+
+    <p class="page-cta-row">
+      <a class="btn btn-primary" href="https://apps.apple.com/cz/app/n%C3%A1kupi%C4%8Dka/id6760430871" rel="noopener noreferrer" target="_blank"
+        ><span class="i18n-cs">Otevřít v App Store</span><span class="i18n-en">Open in App Store</span></a
+      >
+    </p>
+
+    <p class="back-link"><a href="index.html"><span class="i18n-cs">← Zpět na úvod</span><span class="i18n-en">← Back to home</span></a></p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-brand">NÁKUPIČKA</span>
+      <nav class="footer-nav" data-footer-aria-cs="Patička" data-footer-aria-en="Footer" aria-label="Patička">
+        <a href="index.html"><span class="i18n-cs">Domů</span><span class="i18n-en">Home</span></a>
+        <a href="premium.html">Premium</a>
+        <a href="podpora.html"><span class="i18n-cs">Podpora</span><span class="i18n-en">Support</span></a>
+        <a href="privacy.html"><span class="i18n-cs">Soukromí</span><span class="i18n-en">Privacy</span></a>
+        <a href="https://apps.apple.com/cz/app/n%C3%A1kupi%C4%8Dka/id6760430871" rel="noopener noreferrer" target="_blank"
+          >App Store</a
+        >
+        <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" rel="noopener noreferrer">EULA (Apple)</a>
+      </nav>
+      <span class="footer-meta">© Adam Portl</span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
