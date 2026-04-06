@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="cs" data-lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta
+    name="description"
+    id="metaDesc"
+    data-desc-cs="NÁKUPIČKA — webová aplikace: nákupy v cloudu (Supabase)."
+    data-desc-en="NÁKUPIČKA — web app: purchases in the cloud (Supabase)."
+    content="NÁKUPIČKA — webová aplikace: nákupy v cloudu (Supabase)."
+  />
+  <meta name="theme-color" content="#ff2d55" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0d0d0f" media="(prefers-color-scheme: dark)" />
+  <title data-title-cs="Webová aplikace — NÁKUPIČKA" data-title-en="Web app — NÁKUPIČKA">Webová aplikace — NÁKUPIČKA</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="app.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <a class="skip-link" href="#main"
+    ><span class="i18n-cs">Přeskočit na obsah</span><span class="i18n-en">Skip to content</span></a
+  >
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="index.html">NÁKUPIČKA</a>
+      <nav
+        class="nav nav-main"
+        id="siteNav"
+        data-nav-aria-cs="Hlavní menu"
+        data-nav-aria-en="Main menu"
+        aria-label="Hlavní menu"
+      >
+        <a href="index.html"><span class="i18n-cs">Domů</span><span class="i18n-en">Home</span></a>
+        <a href="app.html" aria-current="page"
+          ><span class="i18n-cs">Webová aplikace</span><span class="i18n-en">Web app</span></a
+        >
+        <a href="premium.html">Premium</a>
+        <a href="podpora.html"><span class="i18n-cs">Podpora</span><span class="i18n-en">Support</span></a>
+        <a href="privacy.html"><span class="i18n-cs">Soukromí</span><span class="i18n-en">Privacy</span></a>
+      </nav>
+      <div class="lang-switch" role="group" aria-label="Jazyk / Language">
+        <button type="button" class="lang-btn" data-set-lang="cs" aria-pressed="true">CS</button>
+        <button type="button" class="lang-btn" data-set-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <button type="button" class="theme-toggle" id="themeToggle"></button>
+      <button type="button" class="nav-menu-btn" id="navMenuBtn" aria-expanded="false" aria-controls="siteNav" aria-label="Menu"></button>
+    </div>
+  </header>
+
+  <main id="main" class="page-main app-page">
+    <p id="app-status" class="app-status" aria-live="polite"></p>
+
+    <div data-app-panel="config" class="app-panel" hidden>
+      <h1 id="config-title">Nastavení Supabase</h1>
+      <p id="config-hint" class="app-config-missing"></p>
+    </div>
+
+    <div data-app-panel="auth" class="app-panel" hidden>
+      <header class="page-hero">
+        <h1><span class="i18n-cs">Webová aplikace</span><span class="i18n-en">Web app</span></h1>
+        <p class="page-lead">
+          <span class="i18n-cs"
+            >Přihlas se stejným účtem jako v aplikaci (e-mail a heslo) a pracuj s nákupy domácnosti v prohlížeči.</span
+          >
+          <span class="i18n-en"
+            >Sign in with the same account as in the iOS app (email and password) and manage household purchases in your
+            browser.</span
+          >
+        </p>
+      </header>
+      <div class="app-auth-card">
+        <div class="app-auth-tabs" role="tablist">
+          <button type="button" id="tab-signin" role="tab" aria-selected="true">
+            <span class="i18n-cs">Přihlásit se</span><span class="i18n-en">Sign in</span>
+          </button>
+          <button type="button" id="tab-signup" role="tab" aria-selected="false">
+            <span class="i18n-cs">Založit účet</span><span class="i18n-en">Create account</span>
+          </button>
+        </div>
+        <form id="form-auth" class="app-form-grid">
+          <input type="hidden" id="auth-mode" name="mode" value="signin" />
+          <label>
+            <span class="i18n-cs">E-mail</span><span class="i18n-en">Email</span>
+            <input type="email" id="auth-email" name="email" autocomplete="email" required />
+          </label>
+          <label>
+            <span class="i18n-cs">Heslo</span><span class="i18n-en">Password</span>
+            <input type="password" id="auth-password" name="password" autocomplete="current-password" required />
+          </label>
+          <button type="submit" class="btn btn-primary" id="auth-submit">
+            <span class="i18n-cs">Přihlásit se</span><span class="i18n-en">Sign in</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div data-app-panel="setup" class="app-panel" hidden>
+      <header class="page-hero">
+        <h1><span class="i18n-cs">Domácnost</span><span class="i18n-en">Household</span></h1>
+        <p class="page-lead">
+          <span class="i18n-cs">Založ novou domácnost nebo se připoj kódem pozvánky ze stejné aplikace.</span>
+          <span class="i18n-en">Create a household or join with an invite code from the app.</span>
+        </p>
+      </header>
+      <div class="app-setup-grid">
+        <div class="app-setup-card">
+          <h2><span class="i18n-cs">Založit domácnost</span><span class="i18n-en">Create household</span></h2>
+          <form id="form-create-household" class="app-form-grid">
+            <label>
+              <span class="i18n-cs">Název</span><span class="i18n-en">Name</span>
+              <input type="text" id="setup-household-name" name="name" autocomplete="organization" placeholder="Naše rodina" />
+            </label>
+            <button type="submit" class="btn btn-primary">
+              <span class="i18n-cs">Založit</span><span class="i18n-en">Create</span>
+            </button>
+          </form>
+        </div>
+        <div class="app-setup-card">
+          <h2><span class="i18n-cs">Připojit se kódem</span><span class="i18n-en">Join with code</span></h2>
+          <form id="form-join-household" class="app-form-grid">
+            <label>
+              <span class="i18n-cs">Kód pozvánky</span><span class="i18n-en">Invite code</span>
+              <input type="text" id="setup-invite-code" name="invite" autocomplete="off" required />
+            </label>
+            <button type="submit" class="btn btn-primary">
+              <span class="i18n-cs">Připojit</span><span class="i18n-en">Join</span>
+            </button>
+          </form>
+        </div>
+      </div>
+      <p class="app-note">
+        <span class="i18n-cs">Stejná data jako při zapnutém rodinném sdílení v aplikaci (Supabase).</span>
+        <span class="i18n-en">Same data as family sync in the app (Supabase).</span>
+      </p>
+    </div>
+
+    <div data-app-panel="dashboard" class="app-panel" hidden>
+      <div class="app-user-bar">
+        <span class="i18n-cs">Účet:</span><span class="i18n-en">Account:</span>
+        <span class="app-email" id="app-user-email"></span>
+        <button type="button" class="btn btn-ghost" id="btn-signout">
+          <span class="i18n-cs">Odhlásit</span><span class="i18n-en">Sign out</span>
+        </button>
+      </div>
+
+      <div class="app-dash-header">
+        <div class="app-dash-toolbar">
+          <h1 id="app-household-title">Domácnost</h1>
+          <div class="app-household-picker">
+            <label for="household-select"><span class="i18n-cs">Domácnost</span><span class="i18n-en">Household</span></label>
+            <select id="household-select" aria-label="Household"></select>
+          </div>
+          <button type="button" class="btn btn-ghost" id="btn-refresh">
+            <span class="i18n-cs">Obnovit</span><span class="i18n-en">Refresh</span>
+          </button>
+        </div>
+        <p class="page-lead" style="margin: 0 0 0.5rem">
+          <span class="i18n-cs">Položky sdílené s aplikací — čti a přidávej podle oprávnění.</span>
+          <span class="i18n-en">Items shared with the app — read and add according to your permissions.</span>
+        </p>
+        <p class="app-note" style="margin: 0">
+          <span class="i18n-cs">Data jsou stejná jako v aplikaci při zapnutém rodinném sdílení.</span>
+          <span class="i18n-en">Same data as in the app when family sync is enabled.</span>
+        </p>
+      </div>
+
+      <div id="app-can-edit-note" class="app-readonly-banner" hidden>
+        <span class="i18n-cs">Máš přístup jen ke čtení.</span><span class="i18n-en">You have read-only access.</span>
+      </div>
+
+      <section aria-labelledby="purchases-heading" style="margin-top: 1.5rem">
+        <h2 id="purchases-heading" style="font-size: 1.2rem; margin: 0 0 1rem">
+          <span class="i18n-cs">Položky nákupů</span><span class="i18n-en">Purchases</span>
+        </h2>
+        <div id="purchase-list" class="app-purchase-list"></div>
+      </section>
+
+      <section id="app-add-section" class="app-add-card" aria-labelledby="add-heading">
+        <h2 id="add-heading"><span class="i18n-cs">Přidat položku</span><span class="i18n-en">Add item</span></h2>
+        <form id="form-add-purchase" class="app-add-grid">
+          <label class="app-span-2">
+            <span class="i18n-cs">Název</span><span class="i18n-en">Name</span>
+            <input type="text" id="add-name" name="name" required autocomplete="off" />
+          </label>
+          <label>
+            <span class="i18n-cs">Cena (Kč)</span><span class="i18n-en">Price (CZK)</span>
+            <input type="text" id="add-price" name="price" inputmode="decimal" required placeholder="99,90" />
+          </label>
+          <label>
+            <span class="i18n-cs">Kategorie</span><span class="i18n-en">Category</span>
+            <select id="add-category" name="category"></select>
+          </label>
+          <label class="app-span-2">
+            <span class="i18n-cs">Profil / štítek</span><span class="i18n-en">Profile / label</span>
+            <input type="text" id="add-profile" name="profile" autocomplete="off" />
+          </label>
+          <div class="app-span-2">
+            <button type="submit" class="btn btn-primary">
+              <span class="i18n-cs">Přidat</span><span class="i18n-en">Add</span>
+            </button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <p class="back-link" style="margin-top: 2rem">
+      <a href="index.html"><span class="i18n-cs">← Zpět na úvod</span><span class="i18n-en">← Back to home</span></a>
+    </p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-brand">NÁKUPIČKA</span>
+      <nav class="footer-nav" data-footer-aria-cs="Patička" data-footer-aria-en="Footer" aria-label="Patička">
+        <a href="index.html"><span class="i18n-cs">Domů</span><span class="i18n-en">Home</span></a>
+        <a href="app.html"><span class="i18n-cs">Webová aplikace</span><span class="i18n-en">Web app</span></a>
+        <a href="premium.html">Premium</a>
+        <a href="podpora.html"><span class="i18n-cs">Podpora</span><span class="i18n-en">Support</span></a>
+        <a href="privacy.html"><span class="i18n-cs">Soukromí</span><span class="i18n-en">Privacy</span></a>
+        <a href="https://apps.apple.com/cz/app/n%C3%A1kupi%C4%8Dka/id6760430871" rel="noopener noreferrer" target="_blank"
+          >App Store</a
+        >
+        <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" rel="noopener noreferrer">EULA (Apple)</a>
+      </nav>
+      <span class="footer-meta">© Adam Portl</span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script type="module" src="app.js"></script>
+  <script>
+    (function () {
+      var tabIn = document.getElementById("tab-signin");
+      var tabUp = document.getElementById("tab-signup");
+      var mode = document.getElementById("auth-mode");
+      var submit = document.getElementById("auth-submit");
+      if (!tabIn || !tabUp || !mode || !submit) return;
+      function setMode(signin) {
+        tabIn.setAttribute("aria-selected", signin ? "true" : "false");
+        tabUp.setAttribute("aria-selected", signin ? "false" : "true");
+        mode.value = signin ? "signin" : "signup";
+        var cs = submit.querySelector(".i18n-cs");
+        var en = submit.querySelector(".i18n-en");
+        if (signin) {
+          if (cs) cs.textContent = "Přihlásit se";
+          if (en) en.textContent = "Sign in";
+        } else {
+          if (cs) cs.textContent = "Založit účet";
+          if (en) en.textContent = "Create account";
+        }
+      }
+      tabIn.addEventListener("click", function () {
+        setMode(true);
+      });
+      tabUp.addEventListener("click", function () {
+        setMode(false);
+      });
+      setMode(true);
+    })();
+  </script>
+  <!-- Smartsupp Live Chat script -->
+  <script type="text/javascript">
+    var _smartsupp = _smartsupp || {};
+    _smartsupp.key = '9ef8fc3f6e939371c507edb164bd117b18d69a07';
+    window.smartsupp ||
+      (function (d) {
+        var s,
+          c,
+          o = (smartsupp = function () {
+            o._.push(arguments);
+          });
+        o._ = [];
+        s = d.getElementsByTagName('script')[0];
+        c = d.createElement('script');
+        c.type = 'text/javascript';
+        c.charset = 'utf-8';
+        c.async = true;
+        c.src = 'https://www.smartsuppchat.com/loader.js?';
+        s.parentNode.insertBefore(c, s);
+      })(document);
+  </script>
+  <noscript>Powered by <a href="https://www.smartsupp.com" rel="noopener noreferrer" target="_blank">Smartsupp</a></noscript>
+</body>
+</html>

@@ -1,0 +1,323 @@
+/* Webová aplikace — stejný vizuální jazyk jako zbytek webu */
+
+.app-page {
+  padding-bottom: 5rem;
+}
+
+.app-page > #app-status:first-of-type {
+  margin: 0 0 1.25rem;
+  min-height: 1.5rem;
+}
+
+.app-panel h1 {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  margin: 0 0 0.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.app-panel .page-lead {
+  margin-bottom: 1.75rem;
+}
+
+.app-config-missing {
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  border: 1px dashed color-mix(in srgb, var(--pink) 45%, var(--border));
+  background: color-mix(in srgb, var(--pink) 6%, var(--bg));
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.app-auth-card,
+.app-setup-card,
+.app-dash-header {
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--glass-border-soft);
+  background: var(--glass-surface-muted);
+  backdrop-filter: saturate(var(--glass-saturate)) blur(var(--glass-blur));
+  -webkit-backdrop-filter: saturate(var(--glass-saturate)) blur(var(--glass-blur));
+  box-shadow: var(--shadow);
+}
+
+.app-auth-card {
+  max-width: 420px;
+}
+
+.app-form-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.app-form-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.app-form-grid input,
+.app-form-grid select {
+  font: inherit;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--text);
+}
+
+.app-form-grid input:focus,
+.app-form-grid select:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--pink) 55%, var(--border));
+  box-shadow: 0 0 0 3px var(--pink-soft);
+}
+
+.app-auth-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.app-auth-tabs button {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border-soft);
+  background: var(--glass-surface);
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.app-auth-tabs button[aria-selected="true"] {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--pink) 88%, transparent), var(--pink-deep));
+  color: #fff;
+  border-color: transparent;
+}
+
+.app-dash-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.app-dash-toolbar h1 {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.app-household-picker {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.app-household-picker label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.app-household-picker select {
+  font: inherit;
+  padding: 0.45rem 0.65rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--text);
+  min-width: 12rem;
+}
+
+.app-user-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.app-user-bar .app-email {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.app-status {
+  min-height: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--pink-deep);
+}
+
+[data-theme="dark"] .app-status {
+  color: #ff7a9a;
+}
+
+.app-readonly-banner {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--pink) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--pink) 28%, var(--border));
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.app-readonly-banner[hidden] {
+  display: none !important;
+}
+
+.app-purchase-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.app-empty {
+  margin: 0;
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.app-purchase-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  padding: 1rem 1.15rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border-soft);
+  background: var(--glass-surface);
+  backdrop-filter: saturate(var(--glass-saturate)) blur(12px);
+  -webkit-backdrop-filter: saturate(var(--glass-saturate)) blur(12px);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.app-purchase-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="dark"] .app-purchase-card:hover {
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+.app-purchase-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.app-purchase-name {
+  font-weight: 600;
+  font-size: 1.05rem;
+  word-break: break-word;
+}
+
+.app-purchase-meta {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.app-purchase-right {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.app-purchase-price {
+  display: block;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--pink);
+}
+
+.app-purchase-date {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.app-add-card {
+  margin-top: 2rem;
+  padding: 1.35rem;
+  border-radius: var(--radius);
+  border: 1px solid color-mix(in srgb, var(--pink) 22%, var(--border));
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--pink) 8%, var(--bg-elevated)),
+    var(--glass-surface-muted)
+  );
+}
+
+.app-add-card h2 {
+  margin: 0 0 1rem;
+  font-size: 1.15rem;
+}
+
+.app-add-grid {
+  display: grid;
+  gap: 0.85rem;
+}
+
+@media (min-width: 560px) {
+  .app-add-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .app-add-grid .app-span-2 {
+    grid-column: span 2;
+  }
+}
+
+.app-add-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.app-add-grid input,
+.app-add-grid select {
+  font: inherit;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--text);
+}
+
+.app-setup-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 720px) {
+  .app-setup-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.app-setup-card h2 {
+  margin: 0 0 1rem;
+  font-size: 1.15rem;
+}
+
+.app-note {
+  margin: 1.5rem 0 0;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}

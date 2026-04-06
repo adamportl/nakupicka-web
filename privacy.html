@@ -34,6 +34,7 @@
         aria-label="Hlavní menu"
       >
         <a href="index.html"><span class="i18n-cs">Domů</span><span class="i18n-en">Home</span></a>
+        <a href="app.html"><span class="i18n-cs">Webová aplikace</span><span class="i18n-en">Web app</span></a>
         <a href="premium.html">Premium</a>
         <a href="podpora.html"><span class="i18n-cs">Podpora</span><span class="i18n-en">Support</span></a>
         <a href="privacy.html" aria-current="page"><span class="i18n-cs">Soukromí</span><span class="i18n-en">Privacy</span></a>
@@ -53,12 +54,17 @@
       <p class="legal-updated">Poslední aktualizace: 2026</p>
 
       <p>
-        NÁKUPIČKA respektuje vaše soukromí. Mobilní aplikace neukládá ani centrálně neshromažďuje osobní údaje uživatelů.
-        Níže najdete zásady pro aplikaci i pro tyto webové stránky.
+        NÁKUPIČKA respektuje vaše soukromí. Ve výchozím stavu aplikace ukládá nákupy lokálně na vašem zařízení. Pokud
+        zapnete sdílení domácnosti, přístup k webovému rozhraní nebo zálohu Premium přes cloud, pracujete také se službou
+        Supabase podle oddílu níže. Níže najdete zásady pro aplikaci, webové rozhraní, cloud i tyto stránky.
       </p>
 
       <h2>Ukládání dat</h2>
-      <p>Veškeré nákupy a údaje, které do aplikace zadáte, se ukládají lokálně na vašem zařízení.</p>
+      <p>
+        Veškeré nákupy a údaje, které do aplikace zadáte, se ve výchozím stavu ukládají lokálně na vašem zařízení.
+        Zapnete-li synchronizaci domácnosti, webové rozhraní nebo zálohu Premium, přenáší se a ukládají příslušná data u
+        poskytovatele Supabase (viz oddíl o webu a cloudu).
+      </p>
 
       <h2>Použití fotoaparátu</h2>
       <p>Fotoaparát slouží pouze ke skenování účtenek a čárových kódů produktů.</p>
@@ -72,6 +78,22 @@
       <h2>Služby třetích stran</h2>
       <p>Aplikace může využívat externí služby k doplnění názvu produktu podle čárového kódu.</p>
 
+      <h2>Webové rozhraní a cloud (Supabase)</h2>
+      <p>
+        Webové rozhraní NÁKUPIČKY a cloudová synchronizace jsou napojené na databázi a ověřování uživatelů u
+        <a href="https://supabase.com" rel="noopener noreferrer">Supabase</a> (hosting a infrastruktura u tohoto
+        poskytovatele). K účtu se typicky přihlašujete e-mailem prostřednictvím Supabase Auth.
+      </p>
+      <p>
+        V cloudu mohou být uložena mimo jiné data o domácnosti, sdílených nákupech, členství, e-mailových pozvánkách do
+        domácnosti a volitelné záloze dat (Premium), v rozsahu, který v aplikaci nebo na webu zapnete. Přístup k údajům je
+        omezen pravidly zabezpečení databáze (včetně Row Level Security) nastavenými pro projekt NÁKUPIČKY.
+      </p>
+      <p>
+        Jak Supabase zpracovává osobní údaje v rámci své služby, popisuje
+        <a href="https://supabase.com/privacy" rel="noopener noreferrer">Supabase Privacy Policy</a>.
+      </p>
+
       <h2>Webové stránky a živý chat</h2>
       <p>
         Tyto stránky používají živý chat Smartsupp (služba společnosti Smartsupp). Při načtení stránky a při používání chatu
@@ -82,13 +104,13 @@
       <h2>Kontakt</h2>
       <p>
         Máte-li k těmto zásadám dotazy, napište na
-        <a href="mailto:prtllia73@gmail.com">prtllia73@gmail.com</a>.
+        <a href="mailto:Podpora@nakupicka.app">Podpora@nakupicka.app</a>.
       </p>
 
       <p class="legal-source small">
         Text o aplikaci odpovídá zveřejněné verzi na
         <a href="https://sites.google.com/view/nakupicka/domovsk%C3%A1-str%C3%A1nka" rel="noopener noreferrer">Google Sites</a>;
-        oddíl o webu a živém chatu doplňuje zásady pro tyto stránky.
+        oddíly o webu, cloudu (Supabase) a živém chatu doplňují zásady pro tyto stránky a propojené služby.
       </p>
     </article>
 
@@ -97,12 +119,17 @@
       <p class="legal-updated">Last updated: 2026</p>
 
       <p>
-        NÁKUPIČKA respects your privacy. The mobile app does not collect or centrally store personal data.
-        The sections below cover both the app and this website.
+        NÁKUPIČKA respects your privacy. By default, the app stores purchases locally on your device. If you enable
+        household sharing, the web app, or Premium cloud backup, you also use Supabase as described below. The sections
+        below cover the app, the web app, cloud services, and this site.
       </p>
 
       <h2>Data storage</h2>
-      <p>All purchases and information you enter in the app are stored locally on your device.</p>
+      <p>
+        By default, all purchases and information you enter in the app are stored locally on your device. If you enable
+        household sync, the web interface, or Premium backup, the relevant data is transferred to and stored with Supabase
+        (see “Web app and cloud”).
+      </p>
 
       <h2>Camera</h2>
       <p>The camera is used only for scanning receipts and product barcodes.</p>
@@ -116,6 +143,22 @@
       <h2>Third-party services</h2>
       <p>The app may use external services to fill in a product name from a barcode.</p>
 
+      <h2>Web app and cloud (Supabase)</h2>
+      <p>
+        The NÁKUPIČKA web app and cloud sync connect to a database and user authentication hosted by
+        <a href="https://supabase.com" rel="noopener noreferrer">Supabase</a>. You typically sign in with email via Supabase
+        Auth.
+      </p>
+      <p>
+        Data stored in the cloud may include household information, shared purchases, membership, email invitations to a
+        household, and optional Premium backups, depending on what you enable in the app or on the web. Access is restricted
+        by database security rules (including Row Level Security) configured for the NÁKUPIČKA project.
+      </p>
+      <p>
+        How Supabase processes personal data is described in the
+        <a href="https://supabase.com/privacy" rel="noopener noreferrer">Supabase Privacy Policy</a>.
+      </p>
+
       <h2>Website and live chat</h2>
       <p>
         This site uses Smartsupp live chat. When you load pages and when you use the chat, data may be processed by Smartsupp
@@ -126,13 +169,13 @@
       <h2>Contact</h2>
       <p>
         If you have questions about this policy, write to
-        <a href="mailto:prtllia73@gmail.com">prtllia73@gmail.com</a>.
+        <a href="mailto:Podpora@nakupicka.app">Podpora@nakupicka.app</a>.
       </p>
 
       <p class="legal-source small">
         The app-related text matches the version published on
         <a href="https://sites.google.com/view/nakupicka/domovsk%C3%A1-str%C3%A1nka" rel="noopener noreferrer">Google Sites</a>;
-        the website and live chat section adds disclosures for this site.
+        the web app, cloud (Supabase), and live chat sections add disclosures for this site and connected services.
       </p>
     </article>
 
@@ -144,6 +187,7 @@
       <span class="footer-brand">NÁKUPIČKA</span>
       <nav class="footer-nav" data-footer-aria-cs="Patička" data-footer-aria-en="Footer" aria-label="Patička">
         <a href="index.html"><span class="i18n-cs">Domů</span><span class="i18n-en">Home</span></a>
+        <a href="app.html"><span class="i18n-cs">Webová aplikace</span><span class="i18n-en">Web app</span></a>
         <a href="premium.html">Premium</a>
         <a href="podpora.html"><span class="i18n-cs">Podpora</span><span class="i18n-en">Support</span></a>
         <a href="privacy.html"><span class="i18n-cs">Soukromí</span><span class="i18n-en">Privacy</span></a>
