@@ -386,23 +386,6 @@
   font-size: 0.95rem;
 }
 
-.app-invite-code {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.app-invite-code code {
-  font-size: 1.05rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  padding: 0.25rem 0.5rem;
-  border-radius: 8px;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-}
-
 .app-toggle-row {
   display: flex;
   align-items: center;

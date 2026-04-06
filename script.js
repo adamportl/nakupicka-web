@@ -11,10 +11,6 @@
     return "cs";
   }
 
-  function getPreferred() {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  }
-
   const toggle = document.getElementById("themeToggle");
 
   const themeLabels = {
@@ -144,19 +140,9 @@
       theme = null;
     }
     if (theme !== "light" && theme !== "dark") {
-      theme = getPreferred();
+      theme = "dark";
     }
     applyTheme(theme);
-
-    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-      try {
-        if (!localStorage.getItem(storageKey)) {
-          applyTheme(e.matches ? "dark" : "light");
-        }
-      } catch (_) {
-        applyTheme(e.matches ? "dark" : "light");
-      }
-    });
   }
 
   if (toggle) {

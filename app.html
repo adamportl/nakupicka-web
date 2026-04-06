@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="cs" data-lang="cs">
+<html lang="cs" data-lang="cs" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -160,8 +160,8 @@
       <header class="page-hero">
         <h1><span class="i18n-cs">Domácnost</span><span class="i18n-en">Household</span></h1>
         <p class="page-lead">
-          <span class="i18n-cs">Založ novou domácnost nebo se připoj kódem pozvánky ze stejné aplikace.</span>
-          <span class="i18n-en">Create a household or join with an invite code from the app.</span>
+          <span class="i18n-cs">Založ novou domácnost — stejná data jako při zapnutém rodinném sdílení v aplikaci.</span>
+          <span class="i18n-en">Create a household — same data as family sync in the app.</span>
         </p>
       </header>
       <div class="app-setup-grid">
@@ -174,18 +174,6 @@
             </label>
             <button type="submit" class="btn btn-primary">
               <span class="i18n-cs">Založit</span><span class="i18n-en">Create</span>
-            </button>
-          </form>
-        </div>
-        <div class="app-setup-card">
-          <h2><span class="i18n-cs">Připojit se kódem</span><span class="i18n-en">Join with code</span></h2>
-          <form id="form-join-household" class="app-form-grid">
-            <label>
-              <span class="i18n-cs">Kód pozvánky</span><span class="i18n-en">Invite code</span>
-              <input type="text" id="setup-invite-code" name="invite" autocomplete="off" required />
-            </label>
-            <button type="submit" class="btn btn-primary">
-              <span class="i18n-cs">Připojit</span><span class="i18n-en">Join</span>
             </button>
           </form>
         </div>
@@ -230,49 +218,16 @@
         <span class="i18n-cs">Máš přístup jen ke čtení.</span><span class="i18n-en">You have read-only access.</span>
       </div>
 
-      <section class="app-section-card" id="section-cloud" aria-labelledby="cloud-heading">
-        <h2 id="cloud-heading" class="app-section-title">
-          <span class="i18n-cs">Účet a cloud</span><span class="i18n-en">Account &amp; cloud</span>
-        </h2>
-        <div id="cloud-premium" class="app-cloud-block"></div>
-        <div id="cloud-backup" class="app-cloud-block"></div>
-      </section>
-
       <section class="app-section-card" id="section-family" aria-labelledby="family-heading">
         <h2 id="family-heading" class="app-section-title">
-          <span class="i18n-cs">Domácnost a členové</span><span class="i18n-en">Household &amp; members</span>
+          <span class="i18n-cs">Naše rodina</span><span class="i18n-en">Our household</span>
         </h2>
-        <div id="family-invite-row" class="app-family-row"></div>
         <div id="family-members-toggle" class="app-family-row" hidden></div>
         <div id="family-members-list" class="app-members-list"></div>
       </section>
 
-      <section class="app-section-card" id="section-invites" aria-labelledby="invites-heading">
-        <h2 id="invites-heading" class="app-section-title">
-          <span class="i18n-cs">Pozvánky e-mailem</span><span class="i18n-en">Email invitations</span>
-        </h2>
-        <div id="invites-incoming" class="app-invite-block"></div>
-        <div id="invites-outgoing-wrap" hidden>
-          <h3 class="app-subheading">
-            <span class="i18n-cs">Odeslané pozvánky</span><span class="i18n-en">Sent invitations</span>
-          </h3>
-          <div id="invites-outgoing" class="app-invite-block"></div>
-          <form id="form-invite-email" class="app-form-grid app-invite-form">
-            <label class="app-span-2">
-              <span class="i18n-cs">Pozvat e-mailem</span><span class="i18n-en">Invite by email</span>
-              <input type="email" id="invite-email-input" autocomplete="email" placeholder="jmeno@email.cz" />
-            </label>
-            <div class="app-span-2">
-              <button type="submit" class="btn btn-primary" id="invite-email-submit">
-                <span class="i18n-cs">Odeslat pozvánku</span><span class="i18n-en">Send invite</span>
-              </button>
-            </div>
-          </form>
-        </div>
-      </section>
-
-      <section aria-labelledby="purchases-heading" style="margin-top: 1.5rem">
-        <h2 id="purchases-heading" style="font-size: 1.2rem; margin: 0 0 1rem">
+      <section class="app-section-card" aria-labelledby="purchases-heading">
+        <h2 id="purchases-heading" class="app-section-title">
           <span class="i18n-cs">Položky nákupů</span><span class="i18n-en">Purchases</span>
         </h2>
         <div id="purchase-list" class="app-purchase-list"></div>
@@ -303,6 +258,38 @@
             </button>
           </div>
         </form>
+      </section>
+
+      <section class="app-section-card" id="section-cloud" aria-labelledby="cloud-heading">
+        <h2 id="cloud-heading" class="app-section-title">
+          <span class="i18n-cs">Účet a cloud</span><span class="i18n-en">Account &amp; cloud</span>
+        </h2>
+        <div id="cloud-premium" class="app-cloud-block"></div>
+        <div id="cloud-backup" class="app-cloud-block"></div>
+      </section>
+
+      <section class="app-section-card" id="section-invites" aria-labelledby="invites-heading">
+        <h2 id="invites-heading" class="app-section-title">
+          <span class="i18n-cs">Pozvánky e-mailem</span><span class="i18n-en">Email invitations</span>
+        </h2>
+        <div id="invites-incoming" class="app-invite-block"></div>
+        <div id="invites-outgoing-wrap" hidden>
+          <h3 class="app-subheading">
+            <span class="i18n-cs">Odeslané pozvánky</span><span class="i18n-en">Sent invitations</span>
+          </h3>
+          <div id="invites-outgoing" class="app-invite-block"></div>
+          <form id="form-invite-email" class="app-form-grid app-invite-form">
+            <label class="app-span-2">
+              <span class="i18n-cs">Pozvat e-mailem</span><span class="i18n-en">Invite by email</span>
+              <input type="email" id="invite-email-input" autocomplete="email" placeholder="jmeno@email.cz" />
+            </label>
+            <div class="app-span-2">
+              <button type="submit" class="btn btn-primary" id="invite-email-submit">
+                <span class="i18n-cs">Odeslat pozvánku</span><span class="i18n-en">Send invite</span>
+              </button>
+            </div>
+          </form>
+        </div>
       </section>
     </div>
 

@@ -56,10 +56,6 @@ const STR = {
     signOut: "Odhlásit",
     noHousehold: "Zatím nemáš domácnost",
     createHousehold: "Založit domácnost",
-    joinHousehold: "Připojit se kódem",
-    householdName: "Název domácnosti",
-    inviteCode: "Kód pozvánky",
-    join: "Připojit",
     purchases: "Položky nákupů",
     empty: "Zatím žádné položky — přidej první níže.",
     readonly: "Máš přístup jen ke čtení.",
@@ -73,7 +69,6 @@ const STR = {
     saved: "Uloženo.",
     errGeneric: "Něco se nepovedlo.",
     errAuth: "Zkontroluj e-mail a heslo.",
-    errJoin: "Kód není platný nebo už jsi členem.",
     errSave: "Uložení se nepovedlo.",
     householdLabel: "Domácnost",
     refresh: "Obnovit",
@@ -88,9 +83,6 @@ const STR = {
     backupTitle: "Záloha dat (Premium)",
     backupNone: "Žádná cloudová záloha.",
     backupMeta: "Poslední uložení: {date}, velikost cca {size} kB.",
-    inviteCodeLabel: "Kód pozvánky (sdílení v rodině)",
-    copyCode: "Kopírovat",
-    copied: "Zkopírováno.",
     membersCanEdit: "Členové mohou upravovat sdílené nákupy",
     membersTitle: "Členové",
     roleOwner: "Správce",
@@ -116,10 +108,6 @@ const STR = {
     signOut: "Sign out",
     noHousehold: "No household yet",
     createHousehold: "Create household",
-    joinHousehold: "Join with code",
-    householdName: "Household name",
-    inviteCode: "Invite code",
-    join: "Join",
     purchases: "Purchases",
     empty: "No items yet — add the first one below.",
     readonly: "You have read-only access.",
@@ -133,7 +121,6 @@ const STR = {
     saved: "Saved.",
     errGeneric: "Something went wrong.",
     errAuth: "Check your email and password.",
-    errJoin: "Invalid code or you are already a member.",
     errSave: "Could not save.",
     householdLabel: "Household",
     refresh: "Refresh",
@@ -148,9 +135,6 @@ const STR = {
     backupTitle: "Data backup (Premium)",
     backupNone: "No cloud backup yet.",
     backupMeta: "Last saved: {date}, about {size} kB.",
-    inviteCodeLabel: "Invite code (family sharing)",
-    copyCode: "Copy",
-    copied: "Copied.",
     membersCanEdit: "Members can edit shared purchases",
     membersTitle: "Members",
     roleOwner: "Owner",
@@ -277,21 +261,12 @@ async function loadCloudAccountSection() {
 }
 
 async function loadFamilySection(h) {
-  const inviteRow = el("family-invite-row");
   const toggleWrap = el("family-members-toggle");
   const listEl = el("family-members-list");
-  if (!inviteRow || !listEl) return;
+  if (!listEl) return;
 
   const { data: authData } = await supabase.auth.getUser();
   const myEmail = authData?.user?.email || "";
-
-  const code = (h.invite_code || "").toString();
-  inviteRow.innerHTML = `
-    <div class="app-invite-code">
-      <span>${escapeHtml(t("inviteCodeLabel"))}:</span>
-      <code>${escapeHtml(code)}</code>
-      <button type="button" class="app-btn-inline" data-copy-invite="${escapeHtml(code)}">${escapeHtml(t("copyCode"))}</button>
-    </div>`;
 
   const uid = String(authUserId);
   if (isHouseholdOwner && canEdit && toggleWrap) {
@@ -541,12 +516,7 @@ async function loadHouseholdsAndOpen() {
   }
   const sel = el("household-select");
   if (sel) {
-    sel.innerHTML = rows
-      .map(
-        (r) =>
-          `<option value="${r.id}">${escapeHtml(r.name || r.id)} (${escapeHtml(r.invite_code || "")})</option>`
-      )
-      .join("");
+    sel.innerHTML = rows.map((r) => `<option value="${r.id}">${escapeHtml(r.name || r.id)}</option>`).join("");
     sel.value = rows[0].id;
     sel.onchange = async () => {
       const id = sel.value;
@@ -607,21 +577,6 @@ async function onCreateHousehold(e) {
   el("app-status").textContent = t("errGeneric");
 }
 
-async function onJoinHousehold(e) {
-  e.preventDefault();
-  const code = (el("setup-invite-code").value || "").trim();
-  if (!code) return;
-  el("app-status").textContent = t("saving");
-  const { error } = await supabase.rpc("join_household", { invite: code });
-  if (error) {
-    el("app-status").textContent = t("errJoin");
-    return;
-  }
-  el("app-status").textContent = "";
-  el("setup-invite-code").value = "";
-  await loadHouseholdsAndOpen();
-}
-
 async function onAddPurchase(e) {
   e.preventDefault();
   if (!canEdit || !currentHousehold) return;
@@ -678,21 +633,6 @@ async function onInviteEmailSubmit(e) {
 }
 
 async function onDashboardClick(e) {
-  const copyBtn = e.target.closest("[data-copy-invite]");
-  if (copyBtn) {
-    const code = copyBtn.getAttribute("data-copy-invite");
-    if (code && navigator.clipboard?.writeText) {
-      e.preventDefault();
-      try {
-        await navigator.clipboard.writeText(code);
-        el("app-status").textContent = t("copied");
-      } catch {
-        el("app-status").textContent = t("errGeneric");
-      }
-    }
-    return;
-  }
-
   const acc = e.target.closest("[data-accept-invite]");
   if (acc) {
     e.preventDefault();
@@ -806,7 +746,6 @@ function bindForms() {
   });
 
   el("form-create-household")?.addEventListener("submit", onCreateHousehold);
-  el("form-join-household")?.addEventListener("submit", onJoinHousehold);
   el("form-add-purchase")?.addEventListener("submit", onAddPurchase);
   el("btn-refresh")?.addEventListener("click", () => refreshHouseholdFromServer());
   el("form-invite-email")?.addEventListener("submit", onInviteEmailSubmit);
