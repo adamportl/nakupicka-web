@@ -78,6 +78,10 @@ const STR = {
     householdLabel: "Domácnost",
     refresh: "Obnovit",
     syncNote: "Data jsou stejná jako v aplikaci při zapnutém rodinném sdílení.",
+    resetSent: "Odkaz pro obnovení hesla jsme odeslali na e-mail.",
+    passwordMismatch: "Hesla se neshodují.",
+    passwordUpdated: "Heslo je nastavené. Můžeš se přihlásit.",
+    recoveryHint: "Otevři odkaz z e-mailu na tomto zařízení.",
   },
   en: {
     cfgTitle: "Supabase setup",
@@ -111,6 +115,10 @@ const STR = {
     householdLabel: "Household",
     refresh: "Refresh",
     syncNote: "Same data as in the app when family sync is enabled.",
+    resetSent: "We sent a password reset link to your email.",
+    passwordMismatch: "Passwords do not match.",
+    passwordUpdated: "Password updated. You can sign in.",
+    recoveryHint: "Open the email link on this device.",
   },
 };
 
@@ -255,6 +263,9 @@ async function savePurchasesToServer(nextList) {
 }
 
 async function loadHouseholdsAndOpen() {
+  const recoveryEl = document.querySelector('[data-app-panel="recovery"]');
+  if (recoveryEl && !recoveryEl.hidden) return;
+
   const { data: rows, error } = await supabase.from("households").select("*").order("updated_at", { ascending: false });
   if (error) {
     el("app-status").textContent = error.message || t("errGeneric");
@@ -420,6 +431,56 @@ function bindForms() {
   el("btn-refresh")?.addEventListener("click", () => refreshHouseholdFromServer());
 }
 
+function bindForgotPassword() {
+  el("btn-toggle-forgot")?.addEventListener("click", () => {
+    const p = el("forgot-panel");
+    if (!p) return;
+    p.hidden = !p.hidden;
+  });
+  el("form-forgot")?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = (el("forgot-email")?.value || "").trim();
+    if (!email) return;
+    el("app-status").textContent = t("saving");
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + window.location.pathname,
+    });
+    if (error) {
+      el("app-status").textContent = error.message || t("errGeneric");
+      return;
+    }
+    el("app-status").textContent = t("resetSent");
+    const fp = el("forgot-panel");
+    if (fp) fp.hidden = true;
+  });
+}
+
+function bindRecoveryForm() {
+  el("form-recovery-password")?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const p1 = el("recovery-password")?.value || "";
+    const p2 = el("recovery-password-2")?.value || "";
+    if (p1 !== p2) {
+      el("app-status").textContent = t("passwordMismatch");
+      return;
+    }
+    el("app-status").textContent = t("saving");
+    const { error } = await supabase.auth.updateUser({ password: p1 });
+    if (error) {
+      el("app-status").textContent = error.message || t("errGeneric");
+      return;
+    }
+    el("app-status").textContent = t("passwordUpdated");
+    if (window.history.replaceState) {
+      window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+    await supabase.auth.signOut();
+    showPanel("auth");
+    if (el("recovery-password")) el("recovery-password").value = "";
+    if (el("recovery-password-2")) el("recovery-password-2").value = "";
+  });
+}
+
 async function init() {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
     showPanel("config");
@@ -427,14 +488,23 @@ async function init() {
     return;
   }
 
+  const recoveryHash =
+    typeof window !== "undefined" && window.location.hash && /type=recovery/i.test(window.location.hash);
+
   supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-    auth: { persistSession: true, autoRefreshToken: true },
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
   });
 
   bindForms();
+  bindForgotPassword();
+  bindRecoveryForm();
 
   supabase.auth.onAuthStateChange(async (event, session) => {
     if (event === "INITIAL_SESSION") return;
+    if (event === "PASSWORD_RECOVERY") {
+      showPanel("recovery");
+      return;
+    }
     if (!session) {
       authUserId = null;
       showPanel("auth");
@@ -448,6 +518,12 @@ async function init() {
   const {
     data: { session },
   } = await supabase.auth.getSession();
+
+  if (session?.user && recoveryHash) {
+    showPanel("recovery");
+    return;
+  }
+
   if (session?.user) {
     authUserId = session.user.id;
     el("app-user-email").textContent = session.user.email || "";

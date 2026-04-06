@@ -150,6 +150,7 @@ html.header-hidden main#main.page-main {
   left: 0;
   right: 0;
   z-index: 250;
+  overflow: visible;
   padding-top: var(--safe-top);
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--pink) 12%, transparent) 0%, transparent 42%),
@@ -179,6 +180,7 @@ html.header-hidden .site-header {
   flex-wrap: wrap;
   row-gap: 0.35rem;
   column-gap: 0.5rem;
+  overflow: visible;
 }
 
 .header-inner .logo {
@@ -268,6 +270,121 @@ body.menu-open .nav-menu-btn::after {
 .nav-main a[aria-current="page"] {
   color: var(--pink);
   font-weight: 600;
+}
+
+/* Účet — ikona místo textu „Webová aplikace“, menu při hover / na dotyk */
+.nav-user-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.nav-user-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border-soft);
+  background: var(--glass-surface);
+  backdrop-filter: saturate(var(--glass-saturate)) blur(var(--glass-blur));
+  -webkit-backdrop-filter: saturate(var(--glass-saturate)) blur(var(--glass-blur));
+  color: var(--text-secondary);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.nav-user-trigger:hover,
+.nav-user-wrap:hover .nav-user-trigger,
+.nav-user-wrap:focus-within .nav-user-trigger,
+.nav-user-wrap.is-open .nav-user-trigger {
+  color: var(--pink);
+  border-color: color-mix(in srgb, var(--pink) 35%, var(--border));
+}
+
+.nav-user-icon {
+  display: block;
+}
+
+.nav-user-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  min-width: 15rem;
+  padding: 0.45rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border-soft);
+  background: var(--glass-surface);
+  backdrop-filter: saturate(var(--glass-saturate)) blur(var(--glass-blur));
+  -webkit-backdrop-filter: saturate(var(--glass-saturate)) blur(var(--glass-blur));
+  box-shadow: var(--shadow);
+  z-index: 400;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity 0.18s ease, visibility 0.18s ease, transform 0.18s ease;
+}
+
+.nav-user-wrap:hover .nav-user-dropdown,
+.nav-user-wrap:focus-within .nav-user-dropdown,
+.nav-user-wrap.is-open .nav-user-dropdown {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.nav-user-link {
+  display: block;
+  padding: 0.55rem 0.65rem;
+  border-radius: 10px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.nav-user-link:hover {
+  background: var(--pink-soft);
+  color: var(--pink);
+}
+
+.nav-user-link[aria-current="page"] {
+  color: var(--pink);
+  font-weight: 600;
+}
+
+.nav-user-email {
+  display: block;
+  padding: 0.35rem 0.65rem 0.5rem;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  word-break: break-all;
+}
+
+.nav-user-logout {
+  display: block;
+  width: 100%;
+  margin-top: 0.15rem;
+  padding: 0.55rem 0.65rem;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.nav-user-logout:hover {
+  background: color-mix(in srgb, var(--pink) 12%, transparent);
+  color: var(--pink);
 }
 
 .lang-switch {

@@ -35,9 +35,23 @@
         aria-label="Hlavní menu"
       >
         <a href="index.html"><span class="i18n-cs">Domů</span><span class="i18n-en">Home</span></a>
-        <a href="app.html" aria-current="page"
-          ><span class="i18n-cs">Webová aplikace</span><span class="i18n-en">Web app</span></a
-        >
+        <div class="nav-user-wrap" id="navUserWrap">
+          <button type="button" class="nav-user-trigger" id="navUserTrigger" aria-expanded="false" aria-haspopup="true" aria-label="Účet">
+            <svg class="nav-user-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="4" />
+              <path d="M4 20c1.8-4 14.2-4 16 0" />
+            </svg>
+          </button>
+          <div class="nav-user-dropdown" id="navUserDropdown" role="menu">
+            <a href="app.html" class="nav-user-link" role="menuitem" id="navUserAppLink" aria-current="page">
+              <span class="i18n-cs">Webová aplikace</span><span class="i18n-en">Web app</span>
+            </a>
+            <span class="nav-user-email" id="navUserEmail" hidden></span>
+            <button type="button" class="nav-user-logout" id="navUserLogout" role="menuitem" hidden>
+              <span class="i18n-cs">Odhlásit</span><span class="i18n-en">Sign out</span>
+            </button>
+          </div>
+        </div>
         <a href="premium.html">Premium</a>
         <a href="podpora.html"><span class="i18n-cs">Podpora</span><span class="i18n-en">Support</span></a>
         <a href="privacy.html"><span class="i18n-cs">Soukromí</span><span class="i18n-en">Privacy</span></a>
@@ -59,7 +73,7 @@
       <p id="config-hint" class="app-config-missing"></p>
     </div>
 
-    <div data-app-panel="auth" class="app-panel" hidden>
+    <div data-app-panel="auth" class="app-panel">
       <header class="page-hero">
         <h1><span class="i18n-cs">Webová aplikace</span><span class="i18n-en">Web app</span></h1>
         <p class="page-lead">
@@ -93,6 +107,50 @@
           </label>
           <button type="submit" class="btn btn-primary" id="auth-submit">
             <span class="i18n-cs">Přihlásit se</span><span class="i18n-en">Sign in</span>
+          </button>
+        </form>
+        <p class="app-auth-forgot" id="app-auth-forgot-wrap">
+          <button type="button" class="app-link-btn" id="btn-toggle-forgot">
+            <span class="i18n-cs">Zapomněli jste heslo?</span><span class="i18n-en">Forgot password?</span>
+          </button>
+        </p>
+        <div id="forgot-panel" class="app-forgot-panel" hidden>
+          <p class="app-forgot-lead">
+            <span class="i18n-cs">Pošleme odkaz pro nastavení nového hesla na váš e-mail.</span>
+            <span class="i18n-en">We will email you a link to set a new password.</span>
+          </p>
+          <form id="form-forgot" class="app-form-grid">
+            <label>
+              <span class="i18n-cs">E-mail</span><span class="i18n-en">Email</span>
+              <input type="email" id="forgot-email" name="forgot-email" autocomplete="email" required />
+            </label>
+            <button type="submit" class="btn btn-primary" id="forgot-submit">
+              <span class="i18n-cs">Odeslat odkaz</span><span class="i18n-en">Send link</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div data-app-panel="recovery" class="app-panel" hidden>
+      <header class="page-hero">
+        <h1><span class="i18n-cs">Nové heslo</span><span class="i18n-en">New password</span></h1>
+        <p class="page-lead">
+          <span class="i18n-cs">Zadej nové heslo k účtu.</span><span class="i18n-en">Enter a new password for your account.</span>
+        </p>
+      </header>
+      <div class="app-auth-card">
+        <form id="form-recovery-password" class="app-form-grid">
+          <label>
+            <span class="i18n-cs">Nové heslo</span><span class="i18n-en">New password</span>
+            <input type="password" id="recovery-password" name="password" autocomplete="new-password" required minlength="6" />
+          </label>
+          <label>
+            <span class="i18n-cs">Potvrzení hesla</span><span class="i18n-en">Confirm password</span>
+            <input type="password" id="recovery-password-2" name="password2" autocomplete="new-password" required minlength="6" />
+          </label>
+          <button type="submit" class="btn btn-primary" id="recovery-submit">
+            <span class="i18n-cs">Nastavit heslo</span><span class="i18n-en">Set password</span>
           </button>
         </form>
       </div>
@@ -231,6 +289,7 @@
   </footer>
 
   <script src="script.js"></script>
+  <script type="module" src="account-nav.js"></script>
   <script type="module" src="app.js"></script>
   <script>
     (function () {
@@ -253,13 +312,22 @@
           if (en) en.textContent = "Create account";
         }
       }
+      var forgotWrap = document.getElementById("app-auth-forgot-wrap");
+      var forgotPanel = document.getElementById("forgot-panel");
+      function syncForgotVisibility(signin) {
+        if (forgotWrap) forgotWrap.hidden = !signin;
+        if (forgotPanel && !signin) forgotPanel.hidden = true;
+      }
       tabIn.addEventListener("click", function () {
         setMode(true);
+        syncForgotVisibility(true);
       });
       tabUp.addEventListener("click", function () {
         setMode(false);
+        syncForgotVisibility(false);
       });
       setMode(true);
+      syncForgotVisibility(true);
     })();
   </script>
   <!-- Smartsupp Live Chat script -->

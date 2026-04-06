@@ -101,6 +101,41 @@
   border-color: transparent;
 }
 
+.app-auth-forgot {
+  margin: 1rem 0 0;
+  text-align: center;
+}
+
+.app-link-btn {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--pink);
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.app-link-btn:hover {
+  color: var(--pink-deep);
+}
+
+.app-forgot-panel {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--glass-border-soft);
+}
+
+.app-forgot-lead {
+  margin: 0 0 0.85rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
 .app-dash-toolbar {
   display: flex;
   flex-wrap: wrap;
