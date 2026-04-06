@@ -1,5 +1,4 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
-import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./supabase-config.js";
+import { getSupabaseBrowserClient } from "./supabase-browser.js";
 
 function closeDropdown(wrap, trigger) {
   wrap.classList.remove("is-open");
@@ -19,15 +18,12 @@ async function init() {
   const emailEl = document.getElementById("navUserEmail");
 
   if (!wrap || !trigger || !dropdown) return;
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  const supabase = getSupabaseBrowserClient();
+  if (!supabase) {
     logoutBtn?.setAttribute("hidden", "");
     emailEl?.setAttribute("hidden", "");
     return;
   }
-
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-    auth: { persistSession: true, autoRefreshToken: true },
-  });
 
   async function refresh() {
     const {

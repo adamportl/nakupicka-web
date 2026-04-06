@@ -1,5 +1,5 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.86.0";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./supabase-config.js";
+import { getSupabaseBrowserClient } from "./supabase-browser.js";
 
 /** Stejný offset jako Swift JSONEncoder/Decoder pro `Date` (sekundy od 1. 1. 2001). */
 const REFERENCE_OFFSET = 978307200;
@@ -873,15 +873,7 @@ async function init() {
   const recoveryHash =
     typeof window !== "undefined" && window.location.hash && /type=recovery/i.test(window.location.hash);
 
-  supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true,
-      // Bez navigator.locks: orphan lock po přerušené auth operaci jinak nechá signIn/getSession viset bez síťových requestů.
-      lock: async (_name, _acquireTimeout, fn) => fn(),
-    },
-  });
+  supabase = getSupabaseBrowserClient();
 
   bindForms();
   bindForgotPassword();
