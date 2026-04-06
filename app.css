@@ -356,3 +356,125 @@
   color: var(--text-secondary);
   line-height: 1.5;
 }
+
+.app-section-card {
+  margin-top: 1.5rem;
+  padding: 1.35rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--glass-border-soft);
+  background: var(--glass-surface-muted);
+  backdrop-filter: saturate(var(--glass-saturate)) blur(var(--glass-blur));
+  -webkit-backdrop-filter: saturate(var(--glass-saturate)) blur(var(--glass-blur));
+  box-shadow: var(--shadow);
+}
+
+.app-section-title {
+  font-size: 1.15rem;
+  margin: 0 0 1rem;
+  font-weight: 700;
+}
+
+.app-subheading {
+  font-size: 1rem;
+  margin: 1rem 0 0.65rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.app-family-row {
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.app-invite-code {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.app-invite-code code {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+}
+
+.app-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.app-toggle-row input[type="checkbox"] {
+  width: 1.15rem;
+  height: 1.15rem;
+  accent-color: var(--pink);
+}
+
+.app-members-list table,
+.app-invite-block table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.app-members-list th,
+.app-members-list td,
+.app-invite-block th,
+.app-invite-block td {
+  padding: 0.5rem 0.65rem;
+  text-align: left;
+  border-bottom: 1px solid var(--glass-border-soft);
+}
+
+.app-members-list th,
+.app-invite-block th {
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.app-cloud-block {
+  margin-bottom: 1rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.app-cloud-block:last-child {
+  margin-bottom: 0;
+}
+
+.app-invite-form {
+  margin-top: 1rem;
+  max-width: 28rem;
+}
+
+.app-btn-inline {
+  margin-left: 0.35rem;
+  padding: 0.25rem 0.55rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 1px solid var(--glass-border-soft);
+  background: var(--glass-surface);
+  color: var(--pink);
+  cursor: pointer;
+}
+
+.app-btn-inline:hover {
+  background: var(--pink-soft);
+}
+
+.app-empty-soft {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+}

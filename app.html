@@ -196,7 +196,7 @@
       </p>
     </div>
 
-    <div data-app-panel="dashboard" class="app-panel" hidden>
+    <div data-app-panel="dashboard" class="app-panel" id="dashboard-root" hidden>
       <div class="app-user-bar">
         <span class="i18n-cs">Účet:</span><span class="i18n-en">Account:</span>
         <span class="app-email" id="app-user-email"></span>
@@ -229,6 +229,47 @@
       <div id="app-can-edit-note" class="app-readonly-banner" hidden>
         <span class="i18n-cs">Máš přístup jen ke čtení.</span><span class="i18n-en">You have read-only access.</span>
       </div>
+
+      <section class="app-section-card" id="section-cloud" aria-labelledby="cloud-heading">
+        <h2 id="cloud-heading" class="app-section-title">
+          <span class="i18n-cs">Účet a cloud</span><span class="i18n-en">Account &amp; cloud</span>
+        </h2>
+        <div id="cloud-premium" class="app-cloud-block"></div>
+        <div id="cloud-backup" class="app-cloud-block"></div>
+      </section>
+
+      <section class="app-section-card" id="section-family" aria-labelledby="family-heading">
+        <h2 id="family-heading" class="app-section-title">
+          <span class="i18n-cs">Domácnost a členové</span><span class="i18n-en">Household &amp; members</span>
+        </h2>
+        <div id="family-invite-row" class="app-family-row"></div>
+        <div id="family-members-toggle" class="app-family-row" hidden></div>
+        <div id="family-members-list" class="app-members-list"></div>
+      </section>
+
+      <section class="app-section-card" id="section-invites" aria-labelledby="invites-heading">
+        <h2 id="invites-heading" class="app-section-title">
+          <span class="i18n-cs">Pozvánky e-mailem</span><span class="i18n-en">Email invitations</span>
+        </h2>
+        <div id="invites-incoming" class="app-invite-block"></div>
+        <div id="invites-outgoing-wrap" hidden>
+          <h3 class="app-subheading">
+            <span class="i18n-cs">Odeslané pozvánky</span><span class="i18n-en">Sent invitations</span>
+          </h3>
+          <div id="invites-outgoing" class="app-invite-block"></div>
+          <form id="form-invite-email" class="app-form-grid app-invite-form">
+            <label class="app-span-2">
+              <span class="i18n-cs">Pozvat e-mailem</span><span class="i18n-en">Invite by email</span>
+              <input type="email" id="invite-email-input" autocomplete="email" placeholder="jmeno@email.cz" />
+            </label>
+            <div class="app-span-2">
+              <button type="submit" class="btn btn-primary" id="invite-email-submit">
+                <span class="i18n-cs">Odeslat pozvánku</span><span class="i18n-en">Send invite</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
 
       <section aria-labelledby="purchases-heading" style="margin-top: 1.5rem">
         <h2 id="purchases-heading" style="font-size: 1.2rem; margin: 0 0 1rem">

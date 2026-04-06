@@ -34,13 +34,13 @@ async function init() {
       data: { session },
     } = await supabase.auth.getSession();
     if (session?.user) {
-      logoutBtn.hidden = false;
-      emailEl.hidden = false;
-      emailEl.textContent = session.user.email || "";
+      logoutBtn?.removeAttribute("hidden");
+      emailEl?.removeAttribute("hidden");
+      if (emailEl) emailEl.textContent = session.user.email || "";
     } else {
-      logoutBtn.hidden = true;
-      emailEl.hidden = true;
-      emailEl.textContent = "";
+      logoutBtn?.setAttribute("hidden", "");
+      emailEl?.setAttribute("hidden", "");
+      if (emailEl) emailEl.textContent = "";
     }
   }
 
