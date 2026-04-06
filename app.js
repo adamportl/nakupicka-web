@@ -73,6 +73,7 @@ const STR = {
     saved: "Uloženo.",
     errGeneric: "Něco se nepovedlo.",
     errAuth: "Zkontroluj e-mail a heslo.",
+    errSignInTimeout: "Přihlášení neodpovídá — zkontroluj připojení a zkus to znovu.",
     errJoin: "Kód není platný nebo už jsi členem.",
     errSave: "Uložení se nepovedlo.",
     householdLabel: "Domácnost",
@@ -133,6 +134,7 @@ const STR = {
     saved: "Saved.",
     errGeneric: "Something went wrong.",
     errAuth: "Check your email and password.",
+    errSignInTimeout: "Sign-in is taking too long — check your connection and try again.",
     errJoin: "Invalid code or you are already a member.",
     errSave: "Could not save.",
     householdLabel: "Household",
@@ -742,30 +744,75 @@ async function onDashboardClick(e) {
 }
 
 function bindForms() {
+  const SIGN_IN_TIMEOUT_MS = 45000;
+
   el("form-auth")?.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const email = el("auth-email").value.trim();
-    const password = el("auth-password").value;
-    const mode = el("auth-mode").value;
+    const email = (el("auth-email")?.value || "").trim();
+    const password = el("auth-password")?.value || "";
+    const mode = el("auth-mode")?.value || "signin";
     el("app-status").textContent = t("saving");
-    if (mode === "signup") {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { emailRedirectTo: window.location.origin + window.location.pathname },
-      });
+    try {
+      if (mode === "signup") {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { emailRedirectTo: window.location.origin + window.location.pathname },
+        });
+        if (error) {
+          el("app-status").textContent = error.message || t("errAuth");
+          return;
+        }
+        el("app-status").textContent =
+          lang() === "en" ? "Check your email to confirm." : "Potvrď e-mail, pokud to projekt vyžaduje.";
+        return;
+      }
+
+      let signInResult;
+      try {
+        signInResult = await Promise.race([
+          supabase.auth.signInWithPassword({ email, password }),
+          new Promise((_, reject) => {
+            setTimeout(() => reject(new Error("SIGN_IN_TIMEOUT")), SIGN_IN_TIMEOUT_MS);
+          }),
+        ]);
+      } catch (raceErr) {
+        if (raceErr && raceErr.message === "SIGN_IN_TIMEOUT") {
+          el("app-status").textContent = t("errSignInTimeout");
+          return;
+        }
+        throw raceErr;
+      }
+
+      const { error } = signInResult;
       if (error) {
         el("app-status").textContent = error.message || t("errAuth");
         return;
       }
-      el("app-status").textContent = lang() === "en" ? "Check your email to confirm." : "Potvrď e-mail, pokud to projekt vyžaduje.";
-    } else {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) {
-        el("app-status").textContent = t("errAuth");
+
+      el("app-status").textContent = "";
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!session?.user) {
+        el("app-status").textContent =
+          lang() === "en"
+            ? "Confirm your email, then sign in again."
+            : "Potvrď e-mail v doručené poště, pak se přihlas znovu.";
         return;
       }
-      el("app-status").textContent = "";
+
+      authUserId = session.user.id;
+      el("app-user-email").textContent = session.user.email || "";
+      try {
+        await loadHouseholdsAndOpen();
+      } catch (loadErr) {
+        console.error(loadErr);
+        el("app-status").textContent = t("errGeneric");
+      }
+    } catch (err) {
+      console.error(err);
+      el("app-status").textContent = (err && err.message) || t("errGeneric");
     }
   });
 
@@ -863,7 +910,12 @@ async function init() {
     }
     authUserId = session.user.id;
     el("app-user-email").textContent = session.user.email || "";
-    await loadHouseholdsAndOpen();
+    try {
+      await loadHouseholdsAndOpen();
+    } catch (e) {
+      console.error(e);
+      el("app-status").textContent = t("errGeneric");
+    }
   });
 
   const {
@@ -878,7 +930,12 @@ async function init() {
   if (session?.user) {
     authUserId = session.user.id;
     el("app-user-email").textContent = session.user.email || "";
-    await loadHouseholdsAndOpen();
+    try {
+      await loadHouseholdsAndOpen();
+    } catch (e) {
+      console.error(e);
+      el("app-status").textContent = t("errGeneric");
+    }
   } else {
     showPanel("auth");
   }
