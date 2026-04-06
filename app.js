@@ -1,4 +1,4 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.86.0";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./supabase-config.js";
 
 /** Stejný offset jako Swift JSONEncoder/Decoder pro `Date` (sekundy od 1. 1. 2001). */
@@ -73,7 +73,6 @@ const STR = {
     saved: "Uloženo.",
     errGeneric: "Něco se nepovedlo.",
     errAuth: "Zkontroluj e-mail a heslo.",
-    errSignInTimeout: "Přihlášení neodpovídá — zkontroluj připojení a zkus to znovu.",
     errJoin: "Kód není platný nebo už jsi členem.",
     errSave: "Uložení se nepovedlo.",
     householdLabel: "Domácnost",
@@ -134,7 +133,6 @@ const STR = {
     saved: "Saved.",
     errGeneric: "Something went wrong.",
     errAuth: "Check your email and password.",
-    errSignInTimeout: "Sign-in is taking too long — check your connection and try again.",
     errJoin: "Invalid code or you are already a member.",
     errSave: "Could not save.",
     householdLabel: "Household",
@@ -744,8 +742,6 @@ async function onDashboardClick(e) {
 }
 
 function bindForms() {
-  const SIGN_IN_TIMEOUT_MS = 45000;
-
   el("form-auth")?.addEventListener("submit", async (e) => {
     e.preventDefault();
     const email = (el("auth-email")?.value || "").trim();
@@ -768,32 +764,20 @@ function bindForms() {
         return;
       }
 
-      let signInResult;
-      try {
-        signInResult = await Promise.race([
-          supabase.auth.signInWithPassword({ email, password }),
-          new Promise((_, reject) => {
-            setTimeout(() => reject(new Error("SIGN_IN_TIMEOUT")), SIGN_IN_TIMEOUT_MS);
-          }),
-        ]);
-      } catch (raceErr) {
-        if (raceErr && raceErr.message === "SIGN_IN_TIMEOUT") {
-          el("app-status").textContent = t("errSignInTimeout");
-          return;
-        }
-        throw raceErr;
-      }
-
-      const { error } = signInResult;
+      const { data: signData, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
         el("app-status").textContent = error.message || t("errAuth");
         return;
       }
 
       el("app-status").textContent = "";
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
+      let session = signData?.session;
+      if (!session?.user) {
+        const {
+          data: { session: s2 },
+        } = await supabase.auth.getSession();
+        session = s2;
+      }
       if (!session?.user) {
         el("app-status").textContent =
           lang() === "en"
@@ -890,7 +874,13 @@ async function init() {
     typeof window !== "undefined" && window.location.hash && /type=recovery/i.test(window.location.hash);
 
   supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      // Bez navigator.locks: orphan lock po přerušené auth operaci jinak nechá signIn/getSession viset bez síťových requestů.
+      lock: async (_name, _acquireTimeout, fn) => fn(),
+    },
   });
 
   bindForms();
