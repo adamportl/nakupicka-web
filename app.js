@@ -518,13 +518,29 @@ async function savePurchasesToServer(nextList) {
   renderPurchases();
 }
 
-async function loadHouseholdsAndOpen() {
+/**
+ * Načte domácnosti a zobrazí správný panel.
+ * @param prefetchedSession — ihned po `signInWithPassword` ve WebKitu často `getSession()` ještě vrátí null
+ *   (zápis session do storage není synchronní). Vždy předat session z odpovědi přihlášení / z `onAuthStateChange`.
+ */
+async function loadHouseholdsAndOpen(prefetchedSession) {
   const recoveryEl = document.querySelector('[data-app-panel="recovery"]');
   if (recoveryEl && !recoveryEl.hidden) return;
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  let session = prefetchedSession?.user ? prefetchedSession : null;
+  if (!session) {
+    const {
+      data: { session: s },
+    } = await supabase.auth.getSession();
+    session = s;
+  }
+  if (!session?.user) {
+    await new Promise((r) => setTimeout(r, 100));
+    const {
+      data: { session: s2 },
+    } = await supabase.auth.getSession();
+    session = s2;
+  }
   if (!session?.user) {
     authUserId = null;
     showPanel("auth");
@@ -789,7 +805,7 @@ function bindForms() {
       // dokončení signInWithPassword — bez tohoto by zůstala prázdná data / špatný panel.
       el("app-status").textContent = "";
       try {
-        await loadHouseholdsAndOpen();
+        await loadHouseholdsAndOpen(session);
       } catch (loadErr) {
         console.error(loadErr);
         el("app-status").textContent = t("errGeneric");
@@ -917,7 +933,7 @@ async function initCore() {
     if (event !== "SIGNED_IN") return;
     el("app-status").textContent = "";
     try {
-      await loadHouseholdsAndOpen();
+      await loadHouseholdsAndOpen(session);
     } catch (e) {
       console.error(e);
       el("app-status").textContent = t("errGeneric");
