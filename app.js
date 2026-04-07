@@ -193,6 +193,7 @@ function formatDateDisplay(wireDate) {
 
 function renderPurchases() {
   const list = el("purchase-list");
+  if (!list) return;
   const sorted = [...purchases].sort((a, b) => {
     const da = typeof a.date === "number" ? a.date : encodePurchaseDate(parsePurchaseDate(a.date));
     const db = typeof b.date === "number" ? b.date : encodePurchaseDate(parsePurchaseDate(b.date));
@@ -709,16 +710,34 @@ async function onDashboardClick(e) {
   }
 }
 
+/** Safari / iCloud Keychain: hodnoty někdy nejsou v .value hned; zkusíme krátce znovu. */
+async function readAuthInputsWithSafariRetry() {
+  function readOnce() {
+    const emailEl = el("auth-email");
+    const passEl = el("auth-password");
+    emailEl?.dispatchEvent(new Event("input", { bubbles: true }));
+    passEl?.dispatchEvent(new Event("input", { bubbles: true }));
+    return {
+      email: (emailEl?.value || "").trim(),
+      password: passEl?.value || "",
+    };
+  }
+  let out = readOnce();
+  if (!out.email || !out.password) {
+    await new Promise((r) => setTimeout(r, 0));
+    out = readOnce();
+  }
+  if (!out.email || !out.password) {
+    await new Promise((r) => setTimeout(r, 50));
+    out = readOnce();
+  }
+  return out;
+}
+
 function bindForms() {
   el("form-auth")?.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const emailEl = el("auth-email");
-    const passEl = el("auth-password");
-    // Safari / automatické vyplnění: hodnota se někdy propsát až po „input“ události
-    emailEl?.dispatchEvent(new Event("input", { bubbles: true }));
-    passEl?.dispatchEvent(new Event("input", { bubbles: true }));
-    const email = (emailEl?.value || "").trim();
-    const password = passEl?.value || "";
+    const { email, password } = await readAuthInputsWithSafariRetry();
     const mode = el("auth-mode")?.value || "signin";
     const submitBtn = el("auth-submit");
     try {
@@ -766,7 +785,15 @@ function bindForms() {
         return;
       }
 
-      showPanel("dashboard");
+      // Nejen na onAuthStateChange(SIGNED_IN): ve WebKitu může přijít pozdě nebo v jiném pořadí než
+      // dokončení signInWithPassword — bez tohoto by zůstala prázdná data / špatný panel.
+      el("app-status").textContent = "";
+      try {
+        await loadHouseholdsAndOpen();
+      } catch (loadErr) {
+        console.error(loadErr);
+        el("app-status").textContent = t("errGeneric");
+      }
       if (submitBtn) submitBtn.disabled = false;
     } catch (err) {
       console.error(err);
@@ -839,6 +866,16 @@ function bindRecoveryForm() {
 }
 
 async function init() {
+  try {
+    await initCore();
+  } catch (e) {
+    console.error("[NÁKUPIČKA] init", e);
+    const st = el("app-status");
+    if (st) st.textContent = t("errGeneric");
+  }
+}
+
+async function initCore() {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
     showPanel("config");
     el("config-hint").textContent = t("cfgHint");
