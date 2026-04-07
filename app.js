@@ -699,10 +699,9 @@ function bindForms() {
     const password = el("auth-password")?.value || "";
     const mode = el("auth-mode")?.value || "signin";
     const submitBtn = el("auth-submit");
-    el("app-status").textContent = t("saving");
-    if (submitBtn) submitBtn.disabled = true;
     try {
       if (mode === "signup") {
+        if (submitBtn) submitBtn.disabled = true;
         const { error } = await supabase.auth.signUp({
           email,
           password,
@@ -717,6 +716,7 @@ function bindForms() {
         return;
       }
 
+      if (submitBtn) submitBtn.disabled = true;
       const { data: signData, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
         el("app-status").textContent = error.message || t("errAuth");
@@ -741,6 +741,9 @@ function bindForms() {
 
       authUserId = session.user.id;
       el("app-user-email").textContent = session.user.email || "";
+      showPanel("dashboard");
+      if (submitBtn) submitBtn.disabled = false;
+
       try {
         await loadHouseholdsAndOpen();
       } catch (loadErr) {
@@ -848,6 +851,8 @@ async function init() {
     el("app-user-email").textContent = session.user.email || "";
     // TOKEN_REFRESHED a další události nesmí znovu načítat domácnosti — způsobovalo to zasekávání / závody.
     if (event !== "SIGNED_IN") return;
+    el("app-status").textContent = "";
+    showPanel("dashboard");
     try {
       await loadHouseholdsAndOpen();
     } catch (e) {
@@ -868,6 +873,8 @@ async function init() {
   if (session?.user) {
     authUserId = session.user.id;
     el("app-user-email").textContent = session.user.email || "";
+    el("app-status").textContent = "";
+    showPanel("dashboard");
     try {
       await loadHouseholdsAndOpen();
     } catch (e) {
