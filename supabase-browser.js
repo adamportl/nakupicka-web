@@ -3,13 +3,18 @@
  * account-nav + app) musí být stejná instance a stejné auth volby, jinak Web Locks
  * a localStorage session kolidují a auth může viset bez requestů.
  *
- * Safari: jsdelivr +esm používá importy začínající „/npm/…“. WebKit je špatně
- * vyhodnocuje vůči doméně stránky (404 na nakupicka.app/npm/…). Na HTML stránkách
- * musí být import mapa: „/npm/“ → https://cdn.jsdelivr.net/npm/ (viz app.html atd.).
+ * Safari: ESM z CDN (jsdelivr/esm.sh) používá importy „/npm/…“, které WebKit špatně
+ * vyhodnocuje vůči doméně stránky. Proto používáme oficiální UMD bundle (vendor/supabase-umd.js),
+ * načtený klasickým <script> před type=module (viz HTML).
  * Safari / soukromé okno: localStorage může vyhodit — použijeme paměť (session jen do zavření karty).
  */
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.86.0/+esm";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./supabase-config.js";
+
+/** Z UMD: window.supabase (viz vendor/supabase-umd.js, musí být načten před moduly). */
+function getCreateClient() {
+  const ns = typeof globalThis !== "undefined" ? globalThis.supabase : undefined;
+  return ns && typeof ns.createClient === "function" ? ns.createClient : null;
+}
 
 let singleton = null;
 
@@ -52,6 +57,8 @@ function getAuthStorage() {
 
 export function getSupabaseBrowserClient() {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return null;
+  const createClient = getCreateClient();
+  if (!createClient) return null;
   if (!singleton) {
     singleton = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
       auth: {
