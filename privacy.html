@@ -76,131 +76,221 @@
   <main id="main" class="page-main legal-page">
     <article class="legal-article i18n-cs">
       <h1>Zásady ochrany osobních údajů (Privacy Policy)</h1>
-      <p class="legal-updated">Poslední aktualizace: 2026</p>
+      <p class="legal-updated">Poslední aktualizace: duben 2026</p>
 
       <p>
-        NÁKUPIČKA respektuje vaše soukromí. Ve výchozím stavu aplikace ukládá nákupy lokálně na vašem zařízení. Pokud
-        zapnete sdílení domácnosti, přístup k webovému rozhraní nebo zálohu Premium přes cloud, pracujete také se službou
-        Supabase podle oddílu níže. Níže najdete zásady pro aplikaci, webové rozhraní, cloud i tyto stránky.
+        Tento dokument popisuje zpracování údajů v mobilní aplikaci NÁKUPIČKA (iOS), na webu
+        <a href="https://nakupicka.vercel.app/" rel="noopener noreferrer">nakupicka.vercel.app</a> a souvisejících
+        službách. Provozovatelem je držitel práv k aplikaci a webu (kontakt níže).
       </p>
 
-      <h2>Ukládání dat</h2>
+      <h2>Údaje na vašem zařízení</h2>
       <p>
-        Veškeré nákupy a údaje, které do aplikace zadáte, se ve výchozím stavu ukládají lokálně na vašem zařízení.
-        Zapnete-li synchronizaci domácnosti, webové rozhraní nebo zálohu Premium, přenáší se a ukládají příslušná data u
-        poskytovatele Supabase (viz oddíl o webu a cloudu).
+        Ve výchozím stavu aplikace ukládá nákupy a nastavení lokálně (v úložišti zařízení). Volitelně může synchronizovat
+        seznam nákupů přes <strong>iCloud Key-Value</strong> mezi vašimi zařízeními přihlášenými ke stejnému Apple ID —
+        zpracování probíhá v rámci služeb Apple podle jejich zásad.
       </p>
 
-      <h2>Použití fotoaparátu</h2>
-      <p>Fotoaparát slouží pouze ke skenování účtenek a čárových kódů produktů.</p>
-
-      <h2>Zpracování AI</h2>
+      <h2>Účet, domácnost a cloud (Supabase)</h2>
       <p>
-        Některé funkce — například sken účtenky, odhad ceny košíku nebo analýza nákupů — mohou dočasně odeslat obrázek
-        nebo text externím službám pro zpracování, aby vznikl výsledek. Tyto služby osobní údaje neukládají.
-      </p>
-
-      <h2>Služby třetích stran</h2>
-      <p>Aplikace může využívat externí služby k doplnění názvu produktu podle čárového kódu.</p>
-
-      <h2>Webové rozhraní a cloud (Supabase)</h2>
-      <p>
-        Webové rozhraní NÁKUPIČKY a cloudová synchronizace jsou napojené na databázi a ověřování uživatelů u
-        <a href="https://supabase.com" rel="noopener noreferrer">Supabase</a> (hosting a infrastruktura u tohoto
-        poskytovatele). K účtu se typicky přihlašujete e-mailem prostřednictvím Supabase Auth.
+        Pokud zapnete sdílení domácnosti, používáte webovou aplikaci nebo volitelnou zálohu Premium do cloudu, data se
+        odesílají a ukládají u poskytovatele
+        <a href="https://supabase.com" rel="noopener noreferrer">Supabase</a> (databáze, ověřování uživatelů). Přihlášení
+        je možné <strong>e-mailem a heslem</strong> a v iOS aplikaci také přes <strong>Přihlášení pomocí Apple</strong>
+        (Apple&nbsp;ID), podle nastavení projektu v Supabase.
       </p>
       <p>
-        V cloudu mohou být uložena mimo jiné data o domácnosti, sdílených nákupech, členství, e-mailových pozvánkách do
-        domácnosti a volitelné záloze dat (Premium), v rozsahu, který v aplikaci nebo na webu zapnete. Přístup k údajům je
-        omezen pravidly zabezpečení databáze (včetně Row Level Security) nastavenými pro projekt NÁKUPIČKY.
+        V cloudu mohou být mimo jiné údaje o domácnosti, členech, sdílených nákupech, pozvánkách vázaných na e-mail,
+        stavu Premium synchronizovaném z aplikace a volitelné šifrované nebo strukturované záloze dat uživatele — vždy jen
+        v rozsahu, který v aplikaci nebo na webu zapnete. Přístup k datům v databázi omezují bezpečnostní pravidla včetně
+        Row Level Security nastavených pro projekt NÁKUPIČKY.
       </p>
       <p>
-        Jak Supabase zpracovává osobní údaje v rámci své služby, popisuje
+        Jak Supabase zpracovává osobní údaje, popisuje
         <a href="https://supabase.com/privacy" rel="noopener noreferrer">Supabase Privacy Policy</a>.
       </p>
 
-      <h2>Webové stránky a živý chat</h2>
+      <h2>Nákupy v aplikaci (Premium)</h2>
       <p>
-        Tyto stránky používají živý chat Smartsupp (služba společnosti Smartsupp). Při načtení stránky a při používání chatu
-        může docházet ke zpracování údajů tímto poskytovatelem v souladu s jeho
-        <a href="https://www.smartsupp.com/help/privacy/" rel="noopener noreferrer">informacemi o ochraně osobních údajů</a>.
+        Předplatné Premium zprostředkovává <strong>Apple</strong> přes App Store a StoreKit. O platbách a účtu Apple
+        platí zásady společnosti Apple. Aplikace může do Supabase odeslat informaci, zda má účet aktivní Premium, aby
+        šly nabízet cloudové funkce vázané na předplatné.
+      </p>
+
+      <h2>Fotoaparát a knihovna fotek</h2>
+      <p>
+        Fotoaparát slouží ke skenování <strong>čárových kódů</strong> (EAN/UPC/QR) a k pořízení snímků pro
+        <strong>odhad ceny košíku</strong> nebo <strong>čtení účtenky</strong>. Můžete také vybrat obrázek z
+        <strong>knihovny fotek</strong>, pokud ho systém nabídne místo nedostupného fotoaparátu. Obrázky se neodesílají
+        jinam než při použití funkcí AI popsaných níže.
+      </p>
+
+      <h2>Umělá inteligence a síťový backend</h2>
+      <p>
+        Funkce založené na AI (např. rozbor účtenky z fotky, odhad ceny nákupního koše z fotky, návrhy kategorií k
+        položkám, analýza cen, textový AI chat v aplikaci, případně text notifikace generovaný z nedávných nákupů) odesílají
+        na server provozovatele
+        <strong>nakupicka-ai.adamportl.workers.dev</strong> (Cloudflare Worker) text a/nebo obrázek účtenky či košíku v
+        podobě potřebné pro zpracování. Worker data předává dál modelům třetích stran (např. Google Gemini nebo jiným
+        poskytovatelům AI) za účelem vrácení výsledku do aplikace. Údaje zpracováváte tím, že funkci použijete; uchovávání
+        na straně modelů podléhá podmínkám příslušného poskytovatele.
+      </p>
+
+      <h2>Další veřejné služby na síti</h2>
+      <p>
+        Pro doplnění <strong>názvu produktu podle čárového kódu</strong> může aplikace dotazovat databázi
+        <a href="https://world.openfoodfacts.org" rel="noopener noreferrer">Open Food Facts</a> (odesílá se identifikátor
+        kódu, ne osobní údaje uživatele).
+      </p>
+      <p>
+        Pro přepočty měn může aplikace načíst aktuální kurzy z veřejného API
+        <a href="https://exchangerate.host" rel="noopener noreferrer">exchangerate.host</a> (obecný požadavek, bez
+        osobních údajů o vás).
+      </p>
+
+      <h2>Oznámení</h2>
+      <p>
+        Pokud v aplikaci povolíte související funkce, mohou se zobrazovat <strong>lokální oznámení</strong> s textem
+        vygenerovaným AI z údajů o vašich nákupech — k obsahu se dostanete jen vy na zařízení.
+      </p>
+
+      <h2>Sledování reklam</h2>
+      <p>
+        Aplikace NÁKUPIČKA neslouží k přeshraničnímu sledování uživatelů pro reklamu (App Tracking Transparency se v ní
+        nevyužívá k takovému účelu).
+      </p>
+
+      <h2>Webová aplikace a tyto stránky</h2>
+      <p>
+        Webová aplikace používá stejný účet Supabase jako mobilní aplikace při synchronizaci domácnosti a záloh. Platí
+        oddíl o Supabase výše.
+      </p>
+
+      <h2>Živý chat na webu</h2>
+      <p>
+        Tyto stránky mohou načítat živý chat <strong>Smartsupp</strong>. Při načtení stránky a při používání chatu může
+        docházet ke zpracování údajů tímto poskytovatelem podle jeho
+        <a href="https://www.smartsupp.com/help/privacy/" rel="noopener noreferrer">zásad ochrany osobních údajů</a>.
       </p>
 
       <h2>Kontakt</h2>
       <p>
-        Máte-li k těmto zásadám dotazy, napište na
+        Dotazy k těmto zásadám pište na
         <a href="mailto:Podpora@nakupicka.app">Podpora@nakupicka.app</a>.
       </p>
 
       <p class="legal-source small">
-        Text o aplikaci odpovídá zveřejněné verzi na
-        <a href="https://sites.google.com/view/nakupicka/domovsk%C3%A1-str%C3%A1nka" rel="noopener noreferrer">Google Sites</a>;
-        oddíly o webu, cloudu (Supabase) a živém chatu doplňují zásady pro tyto stránky a propojené služby.
+        Oficiální odkazy k aplikaci (včetně těchto zásad) jsou uvedeny v aplikaci a na
+        <a href="https://nakupicka.vercel.app/" rel="noopener noreferrer">nakupicka.vercel.app</a>.
       </p>
     </article>
 
     <article class="legal-article i18n-en">
       <h1>Privacy policy</h1>
-      <p class="legal-updated">Last updated: 2026</p>
+      <p class="legal-updated">Last updated: April 2026</p>
 
       <p>
-        NÁKUPIČKA respects your privacy. By default, the app stores purchases locally on your device. If you enable
-        household sharing, the web app, or Premium cloud backup, you also use Supabase as described below. The sections
-        below cover the app, the web app, cloud services, and this site.
+        This policy describes how data is handled in the NÁKUPIČKA iOS app, on
+        <a href="https://nakupicka.vercel.app/" rel="noopener noreferrer">nakupicka.vercel.app</a>, and related services.
+        The operator is the rights holder of the app and site (contact below).
       </p>
 
-      <h2>Data storage</h2>
+      <h2>Data on your device</h2>
       <p>
-        By default, all purchases and information you enter in the app are stored locally on your device. If you enable
-        household sync, the web interface, or Premium backup, the relevant data is transferred to and stored with Supabase
-        (see “Web app and cloud”).
+        By default, the app stores purchases and settings locally on the device. Optionally, it can sync purchase lists
+        via <strong>iCloud Key-Value</strong> across your devices signed into the same Apple ID — processing is governed
+        by Apple’s policies.
       </p>
 
-      <h2>Camera</h2>
-      <p>The camera is used only for scanning receipts and product barcodes.</p>
-
-      <h2>AI processing</h2>
+      <h2>Account, household, and cloud (Supabase)</h2>
       <p>
-        Some features — such as receipt scanning, basket price estimation, or purchase analysis — may temporarily send an
-        image or text to external processing services to produce a result. Those services do not store personal data.
-      </p>
-
-      <h2>Third-party services</h2>
-      <p>The app may use external services to fill in a product name from a barcode.</p>
-
-      <h2>Web app and cloud (Supabase)</h2>
-      <p>
-        The NÁKUPIČKA web app and cloud sync connect to a database and user authentication hosted by
-        <a href="https://supabase.com" rel="noopener noreferrer">Supabase</a>. You typically sign in with email via Supabase
-        Auth.
+        If you enable household sharing, use the web app, or optional Premium cloud backup, data is sent to and stored with
+        <a href="https://supabase.com" rel="noopener noreferrer">Supabase</a> (database and authentication). Sign-in is
+        available with <strong>email and password</strong> and, in the iOS app, with <strong>Sign in with Apple</strong>,
+        depending on project settings in Supabase.
       </p>
       <p>
-        Data stored in the cloud may include household information, shared purchases, membership, email invitations to a
-        household, and optional Premium backups, depending on what you enable in the app or on the web. Access is restricted
-        by database security rules (including Row Level Security) configured for the NÁKUPIČKA project.
+        Cloud data may include household details, members, shared purchases, email-linked invitations, Premium status
+        synced from the app, and optional user backups — only to the extent you enable in the app or on the web. Database
+        access is restricted by security rules including Row Level Security for the NÁKUPIČKA project.
       </p>
       <p>
         How Supabase processes personal data is described in the
         <a href="https://supabase.com/privacy" rel="noopener noreferrer">Supabase Privacy Policy</a>.
       </p>
 
-      <h2>Website and live chat</h2>
+      <h2>In-app purchases (Premium)</h2>
       <p>
-        This site uses Smartsupp live chat. When you load pages and when you use the chat, data may be processed by Smartsupp
-        as described in their
-        <a href="https://www.smartsupp.com/help/privacy/" rel="noopener noreferrer">data privacy information</a>.
+        Premium subscriptions are handled by <strong>Apple</strong> via the App Store and StoreKit. Apple’s terms apply to
+        payments and your Apple account. The app may send Supabase whether your account has active Premium so
+        subscription-gated cloud features can work.
+      </p>
+
+      <h2>Camera and photo library</h2>
+      <p>
+        The camera is used to scan <strong>barcodes</strong> (EAN/UPC/QR) and to capture images for <strong>basket price
+        estimates</strong> or <strong>receipt scanning</strong>. You may also pick an image from the <strong>photo
+        library</strong> when the system offers it instead of the camera. Images are not sent elsewhere except when you use
+        the AI features described below.
+      </p>
+
+      <h2>Artificial intelligence and network backend</h2>
+      <p>
+        AI-powered features (e.g. receipt parsing from a photo, basket price estimate from a photo, category suggestions,
+        price insights, in-app AI chat, or optional notification text derived from recent purchases) send text and/or
+        receipt or basket images to the operator’s server at
+        <strong>nakupicka-ai.adamportl.workers.dev</strong> (a Cloudflare Worker) in the form needed for processing. The
+        worker forwards requests to third-party model providers (e.g. Google Gemini or others) to return a result to the
+        app. You initiate processing by using the feature; retention on the model provider’s side is governed by that
+        provider’s terms.
+      </p>
+
+      <h2>Other public network services</h2>
+      <p>
+        To fill in a <strong>product name from a barcode</strong>, the app may query the
+        <a href="https://world.openfoodfacts.org" rel="noopener noreferrer">Open Food Facts</a> database (the request
+        contains the code identifier, not personal data about you).
+      </p>
+      <p>
+        For currency conversion, the app may fetch rates from the public
+        <a href="https://exchangerate.host" rel="noopener noreferrer">exchangerate.host</a> API (a generic request without
+        personal identifiers).
+      </p>
+
+      <h2>Notifications</h2>
+      <p>
+        If you enable related options, <strong>local notifications</strong> may show text generated by AI from your
+        purchase data — only you see that content on your device.
+      </p>
+
+      <h2>Advertising tracking</h2>
+      <p>
+        NÁKUPIČKA is not used for cross-app tracking for advertising (App Tracking Transparency is not used for that
+        purpose).
+      </p>
+
+      <h2>Web app and this site</h2>
+      <p>
+        The web app uses the same Supabase account as the mobile app when household sync and backups are enabled. The
+        Supabase section above applies.
+      </p>
+
+      <h2>Live chat on the website</h2>
+      <p>
+        These pages may load <strong>Smartsupp</strong> live chat. Loading the widget and using the chat may process data
+        as described in Smartsupp’s
+        <a href="https://www.smartsupp.com/help/privacy/" rel="noopener noreferrer">privacy information</a>.
       </p>
 
       <h2>Contact</h2>
       <p>
-        If you have questions about this policy, write to
+        Questions about this policy:
         <a href="mailto:Podpora@nakupicka.app">Podpora@nakupicka.app</a>.
       </p>
 
       <p class="legal-source small">
-        The app-related text matches the version published on
-        <a href="https://sites.google.com/view/nakupicka/domovsk%C3%A1-str%C3%A1nka" rel="noopener noreferrer">Google Sites</a>;
-        the web app, cloud (Supabase), and live chat sections add disclosures for this site and connected services.
+        Official links for the app (including this policy) are listed in the app and on
+        <a href="https://nakupicka.vercel.app/" rel="noopener noreferrer">nakupicka.vercel.app</a>.
       </p>
     </article>
 

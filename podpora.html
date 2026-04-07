@@ -74,44 +74,51 @@
     <section class="support-block" id="navod" aria-labelledby="navod-heading">
       <h2 id="navod-heading"><span class="i18n-cs">Návod</span><span class="i18n-en">User guide</span></h2>
       <article class="guide-content i18n-cs" id="navodPlaceholder">
-        <h3 class="guide-title">Návod na používání NÁKUPIČKY</h3>
+        <h3 class="guide-title">Návod na NÁKUPIČKU</h3>
         <p class="guide-lead">
-          Krátký průvodce pro běžné použití — odpovídá funkcím v aktuální verzi aplikace.
+          Průvodce funkcemi mobilní aplikace (iOS) a stručně i webové aplikace. Odpovídá aktuálnímu stavu vývoje.
         </p>
 
-        <h3>Začátek</h3>
+        <h3>Úvod</h3>
+        <p>
+          <strong>iOS aplikace</strong> slouží k evidenci nákupů, přehledům, AI nástrojům a volitelnému sdílení domácnosti v
+          cloudu. <strong>Web</strong> na
+          <a href="https://nakupicka.vercel.app/app.html">nakupicka.vercel.app</a> umožňuje po přihlášení pracovat se
+          sdílenými nákupy domácnosti (stejný účet jako v aplikaci při zapnutém rodinném režimu). Pro nejlepší kompatibilitu
+          přihlášení na webu použij prohlížeč Google Chrome, pokud by něco nešlo.
+        </p>
+
+        <h3>První spuštění</h3>
         <ul>
+          <li>Po instalaci může proběhnout <strong>průvodce</strong> — projdi kroky nebo zvol <em>Přeskočit</em>.</li>
           <li>
-            <strong>První spuštění</strong> — může se zobrazit průvodce (tutorial). Projdi ho nebo klepni na
-            <em>Přeskočit</em>.
-          </li>
-          <li>
-            <strong>Přehled</strong> — na kartě Domů vidíš souhrn výdajů, graf a rychlé informace k aktuálnímu profilu
-            (nahoře je uvedený aktivní profil).
+            Nákupy se ve výchozím stavu ukládají <strong>do telefonu</strong>; volitelně je aplikace umí synchronizovat přes
+            <strong>iCloud</strong> mezi tvými zařízeními (stejné Apple ID). Když zapneš <strong>rodinné sdílení přes
+            cloud</strong>, má synchronizaci přednost cloudová domácnost.
           </li>
         </ul>
 
-        <h3>Spodní lišta (hlavní nabídka)</h3>
+        <h3>Spodní lišta</h3>
         <div class="guide-table-wrap">
           <table class="guide-table">
             <thead>
               <tr>
-                <th scope="col">Položka</th>
-                <th scope="col">K čemu slouží</th>
+                <th scope="col">Záložka</th>
+                <th scope="col">Účel</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>Domů</td>
-                <td>Přehled, grafy, součty</td>
+                <td>Přehled, grafy, součty, rychlé akce</td>
               </tr>
               <tr>
                 <td>Produkty</td>
-                <td>Seznam nákupů, vyhledávání, úpravy</td>
+                <td>Seznam nákupů, vyhledávání, úpravy, mazání</td>
               </tr>
               <tr>
                 <td>+ (uprostřed)</td>
-                <td>Rychlé přidání položek (rychlé zadání)</td>
+                <td>Rychlé přidání textem (např. „mléko 29“)</td>
               </tr>
               <tr>
                 <td>AI</td>
@@ -119,220 +126,355 @@
               </tr>
               <tr>
                 <td>Nastavení</td>
-                <td>Profily, měna, rozpočet, Premium, export</td>
+                <td>Účet, Premium, profily, měna, rozpočet, chování, PDF, odkazy</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <h3>Profily</h3>
+        <h3>Karta Domů (přehled)</h3>
         <ul>
-          <li>Každý nákup patří do profilu (výchozí je např. Domácnost).</li>
+          <li>Hlavní karta ukazuje <strong>celkovou útratu</strong> aktivního profilu a počet položek.</li>
           <li>
-            V <strong>Nastavení → Rozpočet a profily</strong> můžeš přepínat aktivní profil, přidat nový nebo smazat
-            vlastní profily (výchozí profil nelze smazat stejně jako speciální profil Rodina, pokud je zapnuté sdílení).
+            Pokud máš zadaný <strong>měsíční rozpočet</strong>, vidíš ukazatel „zbývá“ nebo „přesah“ a posuvník využití.
           </li>
           <li>
-            Profil <strong>Rodina</strong> se používá u rodinného sdílení (Premium) — sdílené nákupy pro domácnost přes
-            iCloud.
+            Graf přepínáš mezi <strong>týdenní útratou</strong> (posledních 7 dní) a <strong>přehledem kategorií</strong> (největší
+            podíly výdajů).
+          </li>
+          <li>
+            Pod přehledem jsou <strong>rychlé statistiky</strong>: Dnes, Týden, Top kategorie.
+          </li>
+          <li>
+            <strong>Rychlé akce</strong>: sken účtenky, sken produktu (čárový kód), export PDF. U účtenky a košíku platí AI
+            kredity (viz níže).
+          </li>
+          <li>
+            V menu (⋯) v záhlaví najdeš také skeny, <strong>historii účtenek</strong> (uložené skeny) a při úpravách
+            možnost <strong>vymazat všechny položky</strong> aktuálního seznamu.
           </li>
         </ul>
 
-        <h3>Přidávání nákupů</h3>
+        <h3>Produkty</h3>
         <ul>
           <li>
-            <strong>Produkty</strong> — položky v seznamu; klepnutím upravíš název, cenu, datum, kategorii a profil.
+            Seznam položek pro <strong>aktivní profil</strong>. Klepnutím otevřeš detail — název, cena, datum, profil,
+            kategorie (zobrazená vs. hlavní pro limity).
           </li>
           <li>
-            <strong>Rychlé +</strong> (středové tlačítko) — rychlé doplnění bez nutnosti být jen na jedné obrazovce.
+            <strong>Přejetí prstem</strong>: smazání vpravo, úprava vlevo. Pole <strong>Hledat</strong> filtruje názvy.
           </li>
           <li>
-            <strong>Kategorie</strong> — pro limity a rozpočet se používá hlavní kategorie ze seznamu (Potraviny,
-            Drogerie, …). Aplikace umí doplnit vlastní popisek u položky (např. od AI).
+            U <strong>rodinného sdílení</strong>, pokud máš jen oprávnění číst, seznam upravovat nejde — zobrazí se upozornění.
           </li>
         </ul>
 
-        <h3>AI funkce (skeny)</h3>
+        <h3>Rychlé přidání (+)</h3>
         <ul>
-          <li><strong>Účtenka</strong> — vyfoť nebo vyber z fotek; AI zkusí vytáhnout položky k uložení.</li>
-          <li><strong>Čárový kód</strong> — naskenuj kód; doplní se název produktu, kde je to možné.</li>
-          <li><strong>Košík</strong> — vyfoť nákup v košíku; AI může odhadnout cenu.</li>
+          <li>Zadej textově např. <code>mléko 29</code> — aplikace doplní cenu a kategorii podle pravidel.</li>
+          <li>Pokud zapneš <strong>návrhy při psaní</strong>, nabídne se podobné z historie.</li>
+          <li>Po přidání uvidíš krátký seznam „Právě přidané“ ve stejném panelu.</li>
+        </ul>
+
+        <h3>Záložka AI (asistent)</h3>
+        <ul>
+          <li>Piš otázky o výdajích; nahoře jsou návrhy typu „Za co utrácím nejvíc?“.</li>
+          <li>
+            Tlačítko <strong>Vytvořit rychlý přehled</strong> vygeneruje shrnutí bez psaní dotazu.
+          </li>
+        </ul>
+
+        <h3>AI skeny (účtenka, čárový kód, košík)</h3>
+        <ul>
+          <li>
+            <strong>Účtenka</strong> — vyfoť v aplikaci nebo vyber fotku z galerie. AI připraví seznam položek; před uložením
+            je můžeš vybrat nebo upravit.
+          </li>
+          <li>
+            <strong>Sken produktu</strong> — čte EAN/UPC/QR; název se doplní z veřejné databáze <a
+              href="https://world.openfoodfacts.org"
+              rel="noopener noreferrer"
+              >Open Food Facts</a
+            >, kde je k dispozici.
+          </li>
+          <li>
+            <strong>Odhad ceny košíku</strong> — fotka nákupu v košíku; AI odhadne přibližnou celkovou cenu (před placením).
+          </li>
+          <li>
+            <strong>Free verze:</strong> <strong>2 AI skeny týdně</strong> — spotřebují se při úspěšném zpracování
+            <strong>účtenky</strong> nebo <strong>odhadu košíku</strong> (společný počítadlo). <strong>Sken čárového kódu</strong>
+            tento limit nečerpá. Zbývající počet najdeš v nastavení u „AI skeny tento týden“. S <strong>Premium</strong> neplatí
+            týdenní limit u těchto AI skenů.
+          </li>
+        </ul>
+
+        <h3>Profily a měna</h3>
+        <ul>
+          <li>Každý nákup patří do <strong>profilu</strong> (výchozí je „Domácnost“). Přepínáš v Nastavení → Profil a rozpočet.</li>
+          <li>Vlastní profily můžeš přidávat a mazat; výchozí „Domácnost“ a profil rodiny při sdílení mají zvláštní pravidla.</li>
+          <li>
+            <strong>Měna</strong> (Kč, €, $, £) — přepočty kurzů z veřejného zdroje. Po změně měny zkontroluj starší položky.
+          </li>
+          <li>
+            <strong>Měsíční rozpočet</strong> — zobrazí se na přehledu; u Premium můžeš nastavit také <strong>měsíční limity
+            podle kategorií</strong> (Potraviny, Drogerie, …) a ukládat je.
+          </li>
+        </ul>
+
+        <h3>Profil „Rodina“ a cloud (Premium)</h3>
+        <ul>
+          <li>
+            S Premium a přihlášením e-mailem / Apple můžeš založit <strong>domácnost</strong>, zvát členy <strong>e-mailem</strong>
+            a nastavit, zda nový člen smí jen <strong>prohlížet</strong>, nebo i <strong>měnit</strong> sdílený seznam.
+          </li>
+          <li>
+            Sdílené nákupy jsou v profilu rodiny; data běží přes <strong>Supabase</strong> (stejná domácnost jako na webu).
+          </li>
+          <li>
+            V <strong>Účtu</strong> můžeš zapnout <strong>zálohu nákupů do cloudu</strong> (Premium) — obnovení zálohy na
+            jiném zařízení pod stejným účtem.
+          </li>
+          <li>
+            Pozvánky přijímáš v nastavení (badge u sekce Rodina); člen musí použít <strong>stejný e-mail</strong> jako v pozvánce.
+          </li>
+        </ul>
+
+        <h3>Premium — přehled výhod</h3>
+        <ul>
+          <li>Neomezené AI skeny (účtenka a košík) vůči týdennímu free limitu.</li>
+          <li>Měsíční limity podle kategorií a přehled překročení.</li>
+          <li><strong>Smart ceny</strong> — AI upozorní na podezřelé zdražení opakovaných nákupů (lze ručně obnovit).</li>
+          <li>Rodina a domácnost v cloudu, pozvánky e-mailem, záloha dat na účet.</li>
+          <li>V chování: <strong>intenzita tónu motivačních notifikací</strong> (posuvník).</li>
         </ul>
         <p>
-          <strong>Free verze:</strong> máš 2 AI skeny týdně (po vyčerpání musíš počkat na další týden nebo použít
-          Premium).
+          Předplatné koupíš v Nastavení / obrazovce Premium; použij <strong>Obnovit nákupy</strong>, pokud tě App Store neuzná.
+          Odkazy na EULA a soukromí jsou v aplikaci.
         </p>
 
-        <h3>AI asistent (záložka AI)</h3>
+        <h3>Chování aplikace a PDF</h3>
         <ul>
-          <li>Piš otázky o výdajích (např. „Za co utrácím nejvíc?“).</li>
-          <li>Můžeš použít „Vytvořit rychlý přehled“ pro stručný přehled bez psaní.</li>
-        </ul>
-
-        <h3>Nastavení — důležité</h3>
-        <ul>
-          <li><strong>Měna</strong> — Kč, €, $, £ (přepočty podle kurzů).</li>
           <li>
-            <strong>Měsíční rozpočet</strong> — zadáš limit; aplikace ukáže, kolik ještě zbývá nebo o kolik jsi přešel.
+            <strong>Kalkulačka u ceny</strong>, <strong>haptická odezva</strong>, <strong>návrhy při psaní</strong>,
+            <strong>motivační notifikace</strong> (text může generovat AI z nedávných nákupů — povol systémová oznámení).
           </li>
           <li>
-            <strong>Chytré funkce</strong> — kalkulačka v ceně, haptika, návrhy položek, motivační notifikace (intenzitu
-            u Premium nastavíš posuvníkem).
-          </li>
-          <li><strong>Export PDF</strong> — přehled nákupů pro aktuální profil.</li>
-          <li><strong>O aplikaci</strong> — odkaz na podporu a Privacy Policy.</li>
-        </ul>
-
-        <h3>Premium (předplatné)</h3>
-        <ul>
-          <li>Neomezené AI skeny (účtenka, košík, čárový kód v rozsahu aplikace).</li>
-          <li>Limity kategorií a související přehledy.</li>
-          <li>Smart ceny — upozornění na zdražení opakovaných nákupů.</li>
-          <li>
-            Rodinné sdílení — sdílený seznam v profilu Rodina přes iCloud (nastavení v Premium).
+            <strong>Export PDF</strong> — přehled pro aktivní profil; vzhled PDF (světlý / tmavý) v Nastavení → Export PDF.
           </li>
         </ul>
-        <p>
-          Nákup a obnovení předplatného je v Nastavení nebo v nabídce Premium; u předplatného jsou v aplikaci uvedeny
-          podmínky (EULA) a zásady ochrany osobních údajů.
-        </p>
 
-        <h3>Rady na závěr</h3>
+        <h3>Účet v nastavení</h3>
         <ul>
-          <li>Sleduj aktivní profil v přehledu — statistiky a export se vztahují k němu.</li>
-          <li>Po změně měny zkontroluj částky u starších nákupů (přepočí se podle nastavení v aplikaci).</li>
-          <li>
-            Pokud něco nefunguje, použij Podpora v nastavení nebo Obnovit nákupy u Premium, pokud máš aktivní předplatné
-            z App Storu.
-          </li>
+          <li>Přihlášení <strong>e-mailem a heslem</strong> nebo <strong>Přihlášení pomocí Apple</strong>.</li>
+          <li>Heslo obnovíš přes „Zapomenuté heslo“ na přihlašovací obrazovce (e-mail od Supabase).</li>
+          <li>Po přihlášení se nabídne záloha a sekce rodiny (s Premium).</li>
+        </ul>
+
+        <h3>Webová aplikace</h3>
+        <ul>
+          <li>Přihlášení e-mailem a heslem, přehled domácnosti, úpravy nákupů (podle oprávnění), pozvánky, záloha Premium.</li>
+          <li>Data odpovídají stejné domácnosti jako v iOS po zapnutí synchronizace.</li>
+        </ul>
+
+        <h3>Tipy a podpora</h3>
+        <ul>
+          <li>Statistiky a PDF se vždy vztahují k <strong>aktivnímu profilu</strong>.</li>
+          <li>Na problémy s přihlášením na webu použij Chrome; případně napiš přes formulář níže.</li>
         </ul>
       </article>
       <article class="guide-content i18n-en">
         <h3 class="guide-title">Using NÁKUPIČKA</h3>
         <p class="guide-lead">
-          A short guide for everyday use — matches the current version of the app.
+          Feature guide for the iOS app, with a short note on the web app. Reflects the current product.
         </p>
 
-        <h3>Getting started</h3>
+        <h3>Introduction</h3>
+        <p>
+          The <strong>iOS app</strong> tracks purchases, shows insights, AI tools, and optional household sharing in the
+          cloud. The <strong>web app</strong> at
+          <a href="https://nakupicka.vercel.app/app.html">nakupicka.vercel.app</a> lets you work with shared household
+          purchases after sign-in (same account as the app when family sync is on). If sign-in misbehaves in the browser, try
+          Google Chrome.
+        </p>
+
+        <h3>First launch</h3>
         <ul>
+          <li>A <strong>tutorial</strong> may appear — complete it or tap <em>Skip</em>.</li>
           <li>
-            <strong>First launch</strong> — you may see a tutorial. Complete it or tap <em>Skip</em>.
-          </li>
-          <li>
-            <strong>Overview</strong> — on the Home tab you see spending summary, a chart, and quick info for the active profile
-            (the active profile is shown at the top).
+            By default, data stays <strong>on the device</strong>; optionally the app can sync via <strong>iCloud</strong>
+            across your Apple ID devices. When <strong>household cloud sharing</strong> is enabled, the cloud household takes
+            precedence over iCloud KV for the shared list.
           </li>
         </ul>
 
-        <h3>Bottom bar (main menu)</h3>
+        <h3>Bottom bar</h3>
         <div class="guide-table-wrap">
           <table class="guide-table">
             <thead>
               <tr>
-                <th scope="col">Item</th>
-                <th scope="col">What it does</th>
+                <th scope="col">Tab</th>
+                <th scope="col">Purpose</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>Home</td>
-                <td>Overview, charts, totals</td>
+                <td>Overview, charts, totals, quick actions</td>
               </tr>
               <tr>
                 <td>Products</td>
-                <td>Purchase list, search, edits</td>
+                <td>List, search, edit, delete</td>
               </tr>
               <tr>
                 <td>+ (centre)</td>
-                <td>Quick add (quick entry)</td>
+                <td>Quick text add (e.g. “milk 1.2”)</td>
               </tr>
               <tr>
                 <td>AI</td>
-                <td>Chat with the assistant over your purchases</td>
+                <td>Chat assistant over your purchases</td>
               </tr>
               <tr>
                 <td>Settings</td>
-                <td>Profiles, currency, budget, Premium, export</td>
+                <td>Account, Premium, profiles, currency, budget, behaviour, PDF, links</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <h3>Profiles</h3>
+        <h3>Home (overview)</h3>
         <ul>
-          <li>Each purchase belongs to a profile (the default is e.g. Household).</li>
+          <li>Hero card shows <strong>total spend</strong> for the active profile and item count.</li>
+          <li>With a <strong>monthly budget</strong>, you see remaining amount or overrun and a progress bar.</li>
+          <li>Toggle the chart between <strong>last 7 days spending</strong> and <strong>category breakdown</strong>.</li>
+          <li><strong>Quick stats</strong>: Today, Week, Top category.</li>
           <li>
-            In <strong>Settings → Budget and profiles</strong> you can switch the active profile, add a new one, or delete
-            custom profiles (the default profile cannot be deleted, nor the special Family profile when sharing is on).
+            <strong>Quick actions</strong>: receipt scan, product (barcode) scan, PDF export. Receipt and basket use AI
+            credits (see below).
           </li>
           <li>
-            The <strong>Family</strong> profile is used for family sharing (Premium) — shared household purchases via iCloud.
+            The header menu (⋯) also opens scans, <strong>receipt history</strong> (saved scans), and can
+            <strong>clear all items</strong> when editing is allowed.
           </li>
         </ul>
 
-        <h3>Adding purchases</h3>
+        <h3>Products</h3>
         <ul>
           <li>
-            <strong>Products</strong> — items in the list; tap to edit name, price, date, category, and profile.
+            List for the <strong>active profile</strong>. Tap an item for details — name, price, date, profile, display vs
+            main category for limits.
           </li>
+          <li><strong>Swipe</strong>: delete (trailing), edit (leading). <strong>Search</strong> filters by name.</li>
           <li>
-            <strong>Quick +</strong> (centre button) — quick entry without staying on one screen only.
-          </li>
-          <li>
-            <strong>Categories</strong> — limits and budget use the main category from the list (Groceries, Drugstore, …).
-            The app can add a custom note per item (e.g. from AI).
+            With <strong>read-only family access</strong>, you cannot edit — a banner explains the restriction.
           </li>
         </ul>
 
-        <h3>AI features (scans)</h3>
+        <h3>Quick add (+)</h3>
         <ul>
-          <li><strong>Receipt</strong> — take a photo or pick from Photos; AI tries to extract line items to save.</li>
-          <li><strong>Barcode</strong> — scan the code; product name is filled in when available.</li>
-          <li><strong>Basket</strong> — photograph the basket; AI may estimate the price.</li>
+          <li>Type e.g. <code>milk 1.2</code> — the app parses price and category.</li>
+          <li>With <strong>suggestions while typing</strong> enabled, similar past items are offered.</li>
+          <li>Recently added items appear in the same sheet.</li>
+        </ul>
+
+        <h3>AI tab (assistant)</h3>
+        <ul>
+          <li>Ask spending questions; suggested prompts are shown at the top.</li>
+          <li>
+            <strong>Create quick overview</strong> generates a summary without typing a question.
+          </li>
+        </ul>
+
+        <h3>AI scans (receipt, barcode, basket)</h3>
+        <ul>
+          <li>
+            <strong>Receipt</strong> — capture in-app or pick from Photos. AI extracts lines; you confirm before saving.
+          </li>
+          <li>
+            <strong>Product scan</strong> — reads EAN/UPC/QR; the name is filled from the public
+            <a href="https://world.openfoodfacts.org" rel="noopener noreferrer">Open Food Facts</a> database when
+            available.
+          </li>
+          <li>
+            <strong>Basket estimate</strong> — photo of groceries in a cart; AI returns an approximate total before checkout.
+          </li>
+          <li>
+            <strong>Free tier:</strong> <strong>2 AI scans per week</strong> — consumed on successful
+            <strong>receipt</strong> or <strong>basket</strong> processing (shared counter). <strong>Barcode scans</strong> do
+            not use this quota. Check “AI scans this week” in Settings. <strong>Premium</strong> removes this weekly cap for
+            those AI scans.
+          </li>
+        </ul>
+
+        <h3>Profiles and currency</h3>
+        <ul>
+          <li>Each purchase belongs to a <strong>profile</strong> (default “Household”). Switch under Settings → Profile &amp; budget.</li>
+          <li>Add or remove custom profiles; default “Household” and the family profile when sharing is on have special rules.</li>
+          <li>
+            <strong>Currency</strong> (CZK, €, $, £) — conversions use a public rate API; recheck older rows after switching.
+          </li>
+          <li>
+            <strong>Monthly budget</strong> on the overview; with Premium you can also set <strong>per-category monthly
+            limits</strong> and save them.
+          </li>
+        </ul>
+
+        <h3>“Family” profile and cloud (Premium)</h3>
+        <ul>
+          <li>
+            With Premium and email / Sign in with Apple you can create a <strong>household</strong>, invite members by
+            <strong>email</strong>, and choose whether new members may only <strong>view</strong> or also <strong>edit</strong>
+            the shared list.
+          </li>
+          <li>Shared purchases live in the family profile; data syncs via <strong>Supabase</strong> (same household as the web app).</li>
+          <li>
+            Under <strong>Account</strong>, enable <strong>cloud backup</strong> (Premium) to restore purchases on another device with the same login.
+          </li>
+          <li>
+            Invites appear in settings (badge on the family section); the member must use the <strong>same email</strong> as on the invite.
+          </li>
+        </ul>
+
+        <h3>Premium — summary</h3>
+        <ul>
+          <li>Unlimited AI scans versus the free weekly limit (receipt + basket).</li>
+          <li>Monthly category limits and overrun hints.</li>
+          <li><strong>Smart prices</strong> — AI flags likely price increases on repeat buys (refresh button available).</li>
+          <li>Household in the cloud, email invites, account backup.</li>
+          <li>In behaviour: <strong>motivational notification tone</strong> intensity (slider).</li>
         </ul>
         <p>
-          <strong>Free version:</strong> you have 2 AI scans per week (after that, wait until the next week or use Premium).
+          Subscribe from Settings / Premium; use <strong>Restore purchases</strong> if the App Store does not recognise your
+          subscription. EULA and privacy links are in the app.
         </p>
 
-        <h3>AI assistant (AI tab)</h3>
+        <h3>App behaviour and PDF</h3>
         <ul>
-          <li>Ask questions about spending (e.g. “What do I spend the most on?”).</li>
-          <li>You can use “Create quick overview” for a short summary without typing.</li>
-        </ul>
-
-        <h3>Settings — important</h3>
-        <ul>
-          <li><strong>Currency</strong> — CZK, €, $, £ (conversion using exchange rates).</li>
           <li>
-            <strong>Monthly budget</strong> — set a limit; the app shows how much is left or how much you exceeded.
+            <strong>Price calculator</strong>, <strong>haptics</strong>, <strong>typing suggestions</strong>,
+            <strong>motivational notifications</strong> (body may be AI-generated from recent purchases — allow notifications).
           </li>
           <li>
-            <strong>Smart features</strong> — price calculator, haptics, item suggestions, motivational notifications (with Premium you set intensity with a slider).
-          </li>
-          <li><strong>PDF export</strong> — purchase overview for the active profile.</li>
-          <li><strong>About</strong> — link to support and Privacy Policy.</li>
-        </ul>
-
-        <h3>Premium (subscription)</h3>
-        <ul>
-          <li>Unlimited AI scans (receipt, basket, barcode within the app).</li>
-          <li>Category limits and related views.</li>
-          <li>Smart prices — alerts when repeat purchases get more expensive.</li>
-          <li>
-            Family sharing — shared list in the Family profile via iCloud (configured in Premium).
+            <strong>PDF export</strong> — overview for the active profile; light/dark PDF theme under Settings → PDF export.
           </li>
         </ul>
-        <p>
-          Purchase and restore subscription in Settings or from the Premium screen; subscription screens reference the EULA and privacy policy.
-        </p>
 
-        <h3>Final tips</h3>
+        <h3>Account in Settings</h3>
         <ul>
-          <li>Watch the active profile on the overview — stats and export apply to it.</li>
-          <li>After changing currency, check amounts on older purchases (they convert per app settings).</li>
-          <li>
-            If something fails, use Support in settings or Restore purchases under Premium if you have an active App Store subscription.
-          </li>
+          <li>Sign in with <strong>email and password</strong> or <strong>Sign in with Apple</strong>.</li>
+          <li>Reset password via “Forgot password” on the sign-in screen (email from Supabase).</li>
+          <li>After sign-in, backup and family sections unlock (with Premium where applicable).</li>
+        </ul>
+
+        <h3>Web app</h3>
+        <ul>
+          <li>Email/password sign-in, household overview, editing purchases (per permissions), invites, Premium backup panel.</li>
+          <li>Data matches the iOS household when sync is enabled.</li>
+        </ul>
+
+        <h3>Tips</h3>
+        <ul>
+          <li>Stats and PDF always follow the <strong>active profile</strong>.</li>
+          <li>For web sign-in issues, try Chrome or use the contact form below.</li>
         </ul>
       </article>
     </section>
