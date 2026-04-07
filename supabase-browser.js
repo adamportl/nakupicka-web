@@ -3,7 +3,9 @@
  * account-nav + app) musí být stejná instance a stejné auth volby, jinak Web Locks
  * a localStorage session kolidují a auth může viset bez requestů.
  *
- * Safari: esm.sh někdy selže na načtení modulů; jsdelivr +esm je stabilnější.
+ * Safari: jsdelivr +esm používá importy začínající „/npm/…“. WebKit je špatně
+ * vyhodnocuje vůči doméně stránky (404 na nakupicka.app/npm/…). Na HTML stránkách
+ * musí být import mapa: „/npm/“ → https://cdn.jsdelivr.net/npm/ (viz app.html atd.).
  * Safari / soukromé okno: localStorage může vyhodit — použijeme paměť (session jen do zavření karty).
  */
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.86.0/+esm";
