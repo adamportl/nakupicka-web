@@ -163,6 +163,9 @@ let canEdit = false;
 let authUserId = null;
 let isHouseholdOwner = false;
 
+/** Zabrání paralelním běhům (login + listener / duplicitní SIGNED_IN). */
+let loadHouseholdsInFlight = null;
+
 const el = (id) => document.getElementById(id);
 
 function showPanel(name) {
@@ -501,30 +504,38 @@ async function savePurchasesToServer(nextList) {
 }
 
 async function loadHouseholdsAndOpen() {
-  const recoveryEl = document.querySelector('[data-app-panel="recovery"]');
-  if (recoveryEl && !recoveryEl.hidden) return;
+  if (loadHouseholdsInFlight) return loadHouseholdsInFlight;
+  loadHouseholdsInFlight = (async () => {
+    try {
+      const recoveryEl = document.querySelector('[data-app-panel="recovery"]');
+      if (recoveryEl && !recoveryEl.hidden) return;
 
-  const { data: rows, error } = await supabase.from("households").select("*").order("updated_at", { ascending: false });
-  if (error) {
-    el("app-status").textContent = error.message || t("errGeneric");
-    showPanel("auth");
-    return;
-  }
-  if (!rows || rows.length === 0) {
-    showPanel("setup");
-    return;
-  }
-  const sel = el("household-select");
-  if (sel) {
-    sel.innerHTML = rows.map((r) => `<option value="${r.id}">${escapeHtml(r.name || r.id)}</option>`).join("");
-    sel.value = rows[0].id;
-    sel.onchange = async () => {
-      const id = sel.value;
-      const row = rows.find((r) => r.id === id);
-      if (row) await loadHouseholdDetail(row);
-    };
-  }
-  await loadHouseholdDetail(rows[0]);
+      const { data: rows, error } = await supabase.from("households").select("*").order("updated_at", { ascending: false });
+      if (error) {
+        el("app-status").textContent = error.message || t("errGeneric");
+        showPanel("auth");
+        return;
+      }
+      if (!rows || rows.length === 0) {
+        showPanel("setup");
+        return;
+      }
+      const sel = el("household-select");
+      if (sel) {
+        sel.innerHTML = rows.map((r) => `<option value="${r.id}">${escapeHtml(r.name || r.id)}</option>`).join("");
+        sel.value = rows[0].id;
+        sel.onchange = async () => {
+          const id = sel.value;
+          const row = rows.find((r) => r.id === id);
+          if (row) await loadHouseholdDetail(row);
+        };
+      }
+      await loadHouseholdDetail(rows[0]);
+    } finally {
+      loadHouseholdsInFlight = null;
+    }
+  })();
+  return loadHouseholdsInFlight;
 }
 
 async function onCreateHousehold(e) {
@@ -687,7 +698,9 @@ function bindForms() {
     const email = (el("auth-email")?.value || "").trim();
     const password = el("auth-password")?.value || "";
     const mode = el("auth-mode")?.value || "signin";
+    const submitBtn = el("auth-submit");
     el("app-status").textContent = t("saving");
+    if (submitBtn) submitBtn.disabled = true;
     try {
       if (mode === "signup") {
         const { error } = await supabase.auth.signUp({
@@ -737,6 +750,8 @@ function bindForms() {
     } catch (err) {
       console.error(err);
       el("app-status").textContent = (err && err.message) || t("errGeneric");
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
     }
   });
 
@@ -831,6 +846,8 @@ async function init() {
     }
     authUserId = session.user.id;
     el("app-user-email").textContent = session.user.email || "";
+    // TOKEN_REFRESHED a další události nesmí znovu načítat domácnosti — způsobovalo to zasekávání / závody.
+    if (event !== "SIGNED_IN") return;
     try {
       await loadHouseholdsAndOpen();
     } catch (e) {
