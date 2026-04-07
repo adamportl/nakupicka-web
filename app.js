@@ -49,6 +49,8 @@ const STR = {
   cs: {
     cfgTitle: "Nastavení Supabase",
     cfgHint: "Do souboru supabase-config.js doplň SUPABASE_URL a SUPABASE_ANON_KEY (Dashboard → API).",
+    loadSdkFailed:
+      "Nepodařilo se načíst knihovnu Supabase (síť nebo blokování skriptů). Zkus obnovit stránku; v konzoli je detail.",
     signIn: "Přihlásit se",
     signUp: "Založit účet",
     email: "E-mail",
@@ -101,6 +103,8 @@ const STR = {
   en: {
     cfgTitle: "Supabase setup",
     cfgHint: "Add SUPABASE_URL and SUPABASE_ANON_KEY to supabase-config.js (Dashboard → API).",
+    loadSdkFailed:
+      "Could not load the Supabase library (network or blocked scripts). Try again; see the browser console.",
     signIn: "Sign in",
     signUp: "Create account",
     email: "Email",
@@ -835,6 +839,15 @@ async function init() {
     typeof window !== "undefined" && window.location.hash && /type=recovery/i.test(window.location.hash);
 
   supabase = getSupabaseBrowserClient();
+  if (!supabase) {
+    showPanel("config");
+    const hint = el("config-hint");
+    if (hint) hint.textContent = t("loadSdkFailed");
+    console.error(
+      "[NÁKUPIČKA] Supabase není k dispozici. Zkontroluj v Network, že se načte UMD skript (supabase.js) před moduly a že globalThis.supabase.createClient existuje."
+    );
+    return;
+  }
 
   bindForms();
   bindForgotPassword();

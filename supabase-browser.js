@@ -3,16 +3,17 @@
  * account-nav + app) musí být stejná instance a stejné auth volby, jinak Web Locks
  * a localStorage session kolidují a auth může viset bez requestů.
  *
- * Safari: ESM z CDN (jsdelivr/esm.sh) používá importy „/npm/…“, které WebKit špatně
- * vyhodnocuje vůči doméně stránky. Proto používáme oficiální UMD bundle (vendor/supabase-umd.js),
- * načtený klasickým <script> před type=module (viz HTML).
+ * Safari: ESM z CDN používá importy „/npm/…“, které WebKit špatně vyhodnocuje vůči doméně stránky.
+ * Proto používáme oficiální UMD bundle (dist/umd/supabase.js) načtený klasickým <script> před type=module.
  * Safari / soukromé okno: localStorage může vyhodit — použijeme paměť (session jen do zavření karty).
  */
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./supabase-config.js";
 
-/** Z UMD: window.supabase (viz vendor/supabase-umd.js, musí být načten před moduly). */
+/** Z UMD: self.supabase (webpack exportuje createClient na tento objekt; musí být před moduly). */
 function getCreateClient() {
-  const ns = typeof globalThis !== "undefined" ? globalThis.supabase : undefined;
+  const g = typeof globalThis !== "undefined" ? globalThis : undefined;
+  const w = typeof window !== "undefined" ? window : undefined;
+  const ns = (g && g.supabase) || (w && w.supabase);
   return ns && typeof ns.createClient === "function" ? ns.createClient : null;
 }
 
