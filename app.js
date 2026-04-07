@@ -712,11 +712,21 @@ async function onDashboardClick(e) {
 function bindForms() {
   el("form-auth")?.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const email = (el("auth-email")?.value || "").trim();
-    const password = el("auth-password")?.value || "";
+    const emailEl = el("auth-email");
+    const passEl = el("auth-password");
+    // Safari / automatické vyplnění: hodnota se někdy propsát až po „input“ události
+    emailEl?.dispatchEvent(new Event("input", { bubbles: true }));
+    passEl?.dispatchEvent(new Event("input", { bubbles: true }));
+    const email = (emailEl?.value || "").trim();
+    const password = passEl?.value || "";
     const mode = el("auth-mode")?.value || "signin";
     const submitBtn = el("auth-submit");
     try {
+      if (!email || !password) {
+        el("app-status").textContent =
+          lang() === "en" ? "Enter email and password." : "Vyplň e-mail a heslo.";
+        return;
+      }
       if (mode === "signup") {
         if (submitBtn) submitBtn.disabled = true;
         const { error } = await supabase.auth.signUp({

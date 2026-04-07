@@ -95,7 +95,8 @@
             <span class="i18n-cs">Založit účet</span><span class="i18n-en">Create account</span>
           </button>
         </div>
-        <form id="form-auth" class="app-form-grid">
+        <!-- novalidate: Safari s automatickým vyplněním často nevyvolá submit, pokud nativní validace „required“ selže tiše. -->
+        <form id="form-auth" class="app-form-grid" novalidate>
           <input type="hidden" id="auth-mode" name="mode" value="signin" />
           <label>
             <span class="i18n-cs">E-mail</span><span class="i18n-en">Email</span>
@@ -119,7 +120,7 @@
             <span class="i18n-cs">Pošleme odkaz pro nastavení nového hesla na váš e-mail.</span>
             <span class="i18n-en">We will email you a link to set a new password.</span>
           </p>
-          <form id="form-forgot" class="app-form-grid">
+          <form id="form-forgot" class="app-form-grid" novalidate>
             <label>
               <span class="i18n-cs">E-mail</span><span class="i18n-en">Email</span>
               <input type="email" id="forgot-email" name="forgot-email" autocomplete="email" required />
@@ -140,7 +141,7 @@
         </p>
       </header>
       <div class="app-auth-card">
-        <form id="form-recovery-password" class="app-form-grid">
+        <form id="form-recovery-password" class="app-form-grid" novalidate>
           <label>
             <span class="i18n-cs">Nové heslo</span><span class="i18n-en">New password</span>
             <input type="password" id="recovery-password" name="password" autocomplete="new-password" required minlength="6" />
