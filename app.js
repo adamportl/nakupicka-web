@@ -488,8 +488,12 @@ async function loadHouseholdDetail(h) {
     });
   }
   renderPurchases();
-  await loadExtendedHouseholdUI(h);
   showPanel("dashboard");
+  try {
+    await loadExtendedHouseholdUI(h);
+  } catch (e) {
+    console.error("[NÁKUPIČKA] rozšířené sekce domácnosti", e);
+  }
 }
 
 async function refreshHouseholdFromServer() {
@@ -931,9 +935,12 @@ async function initCore() {
       showPanel("recovery");
       return;
     }
+    // Jen skutečné odhlášení — ne každé !session (ve WebKitu občas mezistav po přihlášení přepnul zpět na auth).
     if (!session) {
-      authUserId = null;
-      showPanel("auth");
+      if (event === "SIGNED_OUT") {
+        authUserId = null;
+        showPanel("auth");
+      }
       return;
     }
     authUserId = session.user.id;
