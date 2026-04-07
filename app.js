@@ -365,14 +365,27 @@ async function loadFamilySection(h) {
   });
 }
 
+function normalizeEmailForCompare(raw) {
+  return String(raw || "")
+    .trim()
+    .toLowerCase();
+}
+
 async function loadInvitesSection(h) {
   const incomingEl = el("invites-incoming");
   const outWrap = el("invites-outgoing-wrap");
   const outEl = el("invites-outgoing");
   if (!incomingEl) return;
 
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  const myEmail = normalizeEmailForCompare(session?.user?.email);
+
   const { data: incoming } = await supabase.from("household_email_invites").select("*").eq("status", "pending");
-  const pendingIn = (incoming || []).filter((r) => r.id);
+  const pendingIn = (incoming || []).filter(
+    (r) => r.id && normalizeEmailForCompare(r.invitee_email) === myEmail && myEmail.length > 0
+  );
 
   if (!pendingIn.length) {
     incomingEl.innerHTML = `<p class="app-empty-soft"><strong>${escapeHtml(t("invitesIncoming"))}</strong> — ${escapeHtml(
