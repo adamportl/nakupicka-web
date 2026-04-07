@@ -4,7 +4,7 @@
  * a localStorage session kolidují a auth může viset bez requestů.
  *
  * Safari: ESM z CDN používá importy „/npm/…“, které WebKit špatně vyhodnocuje vůči doméně stránky.
- * Proto používáme oficiální UMD bundle (dist/umd/supabase.js) načtený klasickým <script> před type=module.
+ * UMD načítáme z vendor/supabase-umd.js (stejná doména) — Safari na Macu často blokuje skripty z CDN (ITP / blokátory).
  * Safari / soukromé okno: localStorage může vyhodit — použijeme paměť (session jen do zavření karty).
  */
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./supabase-config.js";

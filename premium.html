@@ -25,7 +25,16 @@
 
   <header class="site-header">
     <div class="header-inner">
-      <a class="logo" href="index.html">NÁKUPIČKA</a>
+      <a class="logo" href="index.html"
+        ><img
+          class="logo-mark"
+          src="images/app-icon.png"
+          width="40"
+          height="40"
+          alt=""
+          decoding="async"
+        /><span class="logo-text">NÁKUPIČKA</span></a
+      >
       <nav
         class="nav nav-main"
         id="siteNav"
@@ -34,27 +43,27 @@
         aria-label="Hlavní menu"
       >
         <a href="index.html"><span class="i18n-cs">Domů</span><span class="i18n-en">Home</span></a>
-        <div class="nav-user-wrap" id="navUserWrap">
-          <button type="button" class="nav-user-trigger" id="navUserTrigger" aria-expanded="false" aria-haspopup="true" aria-label="Účet">
-            <svg class="nav-user-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="8" r="4" />
-              <path d="M4 20c1.8-4 14.2-4 16 0" />
-            </svg>
-          </button>
-          <div class="nav-user-dropdown" id="navUserDropdown" role="menu">
-            <a href="app.html" class="nav-user-link" role="menuitem" id="navUserAppLink">
-              <span class="i18n-cs">Webová aplikace</span><span class="i18n-en">Web app</span>
-            </a>
-            <span class="nav-user-email" id="navUserEmail" hidden></span>
-            <button type="button" class="nav-user-logout" id="navUserLogout" role="menuitem" hidden>
-              <span class="i18n-cs">Odhlásit</span><span class="i18n-en">Sign out</span>
-            </button>
-          </div>
-        </div>
         <a href="premium.html" aria-current="page">Premium</a>
         <a href="podpora.html"><span class="i18n-cs">Podpora</span><span class="i18n-en">Support</span></a>
         <a href="privacy.html"><span class="i18n-cs">Soukromí</span><span class="i18n-en">Privacy</span></a>
       </nav>
+      <div class="nav-user-wrap" id="navUserWrap">
+        <button type="button" class="nav-user-trigger" id="navUserTrigger" aria-expanded="false" aria-haspopup="true" aria-label="Účet">
+          <svg class="nav-user-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="4" />
+            <path d="M4 20c1.8-4 14.2-4 16 0" />
+          </svg>
+        </button>
+        <div class="nav-user-dropdown" id="navUserDropdown" role="menu">
+          <a href="app.html" class="nav-user-link" role="menuitem" id="navUserAppLink">
+            <span class="i18n-cs">Webová aplikace</span><span class="i18n-en">Web app</span>
+          </a>
+          <span class="nav-user-email" id="navUserEmail" hidden></span>
+          <button type="button" class="nav-user-logout" id="navUserLogout" role="menuitem" hidden>
+            <span class="i18n-cs">Odhlásit</span><span class="i18n-en">Sign out</span>
+          </button>
+        </div>
+      </div>
       <div class="lang-switch" role="group" aria-label="Jazyk / Language">
         <button type="button" class="lang-btn" data-set-lang="cs" aria-pressed="true">CS</button>
         <button type="button" class="lang-btn" data-set-lang="en" aria-pressed="false">EN</button>
@@ -157,10 +166,7 @@
     </div>
   </footer>
 
-  <script
-    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.1/dist/umd/supabase.js"
-    crossorigin="anonymous"
-  ></script>
+  <script src="vendor/supabase-umd.js"></script>
   <script src="script.js"></script>
   <script type="module" src="account-nav.js"></script>
   <!-- Smartsupp Live Chat script -->

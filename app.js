@@ -801,6 +801,15 @@ function bindForms() {
         return;
       }
 
+      // Safari (zejm. macOS): session z API je dřív než konzistentní stav v úložišti — vynutíme zápis klientem.
+      if (session.access_token && session.refresh_token) {
+        const { error: setErr } = await supabase.auth.setSession({
+          access_token: session.access_token,
+          refresh_token: session.refresh_token,
+        });
+        if (setErr) console.warn("[NÁKUPIČKA] setSession po přihlášení", setErr);
+      }
+
       // Nejen na onAuthStateChange(SIGNED_IN): ve WebKitu může přijít pozdě nebo v jiném pořadí než
       // dokončení signInWithPassword — bez tohoto by zůstala prázdná data / špatný panel.
       el("app-status").textContent = "";

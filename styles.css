@@ -188,11 +188,27 @@ html.header-hidden .site-header {
 }
 
 .logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.logo-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+.logo-text {
   font-weight: 700;
   font-size: 1.15rem;
   letter-spacing: 0.06em;
   color: var(--text);
-  text-decoration: none;
   background: linear-gradient(135deg, var(--pink) 0%, #ff6b9d 100%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -272,10 +288,14 @@ body.menu-open .nav-menu-btn::after {
   font-weight: 600;
 }
 
-/* Účet — ikona místo textu „Webová aplikace“, menu při hover / na dotyk */
+/* Účet — ikona vpravo vedle menu (mimo <nav>), dropdown při hover / na dotyk */
 .nav-user-wrap {
   position: relative;
   flex-shrink: 0;
+}
+
+.header-inner > .nav-user-wrap {
+  align-self: center;
 }
 
 .nav-user-trigger {
@@ -1754,7 +1774,7 @@ code {
 
 /* ---- footer & logo upgrade ---- */
 .footer-brand,
-.logo {
+.logo-text {
   background: linear-gradient(128deg, #ff5580 0%, #f020b0 45%, #a855f7 100%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -1878,7 +1898,7 @@ body::after {
   position: relative;
 }
 
-.logo {
+.logo-text {
   text-shadow: 0 0 22px color-mix(in srgb, var(--pink) 32%, transparent);
 }
 
@@ -2115,7 +2135,8 @@ body::after {
 
   .header-inner .lang-switch,
   .header-inner .theme-toggle,
-  .header-inner .nav-menu-btn {
+  .header-inner .nav-menu-btn,
+  .header-inner .nav-user-wrap {
     position: relative;
     z-index: 260;
   }
@@ -2207,7 +2228,7 @@ body::after {
 }
 
 @media (min-width: 769px) and (max-width: 920px) {
-  .logo {
+  .logo-text {
     font-size: 1.02rem;
     letter-spacing: 0.04em;
   }
