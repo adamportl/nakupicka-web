@@ -837,7 +837,7 @@ function bindForms() {
     try {
       if (btn) btn.disabled = true;
       el("app-status").textContent = "";
-      const redirectTo = `${window.location.origin}${window.location.pathname}`;
+      const redirectTo = new URL("app.html", window.location.href).href;
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: { redirectTo },
