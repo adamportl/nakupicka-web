@@ -99,6 +99,11 @@ const STR = {
     noInvites: "Žádné pozvánky.",
     emailUnknown: "(e-mail jen pro správce)",
     inviteSent: "Pozvánka uložena.",
+    readonlyPremiumHtml:
+      'Úpravy na webu vyžadují Premium (stav se synchronizuje z aplikace). <a href="premium.html">Informace o Premium</a>.',
+    setupPremiumHtml:
+      'Založení domácnosti na webu je součástí Premium. Stav se synchronizuje z aplikace — <a href="premium.html">Premium</a>.',
+    errPremiumRequired: "Úpravy na webu vyžadují Premium.",
   },
   en: {
     cfgTitle: "Supabase setup",
@@ -153,6 +158,11 @@ const STR = {
     noInvites: "No invitations.",
     emailUnknown: "(email visible to owner only)",
     inviteSent: "Invitation saved.",
+    readonlyPremiumHtml:
+      'Editing on the web requires Premium (status is synced from the app). <a href="premium.html">About Premium</a>.',
+    setupPremiumHtml:
+      'Creating a household on the web requires Premium. Status is synced from the app — <a href="premium.html">Premium</a>.',
+    errPremiumRequired: "Editing on the web requires Premium.",
   },
 };
 
@@ -164,10 +174,64 @@ let supabase = null;
 let currentHousehold = null;
 let purchases = [];
 let canEdit = false;
+/** Zda má uživatel podle domácnosti právo upravovat (bez ohledu na Premium). */
+let householdEditAllowed = false;
+/** Stav Premium z `user_premium_status` (webové úpravy jen s Premium). */
+let hasPremium = false;
 let authUserId = null;
 let isHouseholdOwner = false;
 
 const el = (id) => document.getElementById(id);
+
+async function refreshPremiumFlag() {
+  if (!supabase || !authUserId) {
+    hasPremium = false;
+    return false;
+  }
+  try {
+    const { data: prem } = await supabase.from("user_premium_status").select("is_premium").eq("user_id", authUserId).maybeSingle();
+    hasPremium = prem?.is_premium === true;
+    return hasPremium;
+  } catch {
+    hasPremium = false;
+    return false;
+  }
+}
+
+function syncReadonlyBanner() {
+  const note = el("app-can-edit-note");
+  if (!note) return;
+  const effective = householdEditAllowed && hasPremium;
+  if (effective) {
+    note.hidden = true;
+    return;
+  }
+  note.hidden = false;
+  if (!householdEditAllowed) {
+    note.textContent = t("readonly");
+  } else {
+    note.innerHTML = t("readonlyPremiumHtml");
+  }
+}
+
+function syncSetupPremiumGate() {
+  const note = el("app-setup-premium-note");
+  const form = el("form-create-household");
+  const btn = form?.querySelector('button[type="submit"]');
+  const nameInput = el("setup-household-name");
+  if (!hasPremium) {
+    if (note) {
+      note.hidden = false;
+      note.innerHTML = t("setupPremiumHtml");
+    }
+    if (nameInput) nameInput.disabled = true;
+    if (btn) btn.disabled = true;
+  } else {
+    if (note) note.hidden = true;
+    if (nameInput) nameInput.disabled = false;
+    if (btn) btn.disabled = false;
+  }
+}
 
 function showPanel(name) {
   document.querySelectorAll("[data-app-panel]").forEach((n) => {
@@ -242,8 +306,7 @@ async function loadCloudAccountSection() {
   if (!premEl || !bakEl || !supabase || !authUserId) return;
 
   try {
-    const { data: prem } = await supabase.from("user_premium_status").select("*").eq("user_id", authUserId).maybeSingle();
-    const on = prem?.is_premium === true;
+    const on = hasPremium;
     premEl.innerHTML = `<p><strong>${escapeHtml(t("premiumState"))}:</strong> ${on ? escapeHtml(t("premiumOn")) : escapeHtml(t("premiumOff"))}</p>`;
   } catch {
     premEl.innerHTML = `<p class="app-empty-soft">${escapeHtml(t("errGeneric"))}</p>`;
@@ -458,9 +521,11 @@ async function loadHouseholdDetail(h) {
   const raw = Array.isArray(h.purchases) ? h.purchases : [];
   purchases = raw.map((p) => enrichForDisplay(p));
 
+  await refreshPremiumFlag();
+
   const uid = String(authUserId);
   if (String(h.owner_id) === uid) {
-    canEdit = true;
+    householdEditAllowed = true;
   } else {
     const { data: m } = await supabase
       .from("household_members")
@@ -468,8 +533,10 @@ async function loadHouseholdDetail(h) {
       .eq("household_id", h.id)
       .eq("user_id", uid)
       .maybeSingle();
-    canEdit = !!(m && m.can_edit);
+    householdEditAllowed = !!(m && m.can_edit);
   }
+
+  canEdit = householdEditAllowed && hasPremium;
 
   isHouseholdOwner = String(h.owner_id) === uid;
 
@@ -478,7 +545,7 @@ async function loadHouseholdDetail(h) {
   if (profileInput && !profileInput.value.trim()) {
     profileInput.placeholder = h.name || "";
   }
-  el("app-can-edit-note").hidden = canEdit;
+  syncReadonlyBanner();
   el("app-add-section").hidden = !canEdit;
   const form = el("form-add-purchase");
   if (form) {
@@ -560,6 +627,8 @@ async function loadHouseholdsAndOpen(prefetchedSession) {
     return;
   }
   if (!rows || rows.length === 0) {
+    await refreshPremiumFlag();
+    syncSetupPremiumGate();
     showPanel("setup");
     return;
   }
@@ -578,6 +647,12 @@ async function loadHouseholdsAndOpen(prefetchedSession) {
 
 async function onCreateHousehold(e) {
   e.preventDefault();
+  await refreshPremiumFlag();
+  if (!hasPremium) {
+    el("app-status").textContent = t("errPremiumRequired");
+    syncSetupPremiumGate();
+    return;
+  }
   const nameInput = el("setup-household-name");
   const name = (nameInput?.value || "").trim() || (lang() === "en" ? "Our household" : "Naše rodina");
   el("app-status").textContent = t("saving");
@@ -685,6 +760,10 @@ async function onDashboardClick(e) {
   const acc = e.target.closest("[data-accept-invite]");
   if (acc) {
     e.preventDefault();
+    if (!hasPremium) {
+      el("app-status").textContent = t("errPremiumRequired");
+      return;
+    }
     const id = acc.getAttribute("data-accept-invite");
     if (!id) return;
     el("app-status").textContent = t("saving");
@@ -701,6 +780,10 @@ async function onDashboardClick(e) {
   const dec = e.target.closest("[data-decline-invite]");
   if (dec) {
     e.preventDefault();
+    if (!hasPremium) {
+      el("app-status").textContent = t("errPremiumRequired");
+      return;
+    }
     const id = dec.getAttribute("data-decline-invite");
     if (!id) return;
     el("app-status").textContent = t("saving");
@@ -717,6 +800,10 @@ async function onDashboardClick(e) {
   const can = e.target.closest("[data-cancel-invite]");
   if (can) {
     e.preventDefault();
+    if (!hasPremium) {
+      el("app-status").textContent = t("errPremiumRequired");
+      return;
+    }
     const id = can.getAttribute("data-cancel-invite");
     if (!id || !currentHousehold) return;
     el("app-status").textContent = t("saving");

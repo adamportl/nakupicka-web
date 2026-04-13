@@ -275,6 +275,12 @@
   display: none !important;
 }
 
+.app-readonly-banner a {
+  color: var(--pink);
+  font-weight: 600;
+  text-underline-offset: 2px;
+}
+
 .app-purchase-list {
   display: flex;
   flex-direction: column;
