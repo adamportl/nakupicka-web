@@ -832,6 +832,33 @@ function bindForms() {
     }
   });
 
+  el("btn-auth-google")?.addEventListener("click", async () => {
+    const btn = el("btn-auth-google");
+    try {
+      if (btn) btn.disabled = true;
+      el("app-status").textContent = "";
+      const redirectTo = `${window.location.origin}${window.location.pathname}`;
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo },
+      });
+      if (error) {
+        el("app-status").textContent = error.message || t("errGeneric");
+        return;
+      }
+      if (data?.url) {
+        window.location.assign(data.url);
+        return;
+      }
+      el("app-status").textContent = t("errGeneric");
+    } catch (err) {
+      console.error(err);
+      el("app-status").textContent = (err && err.message) || t("errGeneric");
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  });
+
   el("btn-signout")?.addEventListener("click", async () => {
     await supabase.auth.signOut();
     showPanel("auth");
