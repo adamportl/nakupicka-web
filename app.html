@@ -2,6 +2,7 @@
 <html lang="cs" data-lang="cs" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
+  <script src="preferences-boot.js"></script>
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <script src="oauth-return-to-app.js"></script>
@@ -14,26 +15,41 @@
     name="description"
     id="metaDesc"
     data-desc-cs="NÁKUPIČKA — webová aplikace: nákupy v cloudu (Supabase)."
-    data-desc-en="NÁKUPIČKA — web app: purchases in the cloud (Supabase)."
+    data-desc-en="NiftySpend — web app: purchases in the cloud (Supabase)."
     content="NÁKUPIČKA — webová aplikace: nákupy v cloudu (Supabase)."
   />
   <meta name="theme-color" content="#ff2d55" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#0d0d0f" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#140a12" media="(prefers-color-scheme: dark)" />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="NAKUPICKA" />
-  <meta property="og:title" content="Webová aplikace — NÁKUPIČKA" />
+  <meta
+    property="og:site_name"
+    content="NAKUPICKA"
+    data-og-site-cs="NAKUPICKA"
+    data-og-site-en="NiftySpend"
+  />
+  <meta
+    property="og:title"
+    content="Webová aplikace — NÁKUPIČKA"
+    data-og-title-cs="Webová aplikace — NÁKUPIČKA"
+    data-og-title-en="Web app — NiftySpend"
+  />
   <meta property="og:description" content="Správa nákupů domácnosti v prohlížeči, synchronizovaná s iOS aplikací." />
   <meta property="og:url" content="https://nakupicka.vercel.app/app.html" />
   <meta property="og:image" content="https://nakupicka.vercel.app/images/app-icon.png" />
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="NÁKUPIČKA Web app" />
+  <meta
+    name="twitter:title"
+    content="NÁKUPIČKA Web app"
+    data-twitter-title-cs="NÁKUPIČKA Web app"
+    data-twitter-title-en="NiftySpend web app"
+  />
   <meta name="twitter:description" content="Sign in and manage shared household purchases in browser." />
   <meta name="twitter:image" content="https://nakupicka.vercel.app/images/app-icon.png" />
   <link rel="icon" type="image/png" href="images/app-icon.png" />
   <link rel="shortcut icon" type="image/png" href="images/app-icon.png" />
   <link rel="apple-touch-icon" href="images/app-icon.png" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <title data-title-cs="Webová aplikace — NÁKUPIČKA" data-title-en="Web app — NÁKUPIČKA">Webová aplikace — NÁKUPIČKA</title>
+  <title data-title-cs="Webová aplikace — NÁKUPIČKA" data-title-en="Web app — NiftySpend">Webová aplikace — NÁKUPIČKA</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="app.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -55,7 +71,7 @@
           height="40"
           alt=""
           decoding="async"
-        /><span class="logo-text">NÁKUPIČKA</span></a
+        /><span class="logo-text i18n-cs">NÁKUPIČKA</span><span class="logo-text i18n-en">NiftySpend</span></a
       >
       <nav
         class="nav nav-main"
@@ -65,6 +81,7 @@
         aria-label="Hlavní menu"
       >
         <a href="index.html"><span class="i18n-cs">Domů</span><span class="i18n-en">Home</span></a>
+        <a href="app.html" aria-current="page"><span class="i18n-cs">Webová aplikace</span><span class="i18n-en">Web app</span></a>
         <a href="premium.html">Premium</a>
         <a href="podpora.html"><span class="i18n-cs">Podpora</span><span class="i18n-en">Support</span></a>
       </nav>
@@ -241,144 +258,116 @@
         </div>
       </div>
       <p id="app-setup-premium-note" class="app-readonly-banner" hidden></p>
-      <p class="app-note">
-        <span class="i18n-cs">Stejná data jako při zapnutém rodinném sdílení v aplikaci (Supabase).</span>
-        <span class="i18n-en">Same data as family sync in the app (Supabase).</span>
-      </p>
     </div>
-
-    <div data-app-panel="dashboard" class="app-panel" id="dashboard-root" hidden>
-      <div class="app-user-bar">
-        <span class="i18n-cs">Účet:</span><span class="i18n-en">Account:</span>
-        <span class="app-email" id="app-user-email"></span>
-        <button type="button" class="btn btn-ghost" id="btn-signout">
-          <span class="i18n-cs">Odhlásit</span><span class="i18n-en">Sign out</span>
-        </button>
-      </div>
-
-      <div class="app-dash-header">
-        <div class="app-dash-toolbar">
-          <h1 id="app-household-title">Domácnost</h1>
-          <div class="app-household-picker">
-            <label for="household-select"><span class="i18n-cs">Domácnost</span><span class="i18n-en">Household</span></label>
-            <select id="household-select" aria-label="Household"></select>
+    <div data-app-panel="dashboard" class="app-panel app-dashboard-v2" id="dashboard-root" hidden>
+      <aside class="dash-left" aria-label="Webová aplikace">
+        <span class="dash-brand i18n-cs">NÁKUPIČKA</span><span class="dash-brand i18n-en">NiftySpend</span>
+        <div class="dash-user-card">
+          <div class="dash-avatar" aria-hidden="true"></div>
+          <div class="dash-user-copy">
+            <p class="dash-user-title"><span class="i18n-cs">Přihlášený účet</span><span class="i18n-en">Signed in account</span></p>
+            <p class="dash-user-email" id="app-user-email"></p>
           </div>
-          <button type="button" class="btn btn-ghost" id="btn-refresh">
-            <span class="i18n-cs">Obnovit</span><span class="i18n-en">Refresh</span>
-          </button>
         </div>
-        <p class="page-lead" style="margin: 0 0 0.5rem">
-          <span class="i18n-cs">Položky sdílené s aplikací — čti a přidávej podle oprávnění.</span>
-          <span class="i18n-en">Items shared with the app — read and add according to your permissions.</span>
-        </p>
-        <p class="app-note" style="margin: 0">
-          <span class="i18n-cs">Data jsou stejná jako v aplikaci při zapnutém rodinném sdílení.</span>
-          <span class="i18n-en">Same data as in the app when family sync is enabled.</span>
-        </p>
-      </div>
-
-      <div id="app-can-edit-note" class="app-readonly-banner" hidden></div>
-
-      <section class="app-section-card" id="section-family" aria-labelledby="family-heading">
-        <h2 id="family-heading" class="app-section-title">
-          <span class="i18n-cs">Naše rodina</span><span class="i18n-en">Our household</span>
-        </h2>
-        <div id="family-members-toggle" class="app-family-row" hidden></div>
-        <div id="family-members-list" class="app-members-list"></div>
-      </section>
-
-      <section class="app-section-card" aria-labelledby="purchases-heading">
-        <h2 id="purchases-heading" class="app-section-title">
-          <span class="i18n-cs">Položky nákupů</span><span class="i18n-en">Purchases</span>
-        </h2>
-        <div class="app-purchase-tools">
-          <label class="app-search">
-            <span class="i18n-cs">Hledat</span><span class="i18n-en">Search</span>
-            <input type="search" id="purchase-search" autocomplete="off" />
-          </label>
-          <label>
-            <span class="i18n-cs">Řazení</span><span class="i18n-en">Sort</span>
-            <select id="purchase-sort">
-              <option value="date-desc" data-cs="Nejnovější" data-en="Newest">Nejnovější</option>
-              <option value="date-asc" data-cs="Nejstarší" data-en="Oldest">Nejstarší</option>
-              <option value="price-desc" data-cs="Cena od nejvyšší" data-en="Price high-low">Cena od nejvyšší</option>
-              <option value="price-asc" data-cs="Cena od nejnižší" data-en="Price low-high">Cena od nejnižší</option>
-              <option value="name-asc" data-cs="Název A-Z" data-en="Name A-Z">Název A-Z</option>
-            </select>
-          </label>
-          <button type="button" class="btn btn-ghost" id="btn-bulk-delete" disabled>
-            <span class="i18n-cs">Smazat vybrané</span><span class="i18n-en">Delete selected</span>
-          </button>
+        <nav class="dash-menu" aria-label="Dashboard menu">
+          <button type="button" class="dash-menu-item is-active" data-dash-nav="overview"><span class="i18n-cs">Přehled</span><span class="i18n-en">Overview</span></button>
+          <button type="button" class="dash-menu-item" data-dash-nav="purchases"><span class="i18n-cs">Nákupy</span><span class="i18n-en">Purchases</span></button>
+          <button type="button" class="dash-menu-item" data-dash-nav="family"><span class="i18n-cs">Rodina</span><span class="i18n-en">Family</span></button>
+          <button type="button" class="dash-menu-item" data-dash-nav="cloud"><span class="i18n-cs">Cloud</span><span class="i18n-en">Cloud</span></button>
+          <button type="button" class="dash-menu-item" data-dash-nav="invites"><span class="i18n-cs">Pozvánky</span><span class="i18n-en">Invites</span></button>
+        </nav>
+        <div class="dash-left-actions">
+          <button type="button" class="btn btn-ghost" id="btn-refresh"><span class="i18n-cs">Obnovit</span><span class="i18n-en">Refresh</span></button>
+          <button type="button" class="btn btn-ghost" id="btn-signout"><span class="i18n-cs">Odhlásit</span><span class="i18n-en">Sign out</span></button>
         </div>
-        <div id="purchase-list" class="app-purchase-list"></div>
-      </section>
+      </aside>
 
-      <section id="app-add-section" class="app-add-card" aria-labelledby="add-heading">
-        <h2 id="add-heading"><span class="i18n-cs">Přidat položku</span><span class="i18n-en">Add item</span></h2>
-        <form id="form-add-purchase" class="app-add-grid">
-          <label class="app-span-2">
-            <span class="i18n-cs">Název</span><span class="i18n-en">Name</span>
-            <input type="text" id="add-name" name="name" required autocomplete="off" />
-          </label>
-          <label>
-            <span class="i18n-cs">Cena (Kč)</span><span class="i18n-en">Price (CZK)</span>
-            <input type="text" id="add-price" name="price" inputmode="decimal" required placeholder="99,90" />
-          </label>
-          <label>
-            <span class="i18n-cs">Kategorie</span><span class="i18n-en">Category</span>
-            <select id="add-category" name="category"></select>
-          </label>
-          <label class="app-span-2">
-            <span class="i18n-cs">Profil / štítek</span><span class="i18n-en">Profile / label</span>
-            <input type="text" id="add-profile" name="profile" autocomplete="off" />
-          </label>
-          <div class="app-span-2">
-            <button type="submit" class="btn btn-primary">
-              <span class="i18n-cs">Přidat</span><span class="i18n-en">Add</span>
-            </button>
-          </div>
-        </form>
-      </section>
-
-      <section class="app-section-card" id="section-cloud" aria-labelledby="cloud-heading">
-        <h2 id="cloud-heading" class="app-section-title">
-          <span class="i18n-cs">Účet a cloud</span><span class="i18n-en">Account &amp; cloud</span>
-        </h2>
-        <div id="cloud-premium" class="app-cloud-block"></div>
-        <div id="cloud-backup" class="app-cloud-block"></div>
-        <div class="app-cloud-block">
-          <a href="delete-account.html" class="btn btn-ghost">
-            <span class="i18n-cs">Jak smazat účet</span><span class="i18n-en">How to delete account</span>
-          </a>
-          <button type="button" class="btn btn-ghost" id="btn-delete-account">
-            <span class="i18n-cs">Smazat účet</span><span class="i18n-en">Delete account</span>
-          </button>
-        </div>
-      </section>
-
-      <section class="app-section-card" id="section-invites" aria-labelledby="invites-heading">
-        <h2 id="invites-heading" class="app-section-title">
-          <span class="i18n-cs">Pozvánky e-mailem</span><span class="i18n-en">Email invitations</span>
-        </h2>
-        <div id="invites-incoming" class="app-invite-block"></div>
-        <div id="invites-outgoing-wrap" hidden>
-          <h3 class="app-subheading">
-            <span class="i18n-cs">Odeslané pozvánky</span><span class="i18n-en">Sent invitations</span>
-          </h3>
-          <div id="invites-outgoing" class="app-invite-block"></div>
-          <form id="form-invite-email" class="app-form-grid app-invite-form">
-            <label class="app-span-2">
-              <span class="i18n-cs">Pozvat e-mailem</span><span class="i18n-en">Invite by email</span>
-              <input type="email" id="invite-email-input" autocomplete="email" placeholder="jmeno@email.cz" />
-            </label>
-            <div class="app-span-2">
-              <button type="submit" class="btn btn-primary" id="invite-email-submit">
-                <span class="i18n-cs">Odeslat pozvánku</span><span class="i18n-en">Send invite</span>
-              </button>
+      <div class="dash-body">
+        <header class="dash-hero app-dash-header" data-dash-view="all">
+          <div class="dash-hero-head">
+            <h1 id="app-household-title">Domácnost</h1>
+            <div class="app-household-picker">
+              <label class="visually-hidden" for="household-select"
+                ><span class="i18n-cs">Vybrat domácnost</span><span class="i18n-en">Select household</span></label
+              >
+              <select id="household-select" class="household-select-field"></select>
             </div>
+          </div>
+          <p class="dash-hero-lead page-lead">
+            <span class="i18n-cs">Položky sdílené s aplikací — čti a přidávej podle oprávnění.</span>
+            <span class="i18n-en">Items shared with the app — read and add according to your permissions.</span>
+          </p>
+        </header>
+
+        <div id="app-can-edit-note" class="app-readonly-banner" hidden data-dash-view="all"></div>
+
+        <section class="app-section-card dash-section" id="app-statistics-panel" aria-labelledby="stats-heading" data-dash-view="overview">
+          <h2 id="stats-heading" class="app-section-title"><span class="i18n-cs">Statistiky</span><span class="i18n-en">Statistics</span></h2>
+          <div class="app-stat-grid">
+            <article class="app-stat-card app-stat-card-wide"><p class="app-stat-label"><span class="i18n-cs">Celkem utraceno</span><span class="i18n-en">Total spent</span></p><p class="app-stat-value" id="app-stat-total">0 Kč</p></article>
+            <article class="app-stat-card"><p class="app-stat-label"><span class="i18n-cs">Položek</span><span class="i18n-en">Items</span></p><p class="app-stat-value" id="app-stat-count">0</p></article>
+            <article class="app-stat-card"><p class="app-stat-label"><span class="i18n-cs">Top kategorie</span><span class="i18n-en">Top category</span></p><p class="app-stat-value" id="app-stat-category">—</p></article>
+          </div>
+        </section>
+
+        <section class="app-section-card dash-section" id="section-purchases" aria-labelledby="purchases-heading" data-dash-view="purchases" hidden>
+          <h2 id="purchases-heading" class="app-section-title"><span class="i18n-cs">Položky nákupů</span><span class="i18n-en">Purchases</span></h2>
+          <div class="app-purchase-tools">
+            <label class="app-search"><span class="i18n-cs">Hledat</span><span class="i18n-en">Search</span><input type="search" id="purchase-search" autocomplete="off" /></label>
+            <label><span class="i18n-cs">Řazení</span><span class="i18n-en">Sort</span>
+              <select id="purchase-sort">
+                <option value="date-desc" data-cs="Nejnovější" data-en="Newest">Nejnovější</option>
+                <option value="date-asc" data-cs="Nejstarší" data-en="Oldest">Nejstarší</option>
+                <option value="price-desc" data-cs="Cena od nejvyšší" data-en="Price high-low">Cena od nejvyšší</option>
+                <option value="price-asc" data-cs="Cena od nejnižší" data-en="Price low-high">Cena od nejnižší</option>
+                <option value="name-asc" data-cs="Název A-Z" data-en="Name A-Z">Název A-Z</option>
+              </select>
+            </label>
+            <button type="button" class="btn btn-ghost" id="btn-bulk-delete" disabled><span class="i18n-cs">Smazat vybrané</span><span class="i18n-en">Delete selected</span></button>
+          </div>
+          <div id="purchase-list" class="app-purchase-list"></div>
+        </section>
+
+        <section id="app-add-section" class="app-add-card dash-section" aria-labelledby="add-heading" data-dash-view="purchases" hidden>
+          <h2 id="add-heading"><span class="i18n-cs">Přidat položku</span><span class="i18n-en">Add item</span></h2>
+          <form id="form-add-purchase" class="app-add-grid">
+            <label class="app-span-2"><span class="i18n-cs">Název</span><span class="i18n-en">Name</span><input type="text" id="add-name" name="name" required autocomplete="off" /></label>
+            <label><span class="i18n-cs">Cena (Kč)</span><span class="i18n-en">Price (CZK)</span><input type="text" id="add-price" name="price" inputmode="decimal" required placeholder="99,90" /></label>
+            <label><span class="i18n-cs">Kategorie</span><span class="i18n-en">Category</span><select id="add-category" name="category"></select></label>
+            <label class="app-span-2"><span class="i18n-cs">Profil / štítek</span><span class="i18n-en">Profile / label</span><input type="text" id="add-profile" name="profile" autocomplete="off" /></label>
+            <div class="app-span-2"><button type="submit" class="btn btn-primary"><span class="i18n-cs">Přidat</span><span class="i18n-en">Add</span></button></div>
           </form>
-        </div>
-      </section>
+        </section>
+
+        <section class="app-section-card dash-section" id="section-family" aria-labelledby="family-heading" data-dash-view="family" hidden>
+          <h2 id="family-heading" class="app-section-title"><span class="i18n-cs">Naše rodina</span><span class="i18n-en">Our household</span></h2>
+          <div id="family-members-toggle" class="app-family-row" hidden></div>
+          <div id="family-members-list" class="app-members-list"></div>
+        </section>
+
+        <section class="app-section-card dash-section" id="section-cloud" aria-labelledby="cloud-heading" data-dash-view="cloud" hidden>
+          <h2 id="cloud-heading" class="app-section-title"><span class="i18n-cs">Účet a cloud</span><span class="i18n-en">Account &amp; cloud</span></h2>
+          <div id="cloud-premium" class="app-cloud-block"></div>
+          <div id="cloud-backup" class="app-cloud-block"></div>
+          <div class="app-cloud-block app-cloud-actions">
+            <a href="delete-account.html" class="btn btn-ghost"><span class="i18n-cs">Jak smazat účet</span><span class="i18n-en">How to delete account</span></a>
+            <button type="button" class="btn btn-ghost" id="btn-delete-account"><span class="i18n-cs">Smazat účet</span><span class="i18n-en">Delete account</span></button>
+          </div>
+        </section>
+
+        <section class="app-section-card dash-section" id="section-invites" aria-labelledby="invites-heading" data-dash-view="invites" hidden>
+          <h2 id="invites-heading" class="app-section-title"><span class="i18n-cs">Pozvánky e-mailem</span><span class="i18n-en">Email invitations</span></h2>
+          <div id="invites-incoming" class="app-invite-block"></div>
+          <div id="invites-outgoing-wrap" hidden>
+            <h3 class="app-subheading"><span class="i18n-cs">Odeslané pozvánky</span><span class="i18n-en">Sent invitations</span></h3>
+            <div id="invites-outgoing" class="app-invite-block"></div>
+            <form id="form-invite-email" class="app-form-grid app-invite-form">
+              <label class="app-span-2"><span class="i18n-cs">Pozvat e-mailem</span><span class="i18n-en">Invite by email</span><input type="email" id="invite-email-input" autocomplete="email" placeholder="jmeno@email.cz" /></label>
+              <div class="app-span-2"><button type="submit" class="btn btn-primary" id="invite-email-submit"><span class="i18n-cs">Odeslat pozvánku</span><span class="i18n-en">Send invite</span></button></div>
+            </form>
+          </div>
+        </section>
+      </div>
 
       <div class="app-modal-backdrop" id="purchase-edit-modal" hidden>
         <div class="app-modal" role="dialog" aria-modal="true" aria-labelledby="purchase-edit-title">
@@ -388,43 +377,28 @@
           </div>
           <form id="form-edit-purchase" class="app-form-grid" novalidate>
             <input type="hidden" id="edit-purchase-id" />
-            <label>
-              <span class="i18n-cs">Název</span><span class="i18n-en">Name</span>
-              <input type="text" id="edit-name" required autocomplete="off" />
-            </label>
-            <label>
-              <span class="i18n-cs">Cena (Kč)</span><span class="i18n-en">Price (CZK)</span>
-              <input type="text" id="edit-price" inputmode="decimal" required />
-            </label>
-            <label>
-              <span class="i18n-cs">Kategorie</span><span class="i18n-en">Category</span>
-              <select id="edit-category"></select>
-            </label>
-            <label>
-              <span class="i18n-cs">Profil / štítek</span><span class="i18n-en">Profile / label</span>
-              <input type="text" id="edit-profile" autocomplete="off" />
-            </label>
+            <label><span class="i18n-cs">Název</span><span class="i18n-en">Name</span><input type="text" id="edit-name" required autocomplete="off" /></label>
+            <label><span class="i18n-cs">Cena (Kč)</span><span class="i18n-en">Price (CZK)</span><input type="text" id="edit-price" inputmode="decimal" required /></label>
+            <label><span class="i18n-cs">Kategorie</span><span class="i18n-en">Category</span><select id="edit-category"></select></label>
+            <label><span class="i18n-cs">Profil / štítek</span><span class="i18n-en">Profile / label</span><input type="text" id="edit-profile" autocomplete="off" /></label>
             <div class="app-modal-actions">
-              <button type="button" class="btn btn-ghost" id="purchase-edit-cancel">
-                <span class="i18n-cs">Zrušit</span><span class="i18n-en">Cancel</span>
-              </button>
-              <button type="submit" class="btn btn-primary">
-                <span class="i18n-cs">Uložit</span><span class="i18n-en">Save</span>
-              </button>
+              <button type="button" class="btn btn-ghost" id="purchase-edit-cancel"><span class="i18n-cs">Zrušit</span><span class="i18n-en">Cancel</span></button>
+              <button type="submit" class="btn btn-primary"><span class="i18n-cs">Uložit</span><span class="i18n-en">Save</span></button>
             </div>
           </form>
         </div>
       </div>
     </div>
 
-    <p class="back-link" style="margin-top: 2rem">
+
+    <p class="back-link app-back-home">
       <a href="index.html"><span class="i18n-cs">← Zpět na úvod</span><span class="i18n-en">← Back to home</span></a>
     </p>
   </main>
 
   <footer class="site-footer">
     <div class="footer-inner">
-      <span class="footer-brand">NÁKUPIČKA</span>
+      <span class="footer-brand i18n-cs">NÁKUPIČKA</span><span class="footer-brand i18n-en">NiftySpend</span>
       <nav class="footer-nav" data-footer-aria-cs="Patička" data-footer-aria-en="Footer" aria-label="Patička">
         <a href="index.html"><span class="i18n-cs">Domů</span><span class="i18n-en">Home</span></a>
         <a href="app.html"><span class="i18n-cs">Webová aplikace</span><span class="i18n-en">Web app</span></a>
@@ -452,6 +426,7 @@
       var tabUp = document.getElementById("tab-signup");
       var mode = document.getElementById("auth-mode");
       var submit = document.getElementById("auth-submit");
+      var authStatus = document.getElementById("app-status");
       if (!tabIn || !tabUp || !mode || !submit) return;
       function setMode(signin) {
         tabIn.setAttribute("aria-selected", signin ? "true" : "false");
@@ -473,16 +448,31 @@
         if (forgotWrap) forgotWrap.hidden = !signin;
         if (forgotPanel && !signin) forgotPanel.hidden = true;
       }
+      var pass = document.getElementById("auth-password");
+      function syncPasswordAutocomplete(signin) {
+        if (!pass) return;
+        pass.setAttribute("autocomplete", signin ? "current-password" : "new-password");
+      }
+      function clearAuthStatus() {
+        if (!authStatus) return;
+        if (authStatus.querySelector("#btn-undo-last")) return;
+        authStatus.textContent = "";
+      }
       tabIn.addEventListener("click", function () {
         setMode(true);
         syncForgotVisibility(true);
+        syncPasswordAutocomplete(true);
+        clearAuthStatus();
       });
       tabUp.addEventListener("click", function () {
         setMode(false);
         syncForgotVisibility(false);
+        syncPasswordAutocomplete(false);
+        clearAuthStatus();
       });
       setMode(true);
       syncForgotVisibility(true);
+      syncPasswordAutocomplete(true);
     })();
   </script>
   <!-- Smartsupp Live Chat script -->

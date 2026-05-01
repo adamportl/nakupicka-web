@@ -1,7 +1,7 @@
 {
   "name": "NÁKUPIČKA",
   "short_name": "Nákupička",
-  "description": "Přehled nákupů domácnosti na mobilu i webu.",
+  "description": "Přehled nákupů domácnosti na mobilu i webu. English: NiftySpend.",
   "start_url": "/app.html",
   "scope": "/",
   "display": "standalone",

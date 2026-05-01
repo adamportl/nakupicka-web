@@ -2,6 +2,7 @@
 <html lang="cs" data-lang="cs" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
+  <script src="preferences-boot.js"></script>
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <script src="oauth-return-to-app.js"></script>
@@ -12,12 +13,23 @@
   <link rel="alternate" hreflang="x-default" href="https://nakupicka.vercel.app/podpora.html" />
   <meta name="description" id="metaDesc"
     data-desc-cs="Podpora — NÁKUPIČKA"
-    data-desc-en="Support — NÁKUPIČKA"
+    data-desc-en="Support — NiftySpend"
     content="Podpora — NÁKUPIČKA" />
   <meta name="theme-color" content="#ff2d55" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#0d0d0f" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#140a12" media="(prefers-color-scheme: dark)" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Podpora — NÁKUPIČKA" />
+  <meta
+    property="og:site_name"
+    content="NAKUPICKA"
+    data-og-site-cs="NAKUPICKA"
+    data-og-site-en="NiftySpend"
+  />
+  <meta
+    property="og:title"
+    content="Podpora — NÁKUPIČKA"
+    data-og-title-cs="Podpora — NÁKUPIČKA"
+    data-og-title-en="Support — NiftySpend"
+  />
   <meta property="og:description" content="Návod, kontakt a podpora pro aplikaci NÁKUPIČKA." />
   <meta property="og:url" content="https://nakupicka.vercel.app/podpora.html" />
   <meta property="og:image" content="https://nakupicka.vercel.app/images/app-icon.png" />
@@ -25,7 +37,7 @@
   <link rel="shortcut icon" type="image/png" href="images/app-icon.png" />
   <link rel="apple-touch-icon" href="images/app-icon.png" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <title data-title-cs="Podpora — NÁKUPIČKA" data-title-en="Support — NÁKUPIČKA">Podpora — NÁKUPIČKA</title>
+  <title data-title-cs="Podpora — NÁKUPIČKA" data-title-en="Support — NiftySpend">Podpora — NÁKUPIČKA</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -44,10 +56,11 @@
           height="40"
           alt=""
           decoding="async"
-        /><span class="logo-text">NÁKUPIČKA</span></a
+        /><span class="logo-text i18n-cs">NÁKUPIČKA</span><span class="logo-text i18n-en">NiftySpend</span></a
       >
       <nav class="nav nav-main" id="siteNav" data-nav-aria-cs="Hlavní menu" data-nav-aria-en="Main menu" aria-label="Hlavní menu">
         <a href="index.html"><span class="i18n-cs">Domů</span><span class="i18n-en">Home</span></a>
+        <a href="app.html"><span class="i18n-cs">Webová aplikace</span><span class="i18n-en">Web app</span></a>
         <a href="premium.html">Premium</a>
         <a href="podpora.html" aria-current="page"><span class="i18n-cs">Podpora</span><span class="i18n-en">Support</span></a>
       </nav>
@@ -298,7 +311,7 @@
         </ul>
       </article>
       <article class="guide-content i18n-en">
-        <h3 class="guide-title">Using NÁKUPIČKA</h3>
+        <h3 class="guide-title">Using NiftySpend</h3>
         <p class="guide-lead">
           Feature guide for the iOS app, with a short note on the web app. Reflects the current product.
         </p>
@@ -514,7 +527,7 @@
 
   <footer class="site-footer">
     <div class="footer-inner">
-      <span class="footer-brand">NÁKUPIČKA</span>
+      <span class="footer-brand i18n-cs">NÁKUPIČKA</span><span class="footer-brand i18n-en">NiftySpend</span>
       <nav class="footer-nav" data-footer-aria-cs="Patička" data-footer-aria-en="Footer" aria-label="Patička">
         <a href="index.html"><span class="i18n-cs">Domů</span><span class="i18n-en">Home</span></a>
         <a href="app.html"><span class="i18n-cs">Webová aplikace</span><span class="i18n-en">Web app</span></a>

@@ -216,6 +216,7 @@ let purchaseSort = "date-desc";
 let selectedPurchaseIds = new Set();
 let undoStack = [];
 let lastModalFocus = null;
+let currentDashView = "overview";
 let canEdit = false;
 /** Zda má uživatel podle domácnosti právo upravovat (bez ohledu na Premium). */
 let householdEditAllowed = false;
@@ -281,6 +282,32 @@ function showPanel(name) {
     n.hidden = n.getAttribute("data-app-panel") !== name;
   });
   if (name !== "dashboard") closePurchaseEditModal();
+  try {
+    window.scrollTo(0, 0);
+  } catch {
+    /* ignore */
+  }
+}
+
+function setDashboardView(view) {
+  const root = el("dashboard-root");
+  if (!root) return;
+  const allowed = new Set(["overview", "purchases", "family", "cloud", "invites"]);
+  const next = allowed.has(view) ? view : "overview";
+  currentDashView = next;
+  root.querySelectorAll("[data-dash-view]").forEach((node) => {
+    const viewName = node.getAttribute("data-dash-view");
+    if (viewName === "all") return;
+    const isTarget = viewName === next;
+    if (node.id === "app-add-section" && !canEdit) {
+      node.hidden = true;
+      return;
+    }
+    node.hidden = !isTarget;
+  });
+  root.querySelectorAll("[data-dash-nav]").forEach((btn) => {
+    btn.classList.toggle("is-active", btn.getAttribute("data-dash-nav") === next);
+  });
 }
 
 function formatMoney(n) {
@@ -358,6 +385,7 @@ function renderPurchases() {
   if (bulkDelete) bulkDelete.disabled = !canEdit || selectedPurchaseIds.size === 0;
   if (!sorted.length) {
     list.innerHTML = `<p class="app-empty">${escapeHtml(purchases.length ? t("noMatch") : t("empty"))}</p>`;
+    updateDashboardStats();
     return;
   }
   list.innerHTML = sorted
@@ -386,7 +414,34 @@ function renderPurchases() {
     </article>`
     )
     .join("");
+  updateDashboardStats();
   renderUndoBar();
+}
+
+function updateDashboardStats() {
+  const totalEl = el("app-stat-total");
+  const countEl = el("app-stat-count");
+  const catEl = el("app-stat-category");
+  if (!totalEl || !countEl || !catEl) return;
+  const normalized = purchases.map((p) => normalizeWirePurchase(p));
+  const total = normalized.reduce((sum, p) => sum + (p.price || 0), 0);
+  const count = normalized.length;
+  const byCategory = new Map();
+  normalized.forEach((p) => {
+    const key = p.category || "Ostatní";
+    byCategory.set(key, (byCategory.get(key) || 0) + (p.price || 0));
+  });
+  let top = "—";
+  let topVal = -1;
+  byCategory.forEach((value, key) => {
+    if (value > topVal) {
+      top = key;
+      topVal = value;
+    }
+  });
+  totalEl.textContent = `${formatMoney(total)} Kč`;
+  countEl.textContent = String(count);
+  catEl.textContent = top;
 }
 
 function escapeHtml(s) {
@@ -663,6 +718,7 @@ async function loadHouseholdDetail(h) {
   }
   renderPurchases();
   showPanel("dashboard");
+  setDashboardView(currentDashView || "overview");
   try {
     await loadExtendedHouseholdUI(h);
   } catch (e) {
@@ -1123,6 +1179,12 @@ function bindForms() {
     }
   });
 
+  document.querySelectorAll("[data-dash-nav]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      setDashboardView(btn.getAttribute("data-dash-nav") || "overview");
+    });
+  });
+
   el("form-auth")?.addEventListener("submit", async (e) => {
     e.preventDefault();
     const { email, password } = await readAuthInputsWithSafariRetry();
@@ -1139,7 +1201,7 @@ function bindForms() {
         const { error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: window.location.origin + window.location.pathname },
+          options: { emailRedirectTo: new URL("/email-verified", window.location.origin).href },
         });
         if (error) {
           el("app-status").textContent = error.message || t("errAuth");
@@ -1281,7 +1343,7 @@ function bindForgotPassword() {
     if (!email) return;
     el("app-status").textContent = t("saving");
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + window.location.pathname,
+      redirectTo: new URL("/reset-password", window.location.origin).href,
     });
     if (error) {
       el("app-status").textContent = error.message || t("errGeneric");

@@ -2,6 +2,7 @@
 <html lang="cs" data-lang="cs" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
+  <script src="preferences-boot.js"></script>
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <script src="oauth-return-to-app.js"></script>
@@ -14,13 +15,24 @@
     name="description"
     id="metaDesc"
     data-desc-cs="Zásady ochrany osobních údajů — NÁKUPIČKA"
-    data-desc-en="Privacy policy — NÁKUPIČKA"
+    data-desc-en="Privacy policy — NiftySpend"
     content="Zásady ochrany osobních údajů — NÁKUPIČKA"
   />
   <meta name="theme-color" content="#ff2d55" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#0d0d0f" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#140a12" media="(prefers-color-scheme: dark)" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Soukromí — NÁKUPIČKA" />
+  <meta
+    property="og:site_name"
+    content="NAKUPICKA"
+    data-og-site-cs="NAKUPICKA"
+    data-og-site-en="NiftySpend"
+  />
+  <meta
+    property="og:title"
+    content="Soukromí — NÁKUPIČKA"
+    data-og-title-cs="Soukromí — NÁKUPIČKA"
+    data-og-title-en="Privacy — NiftySpend"
+  />
   <meta property="og:description" content="Zásady ochrany osobních údajů pro NÁKUPIČKA." />
   <meta property="og:url" content="https://nakupicka.vercel.app/privacy.html" />
   <meta property="og:image" content="https://nakupicka.vercel.app/images/app-icon.png" />
@@ -28,7 +40,7 @@
   <link rel="shortcut icon" type="image/png" href="images/app-icon.png" />
   <link rel="apple-touch-icon" href="images/app-icon.png" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <title data-title-cs="Soukromí — NÁKUPIČKA" data-title-en="Privacy — NÁKUPIČKA">Soukromí — NÁKUPIČKA</title>
+  <title data-title-cs="Soukromí — NÁKUPIČKA" data-title-en="Privacy — NiftySpend">Soukromí — NÁKUPIČKA</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -49,7 +61,7 @@
           height="40"
           alt=""
           decoding="async"
-        /><span class="logo-text">NÁKUPIČKA</span></a
+        /><span class="logo-text i18n-cs">NÁKUPIČKA</span><span class="logo-text i18n-en">NiftySpend</span></a
       >
       <nav
         class="nav nav-main"
@@ -59,6 +71,7 @@
         aria-label="Hlavní menu"
       >
         <a href="index.html"><span class="i18n-cs">Domů</span><span class="i18n-en">Home</span></a>
+        <a href="app.html"><span class="i18n-cs">Webová aplikace</span><span class="i18n-en">Web app</span></a>
         <a href="premium.html">Premium</a>
         <a href="podpora.html"><span class="i18n-cs">Podpora</span><span class="i18n-en">Support</span></a>
       </nav>
@@ -205,7 +218,7 @@
       <p class="legal-updated">Last updated: April 2026</p>
 
       <p>
-        This policy describes how data is handled in the NÁKUPIČKA iOS app, on
+        This policy describes how data is handled in the NiftySpend iOS app, on
         <a href="https://nakupicka.vercel.app/" rel="noopener noreferrer">nakupicka.vercel.app</a>, and related services.
         The operator is the rights holder of the app and site (contact below).
       </p>
@@ -227,7 +240,7 @@
       <p>
         Cloud data may include household details, members, shared purchases, email-linked invitations, Premium status
         synced from the app, and optional user backups — only to the extent you enable in the app or on the web. Database
-        access is restricted by security rules including Row Level Security for the NÁKUPIČKA project.
+        access is restricted by security rules including Row Level Security for the NiftySpend project.
       </p>
       <p>
         How Supabase processes personal data is described in the
@@ -280,7 +293,7 @@
 
       <h2>Advertising tracking</h2>
       <p>
-        NÁKUPIČKA is not used for cross-app tracking for advertising (App Tracking Transparency is not used for that
+        NiftySpend is not used for cross-app tracking for advertising (App Tracking Transparency is not used for that
         purpose).
       </p>
 
@@ -314,7 +327,7 @@
 
   <footer class="site-footer">
     <div class="footer-inner">
-      <span class="footer-brand">NÁKUPIČKA</span>
+      <span class="footer-brand i18n-cs">NÁKUPIČKA</span><span class="footer-brand i18n-en">NiftySpend</span>
       <nav class="footer-nav" data-footer-aria-cs="Patička" data-footer-aria-en="Footer" aria-label="Patička">
         <a href="index.html"><span class="i18n-cs">Domů</span><span class="i18n-en">Home</span></a>
         <a href="app.html"><span class="i18n-cs">Webová aplikace</span><span class="i18n-en">Web app</span></a>

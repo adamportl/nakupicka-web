@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="cs" data-lang="cs" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../preferences-boot.js"></script>
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <script src="../oauth-return-to-app.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="canonical" href="https://nakupicka.vercel.app/reset-password/" />
+  <link rel="alternate" hreflang="cs" href="https://nakupicka.vercel.app/reset-password/" />
+  <link rel="alternate" hreflang="en" href="https://nakupicka.vercel.app/reset-password/?lang=en" />
+  <link rel="alternate" hreflang="x-default" href="https://nakupicka.vercel.app/reset-password/" />
+  <meta name="description" id="metaDesc"
+    data-desc-cs="Obnovení hesla — NÁKUPIČKA"
+    data-desc-en="Reset password — NiftySpend"
+    content="Obnovení hesla — NÁKUPIČKA" />
+  <meta name="theme-color" content="#ff2d55" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#140a12" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" type="image/png" href="../images/app-icon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/app-icon.png" />
+  <link rel="apple-touch-icon" href="../images/app-icon.png" />
+  <link rel="manifest" href="../manifest.webmanifest" />
+  <title data-title-cs="Obnovení hesla — NÁKUPIČKA" data-title-en="Reset password — NiftySpend">Obnovení hesla — NÁKUPIČKA</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="../app.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <a class="skip-link" href="#main"><span class="i18n-cs">Přeskočit na obsah</span><span class="i18n-en">Skip to content</span></a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="../index.html"><img class="logo-mark" src="../images/app-icon.png" width="40" height="40" alt="" decoding="async" /><span class="logo-text i18n-cs">NÁKUPIČKA</span><span class="logo-text i18n-en">NiftySpend</span></a>
+      <nav class="nav nav-main" id="siteNav" data-nav-aria-cs="Hlavní menu" data-nav-aria-en="Main menu" aria-label="Hlavní menu">
+        <a href="../index.html"><span class="i18n-cs">Domů</span><span class="i18n-en">Home</span></a>
+        <a href="../premium.html">Premium</a>
+        <a href="../podpora.html"><span class="i18n-cs">Podpora</span><span class="i18n-en">Support</span></a>
+        <a href="../app.html"><span class="i18n-cs">Webová aplikace</span><span class="i18n-en">Web app</span></a>
+      </nav>
+      <div class="nav-user-wrap" id="navUserWrap">
+        <button type="button" class="nav-user-trigger" id="navUserTrigger" aria-expanded="false" aria-haspopup="true" aria-label="Účet">
+          <svg class="nav-user-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="4" />
+            <path d="M4 20c1.8-4 14.2-4 16 0" />
+          </svg>
+        </button>
+        <div class="nav-user-dropdown" id="navUserDropdown" role="menu">
+          <a href="../app.html" class="nav-user-link" role="menuitem" id="navUserAppLink"><span class="i18n-cs">Webová aplikace</span><span class="i18n-en">Web app</span></a>
+          <span class="nav-user-email" id="navUserEmail" hidden></span>
+          <button type="button" class="nav-user-logout" id="navUserLogout" role="menuitem" hidden><span class="i18n-cs">Odhlásit</span><span class="i18n-en">Sign out</span></button>
+        </div>
+      </div>
+      <div class="lang-switch" role="group" aria-label="Jazyk / Language">
+        <button type="button" class="lang-btn" data-set-lang="cs" aria-pressed="true">CS</button>
+        <button type="button" class="lang-btn" data-set-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <button type="button" class="theme-toggle" id="themeToggle"></button>
+      <button type="button" class="nav-menu-btn" id="navMenuBtn" aria-expanded="false" aria-controls="siteNav" aria-label="Menu"></button>
+    </div>
+  </header>
+
+  <main id="main" class="page-main reset-password-page">
+    <div class="reset-password-inner">
+      <header class="page-hero reset-password-hero">
+        <h1><span class="i18n-cs">Nové heslo</span><span class="i18n-en">New password</span></h1>
+        <p class="page-lead">
+          <span class="i18n-cs">Nastav nové přihlašovací heslo pro svůj účet.</span>
+          <span class="i18n-en">Set a new login password for your account.</span>
+        </p>
+      </header>
+
+      <p id="reset-status" class="reset-status-msg" aria-live="polite" role="status"></p>
+
+      <p id="reset-fatal" class="reset-fatal-msg" aria-live="assertive" role="alert" hidden></p>
+
+      <div id="reset-form-wrap" class="reset-form-section" hidden>
+        <div class="app-auth-card reset-password-card">
+          <form id="reset-form" class="app-form-grid" novalidate>
+            <label>
+              <span class="i18n-cs">Nové heslo</span><span class="i18n-en">New password</span>
+              <input type="password" id="reset-password-field" name="password" autocomplete="new-password" required minlength="6" />
+            </label>
+            <label>
+              <span class="i18n-cs">Potvrzení hesla</span><span class="i18n-en">Confirm password</span>
+              <input type="password" id="reset-password-confirm" name="password2" autocomplete="new-password" required minlength="6" />
+            </label>
+            <button type="submit" class="btn btn-primary btn-reset-save" id="reset-submit">
+              <span class="i18n-cs">Uložit nové heslo</span><span class="i18n-en">Save new password</span>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div id="reset-success" class="reset-success-box" hidden>
+        <div class="app-auth-card reset-password-card reset-success-inner">
+          <p class="reset-success-message">
+            <span class="i18n-cs">Heslo bylo úspěšně změněno.</span><span class="i18n-en">Your password has been successfully updated.</span>
+          </p>
+          <p class="reset-success-hint">
+            <span class="i18n-cs">Za chvíli tě přesměrujeme přihlašení ve webové aplikaci.</span>
+            <span class="i18n-en">We will redirect you to the web app for sign-in in a moment.</span>
+          </p>
+          <a class="btn btn-primary btn-reset-goto-app" href="../app.html"><span class="i18n-cs">Přejít do aplikace</span><span class="i18n-en">Go to web app</span></a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-brand i18n-cs">NÁKUPIČKA</span><span class="footer-brand i18n-en">NiftySpend</span>
+      <nav class="footer-nav" data-footer-aria-cs="Patička" data-footer-aria-en="Footer" aria-label="Patička">
+        <a href="../index.html"><span class="i18n-cs">Domů</span><span class="i18n-en">Home</span></a>
+        <a href="../app.html"><span class="i18n-cs">Webová aplikace</span><span class="i18n-en">Web app</span></a>
+        <a href="../premium.html">Premium</a>
+        <a href="../podpora.html"><span class="i18n-cs">Podpora</span><span class="i18n-en">Support</span></a>
+        <a href="../privacy.html"><span class="i18n-cs">Soukromí</span><span class="i18n-en">Privacy</span></a>
+        <a href="../delete-account.html"><span class="i18n-cs">Smazání účtu</span><span class="i18n-en">Delete account</span></a>
+      </nav>
+      <span class="footer-meta">© Adam Portl</span>
+    </div>
+  </footer>
+
+  <script src="../vendor/supabase-umd.js" defer></script>
+  <script src="../analytics.js" defer></script>
+  <script src="../script.js" defer></script>
+  <script type="module" src="../account-nav.js"></script>
+  <script type="module" src="../reset-password.js"></script>
+</body>
+</html>

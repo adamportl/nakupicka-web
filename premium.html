@@ -2,6 +2,7 @@
 <html lang="cs" data-lang="cs" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
+  <script src="preferences-boot.js"></script>
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <script src="oauth-return-to-app.js"></script>
@@ -14,13 +15,24 @@
     name="description"
     id="metaDesc"
     data-desc-cs="NÁKUPIČKA — Free a Premium v kostce."
-    data-desc-en="NÁKUPIČKA — Free vs Premium at a glance."
+    data-desc-en="NiftySpend — Free vs Premium at a glance."
     content="NÁKUPIČKA — Free a Premium v kostce."
   />
   <meta name="theme-color" content="#ff2d55" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#0d0d0f" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#140a12" media="(prefers-color-scheme: dark)" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Premium — NÁKUPIČKA" />
+  <meta
+    property="og:site_name"
+    content="NAKUPICKA"
+    data-og-site-cs="NAKUPICKA"
+    data-og-site-en="NiftySpend"
+  />
+  <meta
+    property="og:title"
+    content="Premium — NÁKUPIČKA"
+    data-og-title-cs="Premium — NÁKUPIČKA"
+    data-og-title-en="Premium — NiftySpend"
+  />
   <meta property="og:description" content="Porovnání Free a Premium funkcí aplikace NÁKUPIČKA." />
   <meta property="og:url" content="https://nakupicka.vercel.app/premium.html" />
   <meta property="og:image" content="https://nakupicka.vercel.app/images/app-icon.png" />
@@ -28,7 +40,7 @@
   <link rel="shortcut icon" type="image/png" href="images/app-icon.png" />
   <link rel="apple-touch-icon" href="images/app-icon.png" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <title data-title-cs="Premium — NÁKUPIČKA" data-title-en="Premium — NÁKUPIČKA">Premium — NÁKUPIČKA</title>
+  <title data-title-cs="Premium — NÁKUPIČKA" data-title-en="Premium — NiftySpend">Premium — NÁKUPIČKA</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -49,7 +61,7 @@
           height="40"
           alt=""
           decoding="async"
-        /><span class="logo-text">NÁKUPIČKA</span></a
+        /><span class="logo-text i18n-cs">NÁKUPIČKA</span><span class="logo-text i18n-en">NiftySpend</span></a
       >
       <nav
         class="nav nav-main"
@@ -59,6 +71,7 @@
         aria-label="Hlavní menu"
       >
         <a href="index.html"><span class="i18n-cs">Domů</span><span class="i18n-en">Home</span></a>
+        <a href="app.html"><span class="i18n-cs">Webová aplikace</span><span class="i18n-en">Web app</span></a>
         <a href="premium.html" aria-current="page">Premium</a>
         <a href="podpora.html"><span class="i18n-cs">Podpora</span><span class="i18n-en">Support</span></a>
       </nav>
@@ -165,7 +178,7 @@
 
   <footer class="site-footer">
     <div class="footer-inner">
-      <span class="footer-brand">NÁKUPIČKA</span>
+      <span class="footer-brand i18n-cs">NÁKUPIČKA</span><span class="footer-brand i18n-en">NiftySpend</span>
       <nav class="footer-nav" data-footer-aria-cs="Patička" data-footer-aria-en="Footer" aria-label="Patička">
         <a href="index.html"><span class="i18n-cs">Domů</span><span class="i18n-en">Home</span></a>
         <a href="app.html"><span class="i18n-cs">Webová aplikace</span><span class="i18n-en">Web app</span></a>

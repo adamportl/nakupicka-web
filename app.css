@@ -1,12 +1,15 @@
 /* Webová aplikace — stejný vizuální jazyk jako zbytek webu */
 
-.app-page {
-  padding-bottom: 5rem;
+.app-page > #app-status:first-of-type {
+  width: min(28rem, 100%);
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0.75rem;
+  min-height: 0;
 }
 
-.app-page > #app-status:first-of-type {
-  margin: 0 0 1.25rem;
-  min-height: 1.5rem;
+.app-page > #app-status:first-of-type:empty {
+  margin-bottom: 0;
 }
 
 .app-panel h1 {
@@ -44,6 +47,8 @@
 
 .app-auth-card {
   max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .app-form-grid {
@@ -102,7 +107,12 @@
 }
 
 .app-auth-oauth {
-  margin-bottom: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.app-auth-oauth .btn-google {
+  width: 100%;
+  justify-content: center;
 }
 
 .btn-google {
@@ -227,7 +237,8 @@
   color: var(--text-secondary);
 }
 
-.app-household-picker select {
+.app-household-picker select,
+#dashboard-root .household-select-field {
   font: inherit;
   padding: 0.45rem 0.65rem;
   border-radius: var(--radius-sm);
@@ -253,14 +264,14 @@
 }
 
 .app-status {
-  min-height: 1.5rem;
-  font-size: 0.9rem;
-  color: var(--pink-deep);
-  margin-bottom: 0.8rem;
+  min-height: 1rem;
+  font-size: 0.92rem;
+  color: color-mix(in srgb, var(--pink-deep) 92%, var(--text));
+  line-height: 1.45;
 }
 
 [data-theme="dark"] .app-status {
-  color: #ff7a9a;
+  color: #ffa7c4;
 }
 
 .app-readonly-banner {
@@ -669,5 +680,944 @@
 
   .app-purchase-tools {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ===== 2026 APP UI REDESIGN ===== */
+.app-page {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  max-width: min(1200px, 100%);
+  margin: 0 auto;
+  padding-left: max(1rem, var(--safe-left));
+  padding-right: max(1rem, var(--safe-right));
+  padding-bottom: 6rem;
+}
+
+.page-main.app-page:has(#dashboard-root[hidden]) {
+  justify-content: center;
+  min-height: calc(100dvh - var(--header-bar) - var(--safe-bottom, 0px) - 2rem);
+}
+
+.page-main.app-page:has(#dashboard-root:not([hidden])) {
+  justify-content: flex-start;
+  min-height: 0;
+  max-width: min(1280px, 100%);
+}
+
+.page-main.app-page:has(#dashboard-root:not([hidden])) .app-back-home {
+  display: none;
+}
+
+.app-back-home {
+  margin-top: 2rem;
+}
+
+.app-panel h1 {
+  letter-spacing: 0.01em;
+}
+
+.app-auth-card,
+.app-setup-card,
+.app-dash-header,
+.app-section-card,
+.app-add-card {
+  border: 1px solid color-mix(in srgb, #fff 72%, transparent);
+  background:
+    linear-gradient(130deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0)),
+    var(--glass-surface-muted);
+  box-shadow: 0 18px 42px rgba(117, 74, 179, 0.22);
+}
+
+[data-theme="dark"] .app-auth-card,
+[data-theme="dark"] .app-setup-card,
+[data-theme="dark"] .app-dash-header,
+[data-theme="dark"] .app-section-card,
+[data-theme="dark"] .app-add-card {
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.32);
+}
+
+.app-user-bar {
+  padding: 0.8rem 1rem;
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, #fff 74%, transparent);
+  background: var(--glass-surface);
+}
+
+.app-dash-toolbar {
+  gap: 0.9rem 1rem;
+}
+
+.app-household-picker select,
+#dashboard-root .household-select-field,
+.app-form-grid input,
+.app-form-grid select,
+.app-add-grid input,
+.app-add-grid select,
+.app-purchase-tools input,
+.app-purchase-tools select {
+  border: 1px solid color-mix(in srgb, #fff 70%, transparent);
+  background: color-mix(in srgb, #fff 66%, transparent);
+}
+
+[data-theme="dark"] .app-household-picker select,
+[data-theme="dark"] #dashboard-root .household-select-field,
+[data-theme="dark"] .app-form-grid input,
+[data-theme="dark"] .app-form-grid select,
+[data-theme="dark"] .app-add-grid input,
+[data-theme="dark"] .app-add-grid select,
+[data-theme="dark"] .app-purchase-tools input,
+[data-theme="dark"] .app-purchase-tools select {
+  background: rgba(58, 28, 52, 0.62);
+  border-color: rgba(255, 140, 190, 0.28);
+}
+
+.app-purchase-tools {
+  padding: 0.8rem;
+  border: 1px solid color-mix(in srgb, #fff 74%, transparent);
+  border-radius: 16px;
+  background: var(--glass-surface);
+}
+
+.app-purchase-card {
+  border: 1px solid color-mix(in srgb, #fff 74%, transparent);
+  border-radius: 18px;
+  background:
+    linear-gradient(130deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0)),
+    var(--glass-surface);
+  box-shadow: 0 14px 26px rgba(122, 83, 183, 0.16);
+}
+
+.app-purchase-price {
+  background: linear-gradient(125deg, var(--violet), var(--pink));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.app-purchase-actions .app-btn-inline,
+.app-btn-inline {
+  border-color: color-mix(in srgb, #fff 70%, transparent);
+  background: color-mix(in srgb, #fff 72%, transparent);
+}
+
+[data-theme="dark"] .app-purchase-actions .app-btn-inline,
+[data-theme="dark"] .app-btn-inline {
+  background: rgba(52, 26, 46, 0.72);
+  border-color: rgba(255, 150, 200, 0.28);
+}
+
+.app-readonly-banner {
+  border: 1px solid rgba(255, 121, 197, 0.55);
+  background: linear-gradient(120deg, rgba(255, 107, 185, 0.18), rgba(232, 121, 249, 0.14));
+}
+
+.app-modal {
+  border: 1px solid color-mix(in srgb, #fff 76%, transparent);
+  background:
+    linear-gradient(130deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0)),
+    var(--glass-surface-muted);
+  box-shadow: 0 22px 46px rgba(123, 74, 190, 0.28);
+}
+
+.app-modal-close {
+  border-color: color-mix(in srgb, #fff 70%, transparent);
+}
+
+@media (max-width: 760px) {
+  .app-page {
+    padding-bottom: 4.4rem;
+  }
+
+  .app-dash-header,
+  .app-section-card,
+  .app-add-card {
+    padding: 1rem;
+  }
+}
+
+#dashboard-root .app-purchase-card {
+  border-radius: 18px;
+}
+
+#dashboard-root .app-purchase-actions .app-btn-inline,
+#dashboard-root .app-btn-inline {
+  border-radius: 10px;
+}
+
+#dashboard-root .app-household-picker {
+  margin-left: auto;
+}
+
+#dashboard-root .household-select-field {
+  min-width: min(100%, 14rem);
+}
+
+#dashboard-root .app-cloud-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+#dashboard-root .app-cloud-actions .btn {
+  flex: 1 1 12rem;
+  justify-content: center;
+}
+
+/* ===== V3 HARD FIX + FULL APP REDESIGN ===== */
+#dashboard-root[hidden] {
+  display: none !important;
+}
+
+[data-app-panel="auth"][hidden],
+[data-app-panel="setup"][hidden],
+[data-app-panel="config"][hidden],
+[data-app-panel="recovery"][hidden] {
+  display: none !important;
+}
+
+.app-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(50rem 26rem at 15% -5%, rgba(120, 210, 255, 0.45), transparent 68%),
+    radial-gradient(40rem 22rem at 95% 0%, rgba(255, 132, 193, 0.42), transparent 68%),
+    radial-gradient(35rem 20rem at 50% 105%, rgba(182, 117, 255, 0.28), transparent 70%),
+    linear-gradient(140deg, #f3edff 0%, #ffe7f5 100%);
+  pointer-events: none;
+}
+
+[data-theme="dark"] .app-page::before {
+  background:
+    radial-gradient(50rem 26rem at 15% -5%, rgba(255, 110, 175, 0.26), transparent 70%),
+    radial-gradient(40rem 22rem at 95% 0%, rgba(210, 100, 255, 0.22), transparent 70%),
+    radial-gradient(35rem 20rem at 50% 105%, rgba(255, 55, 130, 0.16), transparent 72%),
+    linear-gradient(145deg, #120810 0%, #1a0c18 42%, #141018 100%);
+}
+
+[data-app-panel="auth"],
+[data-app-panel="setup"],
+[data-app-panel="recovery"] {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+[data-app-panel="auth"] .page-hero,
+[data-app-panel="setup"] .page-hero,
+[data-app-panel="recovery"] .page-hero {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.app-auth-card,
+.app-setup-card,
+.app-dash-header,
+.app-section-card,
+.app-add-card,
+.dash-left {
+  border-radius: 22px;
+  border: 1px solid color-mix(in srgb, #fff 76%, transparent);
+  background:
+    linear-gradient(130deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.06)),
+    var(--glass-surface-muted);
+  box-shadow: 0 22px 48px rgba(113, 70, 176, 0.2);
+}
+
+[data-theme="dark"] .app-auth-card,
+[data-theme="dark"] .app-setup-card,
+[data-theme="dark"] .app-dash-header,
+[data-theme="dark"] .app-section-card,
+[data-theme="dark"] .app-add-card,
+[data-theme="dark"] .dash-left {
+  border-color: rgba(255, 140, 195, 0.22);
+  background:
+    linear-gradient(130deg, rgba(92, 42, 88, 0.55), rgba(48, 22, 52, 0.62)),
+    rgba(26, 12, 22, 0.72);
+  box-shadow: 0 26px 56px rgba(40, 8, 28, 0.55);
+}
+
+.app-auth-tabs button[aria-selected="true"] {
+  background: linear-gradient(120deg, #8358ff 0%, #ff4fa7 100%);
+  box-shadow: 0 10px 24px rgba(207, 75, 170, 0.35);
+}
+
+.btn-primary {
+  background: linear-gradient(120deg, #8458ff 0%, #ff4fa8 65%, #ff84c4 100%);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 18px 34px rgba(206, 83, 174, 0.35);
+}
+
+.app-purchase-tools {
+  padding: 0.9rem;
+  border-radius: 15px;
+}
+
+.app-purchase-card {
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, #fff 70%, transparent);
+  box-shadow: 0 12px 24px rgba(115, 76, 177, 0.14);
+}
+
+[data-theme="dark"] .app-purchase-card {
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.28);
+}
+
+.app-purchase-price,
+.app-stat-value {
+  background: linear-gradient(125deg, #7f58ff, #ff4fa8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.app-stat-card {
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, #fff 74%, transparent);
+  background:
+    linear-gradient(125deg, rgba(132, 88, 255, 0.16), rgba(255, 83, 168, 0.18)),
+    color-mix(in srgb, #fff 70%, transparent);
+}
+
+[data-theme="dark"] .app-stat-card {
+  background:
+    linear-gradient(125deg, rgba(132, 88, 255, 0.2), rgba(255, 83, 168, 0.18)),
+    rgba(56, 40, 100, 0.46);
+}
+
+.app-readonly-banner {
+  border-radius: 14px;
+}
+
+/* ===== V4 COMPLETE NEW WEB APP SHELL ===== */
+.app-dashboard-v2[hidden] { display: none !important; }
+
+.app-dashboard-v2 {
+  display: grid;
+  grid-template-columns: minmax(220px, 260px) minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.dash-left,
+.dash-body {
+  min-width: 0;
+}
+
+.dash-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.dash-body > .dash-section {
+  margin-top: 0;
+}
+
+.dash-body > .app-add-card {
+  margin-top: 0;
+}
+
+.dash-left {
+  padding: 1.05rem;
+  border-radius: 22px;
+  border: 1px solid color-mix(in srgb, #fff 76%, transparent);
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.32), rgba(255,255,255,0.08)),
+    var(--glass-surface-muted);
+  box-shadow: 0 24px 52px rgba(105, 66, 168, 0.24);
+  position: sticky;
+  top: calc(var(--header-bar) + 0.8rem);
+}
+
+[data-theme="dark"] .dash-left {
+  background:
+    linear-gradient(135deg, rgba(92, 44, 78, 0.52), rgba(48, 24, 42, 0.52)),
+    rgba(26, 12, 20, 0.52);
+}
+
+.dash-brand {
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  font-size: 0.92rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(120deg, #7f58ff, #ff4fa8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dash-user-card {
+  display: flex;
+  gap: 0.7rem;
+  align-items: center;
+  padding: 0.75rem;
+  border-radius: 14px;
+  background: color-mix(in srgb, #fff 72%, transparent);
+  border: 1px solid color-mix(in srgb, #fff 80%, transparent);
+}
+
+[data-theme="dark"] .dash-user-card {
+  background: rgba(77, 58, 129, 0.52);
+}
+
+.dash-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: linear-gradient(140deg, #8a5cff, #ff5bb0);
+  box-shadow: 0 8px 16px rgba(189, 78, 169, 0.32);
+}
+
+.dash-user-title,
+.dash-user-email {
+  margin: 0;
+}
+
+.dash-user-title {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.dash-user-email {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--text);
+  word-break: break-all;
+}
+
+.dash-menu {
+  display: grid;
+  gap: 0.35rem;
+  margin: 1rem 0;
+}
+
+.dash-menu-item {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-weight: 600;
+  padding: 0.55rem 0.72rem;
+  border-radius: 12px;
+  transition: all 0.18s ease;
+}
+
+.dash-menu-item:hover {
+  color: var(--text);
+  background: color-mix(in srgb, var(--pink) 14%, transparent);
+}
+
+.dash-menu-item.is-active {
+  color: #fff;
+  background: linear-gradient(120deg, #8158ff, #ff4fa7);
+  box-shadow: 0 12px 24px rgba(198, 76, 168, 0.35);
+}
+
+.dash-left-actions {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.dash-left-actions .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.dash-hero {
+  border-radius: 22px;
+}
+
+.dash-hero-lead.page-lead {
+  margin: 0;
+}
+
+.dash-hero-head {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.dash-hero h1 {
+  margin: 0;
+  font-size: clamp(1.7rem, 3.2vw, 2.2rem);
+  letter-spacing: 0.01em;
+}
+
+.app-stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+}
+
+.app-stat-card {
+  margin: 0;
+  padding: 0.82rem;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, #fff 76%, transparent);
+  background:
+    linear-gradient(125deg, rgba(138, 94, 255, 0.17), rgba(255, 87, 170, 0.2)),
+    color-mix(in srgb, #fff 72%, transparent);
+}
+
+[data-theme="dark"] .app-stat-card {
+  background:
+    linear-gradient(125deg, rgba(138, 94, 255, 0.22), rgba(255, 87, 170, 0.2)),
+    rgba(56, 40, 98, 0.52);
+}
+
+.app-stat-card-wide {
+  grid-column: 1 / -1;
+}
+
+.app-stat-label,
+.app-stat-value {
+  margin: 0;
+}
+
+.app-stat-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  font-weight: 700;
+}
+
+.app-stat-value {
+  margin-top: 0.35rem;
+  font-size: 1.2rem;
+  font-weight: 800;
+  background: linear-gradient(125deg, #7f58ff, #ff4fa8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.app-purchase-tools,
+.app-purchase-card,
+.app-modal {
+  border-color: color-mix(in srgb, #fff 76%, transparent);
+}
+
+@media (max-width: 1240px) {
+  .app-dashboard-v2 {
+    grid-template-columns: 1fr;
+  }
+
+  .dash-left {
+    position: static;
+  }
+
+  .dash-menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0.85rem 0;
+  }
+
+  .dash-menu-item {
+    flex: 1 1 auto;
+    min-width: 8.5rem;
+    text-align: center;
+  }
+
+  .dash-left-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .dash-hero-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .dash-left-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .app-stat-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== V5 navigation behavior + calmer dark scheme ===== */
+[data-dash-view][hidden] {
+  display: none !important;
+}
+
+.dash-menu-item {
+  appearance: none;
+  border: 1px solid transparent;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.dash-menu-item.is-active {
+  border-color: rgba(255, 255, 255, 0.42);
+}
+
+[data-theme="dark"] .app-page::before {
+  background:
+    radial-gradient(44rem 24rem at 14% -5%, rgba(255, 95, 165, 0.22), transparent 68%),
+    radial-gradient(34rem 20rem at 90% 4%, rgba(188, 95, 255, 0.18), transparent 66%),
+    radial-gradient(32rem 18rem at 56% 100%, rgba(255, 65, 130, 0.14), transparent 70%),
+    linear-gradient(145deg, #10080f 0%, #140c14 48%, #120612 100%);
+}
+
+[data-theme="dark"] .dash-left,
+[data-theme="dark"] .app-auth-card,
+[data-theme="dark"] .app-setup-card,
+[data-theme="dark"] .app-dash-header,
+[data-theme="dark"] .app-section-card,
+[data-theme="dark"] .app-add-card,
+[data-theme="dark"] .app-modal {
+  border-color: rgba(255, 130, 185, 0.28);
+  background:
+    linear-gradient(130deg, rgba(78, 38, 72, 0.82), rgba(42, 18, 38, 0.88)),
+    rgba(22, 10, 18, 0.82);
+  box-shadow: 0 20px 44px rgba(28, 6, 18, 0.52);
+}
+
+[data-theme="dark"] .app-purchase-card,
+[data-theme="dark"] .app-stat-card,
+[data-theme="dark"] .dash-user-card {
+  border-color: rgba(255, 145, 195, 0.22);
+  background: rgba(42, 22, 38, 0.82);
+}
+
+/*
+ * Světlý režim: výraznější obrysy — původní „bílé“ border-color-mix má na světlém pozadí téměř nulový kontrast.
+ */
+[data-theme="light"] .dash-left,
+[data-theme="light"] .app-auth-card,
+[data-theme="light"] .app-setup-card,
+[data-theme="light"] .app-dash-header,
+[data-theme="light"] .app-section-card,
+[data-theme="light"] .app-add-card,
+[data-theme="light"] .app-user-bar,
+[data-theme="light"] .app-purchase-tools,
+[data-theme="light"] .app-purchase-card,
+[data-theme="light"] .app-modal {
+  border-color: color-mix(in srgb, var(--pink) 30%, rgba(44, 36, 62, 0.22));
+}
+
+[data-theme="light"] .app-stat-card {
+  border-color: color-mix(in srgb, var(--pink) 28%, rgba(44, 36, 62, 0.22));
+}
+
+[data-theme="light"] .dash-user-card {
+  border-color: color-mix(in srgb, var(--pink) 28%, rgba(44, 36, 62, 0.2));
+}
+
+[data-theme="light"] .dash-menu-item.is-active {
+  border-color: rgba(200, 90, 150, 0.55);
+}
+
+[data-theme="light"] .app-household-picker select,
+[data-theme="light"] #dashboard-root .household-select-field,
+[data-theme="light"] .app-form-grid input,
+[data-theme="light"] .app-form-grid select,
+[data-theme="light"] .app-add-grid input,
+[data-theme="light"] .app-add-grid select,
+[data-theme="light"] .app-purchase-tools input,
+[data-theme="light"] .app-purchase-tools select {
+  border-color: color-mix(in srgb, var(--pink) 24%, rgba(44, 36, 62, 0.24));
+}
+
+[data-theme="light"] .app-purchase-actions .app-btn-inline,
+[data-theme="light"] .app-btn-inline {
+  border-color: color-mix(in srgb, var(--pink) 20%, rgba(44, 36, 62, 0.2));
+}
+
+[data-theme="light"] .app-modal-close {
+  border-color: color-mix(in srgb, var(--pink) 22%, rgba(44, 36, 62, 0.2));
+}
+
+[data-theme="dark"] .dash-menu-item.is-active,
+[data-theme="dark"] .btn-primary {
+  background: linear-gradient(120deg, #a855f7 0%, #ec4899 52%, #ff6ba8 100%);
+  box-shadow: 0 12px 28px rgba(236, 72, 153, 0.42);
+}
+
+[data-theme="dark"] .app-stat-value,
+[data-theme="dark"] .app-purchase-price,
+[data-theme="dark"] .logo-text {
+  background: linear-gradient(120deg, #e879f9, #fb7185 55%, #fda4af);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="dark"] .btn-ghost,
+[data-theme="dark"] .app-btn-inline,
+[data-theme="dark"] .dash-left-actions .btn,
+[data-theme="dark"] .app-form-grid input,
+[data-theme="dark"] .app-form-grid select,
+[data-theme="dark"] .app-add-grid input,
+[data-theme="dark"] .app-add-grid select,
+[data-theme="dark"] .app-purchase-tools input,
+[data-theme="dark"] .app-purchase-tools select,
+[data-theme="dark"] .app-household-picker select,
+[data-theme="dark"] #dashboard-root .household-select-field {
+  background: rgba(48, 22, 40, 0.82);
+  border-color: rgba(255, 140, 190, 0.35);
+  color: #fff5f8;
+}
+
+[data-theme="dark"] .dash-menu-item,
+[data-theme="dark"] .app-stat-label,
+[data-theme="dark"] .app-note,
+[data-theme="dark"] .app-purchase-meta,
+[data-theme="dark"] .dash-user-title {
+  color: rgba(255, 228, 240, 0.74);
+}
+
+/* Stránka obnovení hesla (/reset-password/) */
+.page-main.reset-password-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 2rem 1rem 3rem;
+  min-height: min(92vh, 52rem);
+}
+
+.reset-password-inner {
+  width: min(440px, 100%);
+}
+
+.reset-password-hero.page-hero {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.reset-password-inner .reset-password-card {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.reset-status-msg {
+  min-height: 1.4rem;
+  margin: 0 0 0.85rem;
+  font-size: 0.925rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.reset-fatal-msg {
+  padding: 1.1rem 1.25rem;
+  margin: 0;
+  border-radius: var(--radius);
+  border: 1px solid color-mix(in srgb, var(--pink) 38%, var(--border));
+  background: color-mix(in srgb, var(--pink) 10%, var(--bg-elevated, var(--bg)));
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.reset-success-box .reset-password-card {
+  text-align: center;
+}
+
+.reset-success-message {
+  margin: 0 0 0.65rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.reset-success-hint {
+  margin: 0 0 1.25rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.btn-reset-goto-app.btn {
+  display: inline-flex;
+  justify-content: center;
+}
+
+#reset-submit.btn-primary[data-loading] {
+  opacity: 0.85;
+}
+
+/* Ověření e-mailu (/email-verified/) */
+.verified-loading-msg {
+  margin: 0 0 1rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.verified-state-section {
+  width: 100%;
+}
+
+.email-verified-card {
+  text-align: center;
+  box-shadow: 0 18px 48px rgba(24, 6, 18, 0.14);
+}
+
+[data-theme="dark"] .email-verified-card {
+  box-shadow: 0 20px 44px rgba(28, 6, 18, 0.52);
+}
+
+.email-verified-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.25rem;
+  height: 4.25rem;
+  margin: 0 auto 1.1rem;
+  border-radius: 50%;
+}
+
+.email-verified-icon--ok {
+  color: #fff;
+  background: linear-gradient(130deg, color-mix(in srgb, var(--pink) 85%, #22c55e), var(--pink-deep, #e11d48));
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--pink) 35%, transparent);
+}
+
+.email-verified-icon--warn {
+  color: #fff;
+  background: linear-gradient(130deg, #f59e0b, #f97316);
+  box-shadow: 0 10px 26px rgba(249, 115, 22, 0.35);
+}
+
+.verified-card-title {
+  margin: 0 0 0.65rem;
+  font-size: clamp(1.25rem, 4vw, 1.55rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Gradient jen na slovní část — emoji s background-clip:text v Safari často zmizí nebo přesahuje řádek */
+.verified-card-title--success .verified-title-gradient {
+  background: linear-gradient(120deg, var(--text) 0%, color-mix(in srgb, var(--pink) 55%, var(--text)) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+[data-theme="dark"] .verified-card-title--success .verified-title-gradient {
+  background: linear-gradient(120deg, #fff5f8 0%, #fda4af 55%, #e879f9 100%);
+}
+
+.verified-card-title--success .verified-title-emoji {
+  display: inline-block;
+  vertical-align: baseline;
+  margin-left: 0.05em;
+  font-size: 1.08em;
+  line-height: 1;
+  -webkit-text-fill-color: unset;
+  background: none;
+  letter-spacing: 0;
+  font-style: normal;
+}
+
+.verified-card-lead {
+  margin: 0 0 1.35rem;
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.verified-error-detail {
+  margin-bottom: 1.15rem;
+}
+
+.verified-resend-form {
+  text-align: left;
+  margin-top: 0.25rem;
+}
+
+.verified-resend-status {
+  min-height: 1.35rem;
+  margin: 0.85rem 0 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.btn-verified-continue.btn {
+  display: inline-flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Mobilní ladění (webová aplikace a úzké viewporty) */
+.app-dashboard-v2,
+#dashboard-root {
+  max-width: 100%;
+}
+
+@media (max-width: 640px) {
+  .page-main.app-page #dashboard-root {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .page-main.app-page .dash-body {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .page-main.app-page .dash-menu-item {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .page-main.app-page .dash-left-actions .btn,
+  .page-main.app-page #dashboard-root .app-form-grid button[type="submit"],
+  .page-main.app-page .btn-google:not(.dash-menu-item) {
+    min-height: 46px;
+  }
+
+  .page-main.app-page .app-auth-tabs button {
+    min-height: 44px;
+  }
+
+  .page-main.app-page .app-form-grid input,
+  .page-main.app-page .app-form-grid select,
+  .page-main.app-page .app-add-grid input,
+  .page-main.app-page .app-add-grid select,
+  .page-main.app-page .app-purchase-tools input,
+  .page-main.app-page .app-purchase-tools select {
+    font-size: max(16px, 1rem);
+  }
+
+  body > main#main.page-main.reset-password-page {
+    padding-left: max(0.875rem, var(--safe-left));
+    padding-right: max(0.875rem, var(--safe-right));
+  }
+}
+
+@media (max-width: 400px) {
+  .page-main.app-page .dash-menu {
+    gap: 0.35rem;
+  }
+
+  .page-main.app-page .dash-menu-item {
+    flex: 1 1 calc(50% - 0.2rem);
+    min-width: 7.25rem;
   }
 }

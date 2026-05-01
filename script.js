@@ -1,14 +1,58 @@
 (function () {
-  const storageKey = "nakupicka-theme";
-  const langKey = "nakupicka-lang";
+  const themeChoiceKey = "nakupicka-theme-choice";
+  const langChoiceKey = "nakupicka-lang-choice";
   const root = document.documentElement;
 
-  function getLang() {
+  function detectNavigatorLang() {
+    const list =
+      typeof navigator !== "undefined" && navigator.languages && navigator.languages.length
+        ? navigator.languages
+        : typeof navigator !== "undefined" && navigator.language
+          ? [navigator.language]
+          : [];
+    for (let i = 0; i < list.length; i++) {
+      const base = String(list[i] || "").toLowerCase().split("-")[0];
+      if (base === "cs") return "cs";
+    }
+    return "en";
+  }
+
+  function langFromUrl() {
     try {
-      const s = localStorage.getItem(langKey);
-      if (s === "en" || s === "cs") return s;
+      const p = new URLSearchParams(window.location.search).get("lang");
+      if (p === "en" || p === "cs") return p;
     } catch (_) {}
-    return "cs";
+    return null;
+  }
+
+  function getChosenLang() {
+    try {
+      const c = localStorage.getItem(langChoiceKey);
+      if (c === "en" || c === "cs") return c;
+    } catch (_) {}
+    return null;
+  }
+
+  function getEffectiveLang() {
+    return langFromUrl() || getChosenLang() || detectNavigatorLang();
+  }
+
+  function detectSystemTheme() {
+    if (typeof window === "undefined" || !window.matchMedia) return "dark";
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+
+  function syncChromeThemeColors(theme) {
+    try {
+      let meta = document.getElementById("nakupicka-theme-color-override");
+      if (!meta) {
+        meta = document.createElement("meta");
+        meta.id = "nakupicka-theme-color-override";
+        meta.setAttribute("name", "theme-color");
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute("content", theme === "dark" ? "#140a12" : "#ff2d55");
+    } catch (_) {}
   }
 
   const toggle = document.getElementById("themeToggle");
@@ -21,18 +65,25 @@
   function syncThemeLabel() {
     if (!toggle) return;
     const dark = root.getAttribute("data-theme") === "dark";
-    const lang = root.getAttribute("data-lang") || getLang();
+    const lang = root.getAttribute("data-lang") || getEffectiveLang();
     const L = themeLabels[lang] || themeLabels.cs;
     toggle.setAttribute("aria-pressed", dark ? "true" : "false");
     toggle.setAttribute("aria-label", dark ? L.toLight : L.toDark);
   }
 
-  function applyTheme(theme) {
+  function applyTheme(theme, opts = {}) {
+    const persist = Boolean(opts.persist);
     root.setAttribute("data-theme", theme);
     try {
-      localStorage.setItem(storageKey, theme);
+      root.style.colorScheme = theme === "dark" ? "dark" : "light";
     } catch (_) {}
-    if (window.nakupickaTrack) {
+    if (persist) {
+      try {
+        localStorage.setItem(themeChoiceKey, theme);
+      } catch (_) {}
+    }
+    syncChromeThemeColors(theme);
+    if (persist && window.nakupickaTrack) {
       window.nakupickaTrack("theme_change", { theme: theme });
     }
     syncThemeLabel();
@@ -82,6 +133,21 @@
         lang === "en" ? footerNav.getAttribute("data-footer-aria-en") : footerNav.getAttribute("data-footer-aria-cs")
       );
     }
+    document.querySelectorAll('meta[property="og:title"][data-og-title-cs]').forEach((el) => {
+      const cs = el.getAttribute("data-og-title-cs");
+      const en = el.getAttribute("data-og-title-en");
+      if (cs != null && en != null) el.setAttribute("content", lang === "en" ? en : cs);
+    });
+    document.querySelectorAll('meta[name="twitter:title"][data-twitter-title-cs]').forEach((el) => {
+      const cs = el.getAttribute("data-twitter-title-cs");
+      const en = el.getAttribute("data-twitter-title-en");
+      if (cs != null && en != null) el.setAttribute("content", lang === "en" ? en : cs);
+    });
+    document.querySelectorAll('meta[property="og:site_name"][data-og-site-cs]').forEach((el) => {
+      const cs = el.getAttribute("data-og-site-cs");
+      const en = el.getAttribute("data-og-site-en");
+      if (cs != null && en != null) el.setAttribute("content", lang === "en" ? en : cs);
+    });
     const dock = document.querySelector(".phone-dock-overlay[data-dock-aria-cs]");
     if (dock) {
       dock.setAttribute(
@@ -109,20 +175,24 @@
     if (previewImg) previewImg.alt = alt;
   }
 
-  function setLang(lang) {
+  function setLang(lang, opts = {}) {
     if (lang !== "en" && lang !== "cs") return;
+    const persistChoice = Boolean(opts.persistChoice);
+
     root.setAttribute("data-lang", lang);
     root.setAttribute("lang", lang === "en" ? "en" : "cs");
-    try {
-      localStorage.setItem(langKey, lang);
-    } catch (_) {}
+    if (persistChoice) {
+      try {
+        localStorage.setItem(langChoiceKey, lang);
+      } catch (_) {}
+    }
     document.querySelectorAll(".lang-btn").forEach((b) => {
       b.setAttribute("aria-pressed", b.getAttribute("data-set-lang") === lang ? "true" : "false");
     });
     setMetaAndTitle(lang);
     syncThemeLabel();
     refreshPreviewCaption();
-    if (window.nakupickaTrack) {
+    if (!opts.suppressAnalytics && persistChoice && window.nakupickaTrack) {
       window.nakupickaTrack("language_change", { lang: lang });
     }
     closeMenu();
@@ -132,30 +202,56 @@
     document.querySelectorAll(".lang-btn").forEach((b) => {
       b.addEventListener("click", (e) => {
         e.stopPropagation();
-        setLang(b.getAttribute("data-set-lang"));
+        setLang(b.getAttribute("data-set-lang"), { persistChoice: true });
       });
     });
-    setLang(getLang());
+    const initial = langFromUrl() || root.getAttribute("data-lang") || getEffectiveLang();
+    setLang(initial, { persistChoice: false, suppressAnalytics: true });
   }
 
   function initTheme() {
-    let theme;
+    let choice = null;
     try {
-      theme = localStorage.getItem(storageKey);
-    } catch (_) {
-      theme = null;
+      const tc = localStorage.getItem(themeChoiceKey);
+      if (tc === "light" || tc === "dark") choice = tc;
+    } catch (_) {}
+
+    const theme = choice || detectSystemTheme();
+    root.setAttribute("data-theme", theme);
+    try {
+      root.style.colorScheme = theme === "dark" ? "dark" : "light";
+    } catch (_) {}
+    syncChromeThemeColors(theme);
+    syncThemeLabel();
+
+    if (!window.matchMedia) return;
+
+    function onOsThemeChange() {
+      let hasChoice = false;
+      try {
+        const v = localStorage.getItem(themeChoiceKey);
+        hasChoice = v === "light" || v === "dark";
+      } catch (_) {}
+      if (hasChoice) return;
+      const next = detectSystemTheme();
+      root.setAttribute("data-theme", next);
+      try {
+        root.style.colorScheme = next === "dark" ? "dark" : "light";
+      } catch (_) {}
+      syncChromeThemeColors(next);
+      syncThemeLabel();
     }
-    if (theme !== "light" && theme !== "dark") {
-      theme = "dark";
-    }
-    applyTheme(theme);
+
+    var mqDark = window.matchMedia("(prefers-color-scheme: dark)");
+    if (mqDark.addEventListener) mqDark.addEventListener("change", onOsThemeChange);
+    else if (mqDark.addListener) mqDark.addListener(onOsThemeChange);
   }
 
   if (toggle) {
     toggle.addEventListener("click", (e) => {
       e.stopPropagation();
       const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
-      applyTheme(next);
+      applyTheme(next, { persist: true });
     });
   }
 
