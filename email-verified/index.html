@@ -68,6 +68,30 @@
         <span class="i18n-cs">Ověřuji odkaz…</span><span class="i18n-en">Verifying link…</span>
       </p>
 
+      <!-- OTP z e-mailové šablony: ?token={{ .Token }}&email={{ .Email }} (e-mail v odkazu zamezí tomuto kroku). -->
+      <section id="verified-otp-gate" class="verified-state-section verified-otp-email-section" hidden>
+        <div class="app-auth-card email-verified-card">
+          <h1 class="verified-card-title">
+            <span class="i18n-cs">Doplň e-mail účtu</span><span class="i18n-en">Enter your account email</span>
+          </h1>
+          <p class="verified-card-lead">
+            <span class="i18n-cs">Šestimístný kód z e-mailu už máš v adrese — zadej ještě e-mail použitý při registraci.</span>
+            <span class="i18n-en">The verification code from the email is already in this link — also enter the email you used when signing up.</span>
+          </p>
+          <form id="form-verified-otp-email" class="app-form-grid verified-resend-form" novalidate>
+            <input type="hidden" id="verified-otp-token-value" name="otp_token_stub" autocomplete="off" />
+            <label>
+              <span class="i18n-cs">E-mail</span><span class="i18n-en">Email</span>
+              <input type="email" id="verified-otp-email-field" autocomplete="email" required />
+            </label>
+            <button type="submit" class="btn btn-primary" id="verified-otp-submit">
+              <span class="i18n-cs">Ověřit kód</span><span class="i18n-en">Verify code</span>
+            </button>
+          </form>
+          <p id="verified-otp-status" class="verified-resend-status" role="status" aria-live="polite"></p>
+        </div>
+      </section>
+
       <section id="verified-success" class="verified-state-section" hidden>
         <div class="app-auth-card email-verified-card">
           <div class="email-verified-icon email-verified-icon--ok" aria-hidden="true">
@@ -137,7 +161,7 @@
   <script src="../vendor/supabase-umd.js" defer></script>
   <script src="../analytics.js" defer></script>
   <script src="../script.js" defer></script>
-  <script type="module" src="../account-nav.js"></script>
   <script type="module" src="../email-verified.js"></script>
+  <script type="module" src="../account-nav.js"></script>
 </body>
 </html>

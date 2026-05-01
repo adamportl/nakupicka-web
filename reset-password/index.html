@@ -76,6 +76,26 @@
 
       <p id="reset-fatal" class="reset-fatal-msg" aria-live="assertive" role="alert" hidden></p>
 
+      <!-- OTP ze šablony obnovení: ?token={{ .Token }}&email={{ .Email }} -->
+      <div id="reset-otp-gate" class="reset-form-section reset-otp-gate" hidden>
+        <div class="app-auth-card reset-password-card">
+          <p class="verified-card-lead reset-otp-gate-lead">
+            <span class="i18n-cs">Zadej e-mail účtu — kód z e-mailu je už v adresě stránky.</span>
+            <span class="i18n-en">Enter your account email — the code from the email is already in this page URL.</span>
+          </p>
+          <form id="form-reset-otp" class="app-form-grid" novalidate>
+            <input type="hidden" id="reset-otp-token-hidden" autocomplete="off" />
+            <label>
+              <span class="i18n-cs">E-mail</span><span class="i18n-en">Email</span>
+              <input type="email" id="reset-otp-email-field" autocomplete="email" required />
+            </label>
+            <button type="submit" class="btn btn-primary btn-reset-save" id="reset-otp-submit">
+              <span class="i18n-cs">Pokračovat</span><span class="i18n-en">Continue</span>
+            </button>
+          </form>
+        </div>
+      </div>
+
       <div id="reset-form-wrap" class="reset-form-section" hidden>
         <div class="app-auth-card reset-password-card">
           <form id="reset-form" class="app-form-grid" novalidate>
@@ -127,7 +147,7 @@
   <script src="../vendor/supabase-umd.js" defer></script>
   <script src="../analytics.js" defer></script>
   <script src="../script.js" defer></script>
-  <script type="module" src="../account-nav.js"></script>
   <script type="module" src="../reset-password.js"></script>
+  <script type="module" src="../account-nav.js"></script>
 </body>
 </html>

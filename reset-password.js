@@ -1,15 +1,40 @@
 import { getSupabaseBrowserClient } from "./supabase-browser.js";
 
-/** Zachytí recovery token/hash ještě před tím, než klient vyčistí URL. */
-function hadAuthRecoveryParams() {
+/** Pouze odkazy, kde má smysl čekat na session z implicitního přesměrování Supabase v URL fragmentu/query. */
+function hadMagicLinkRecoveryMarkers() {
   if (typeof window === "undefined") return false;
   const u = `${window.location.hash || ""}${window.location.search || ""}`;
   return (
     /type=recovery/i.test(u) ||
     /access_token=/i.test(u) ||
     /refresh_token=/i.test(u) ||
-    /[&?]code=/.test(u)
+    /[#?&]code=/i.test(u) ||
+    /token_hash=/i.test(u)
   );
+}
+
+/** OTP ze šablony v query ({{ .Token }}) bez čekání na fragment. */
+function readOtpFromSearch(search) {
+  const raw =
+    typeof search === "string"
+      ? search
+      : typeof window !== "undefined"
+        ? window.location.search || ""
+        : "";
+  const qs = new URLSearchParams(raw.replace(/^\?/, ""));
+  let token = (qs.get("token") || qs.get("otp") || "").replace(/\s+/g, "").trim();
+  if (!token || !/^\d{6,10}$/.test(token)) return null;
+  let email = (qs.get("email") || qs.get("e") || "").trim();
+  return { token, email: email.length > 0 ? email : null };
+}
+
+function stripOtpParamsFromLocation() {
+  try {
+    const u = new URL(window.location.href);
+    ["token", "otp", "email", "e"].forEach((k) => u.searchParams.delete(k));
+    const q = u.searchParams.toString();
+    window.history.replaceState(null, "", u.pathname + (q ? `?${q}` : "") + u.hash);
+  } catch (_) {}
 }
 
 function el(id) {
@@ -22,7 +47,7 @@ function csEn(cs, en) {
 }
 
 /**
- * Volá getSession po určitou dobu — po redirectu z e-mailu se session z URL nastavuje asynchronně.
+ * Čekání na recovery session po redirectu z klasického odkazu (hash / PKCE přes návratové URL).
  */
 async function waitForRecoverySession(supabase, retry, maxWaitMs) {
   async function fetchOnce() {
@@ -50,6 +75,8 @@ async function waitForRecoverySession(supabase, retry, maxWaitMs) {
 function showFatal(msg) {
   const box = el("reset-form-wrap");
   const err = el("reset-fatal");
+  const gate = el("reset-otp-gate");
+  if (gate) gate.hidden = true;
   if (box) box.hidden = true;
   if (err) {
     err.hidden = false;
@@ -57,39 +84,28 @@ function showFatal(msg) {
   }
 }
 
-async function boot() {
-  const hint = hadAuthRecoveryParams();
-  const supabase = getSupabaseBrowserClient();
-
-  if (!supabase) {
-    showFatal(
-      csEn("Spojení nelze inicializovat. Zkuste stránku znovu načíst.", "Could not initialise. Refresh the page and try again."),
-    );
-    return;
+function hideFatal() {
+  const err = el("reset-fatal");
+  if (err) {
+    err.hidden = true;
+    err.textContent = "";
   }
+}
 
-  const { session } = await waitForRecoverySession(supabase, hint, hint ? 6000 : 0);
+function showOtpEmailGate(token) {
+  hideFatal();
+  el("reset-form-wrap")?.setAttribute("hidden", "");
+  const gate = el("reset-otp-gate");
+  const hid = el("reset-otp-token-hidden");
+  if (hid) hid.value = token;
+  if (gate) gate.hidden = false;
+}
 
-  if (!session?.user) {
-    if (hint) {
-      showFatal(
-        csEn(
-          "Tento odkaz už není platný nebo byl použit vícekrát. Požádejte o nový odkaz pro obnovení hesla.",
-          "This link expired or has already been used. Request a new password reset.",
-        ),
-      );
-    } else {
-      showFatal(
-        csEn(
-          "Pro nastavení hesla použij odkaz z e-mailu z položky „Zapomenuté heslo“ ve webové aplikaci.",
-          'Use the link from our email after "Forgot password" in the web app.',
-        ),
-      );
-    }
-    return;
-  }
+let resetSubmitBound = false;
 
-  el("reset-form-wrap")?.removeAttribute("hidden");
+function attachPasswordFormHandler(supabase) {
+  if (resetSubmitBound) return;
+  resetSubmitBound = true;
 
   el("reset-form")?.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -150,6 +166,120 @@ async function boot() {
       window.location.href = "../app.html";
     }, 2500);
   });
+}
+
+function revealPasswordCard(supabase) {
+  el("reset-otp-gate")?.setAttribute("hidden", "");
+  el("reset-form-wrap")?.removeAttribute("hidden");
+  attachPasswordFormHandler(supabase);
+}
+
+async function boot() {
+  const otpQs = typeof window !== "undefined" ? readOtpFromSearch(window.location.search) : null;
+  const hintMagic = hadMagicLinkRecoveryMarkers();
+
+  const supabase = getSupabaseBrowserClient();
+
+  if (!supabase) {
+    showFatal(
+      csEn("Spojení nelze inicializovat. Zkuste stránku znovu načíst.", "Could not initialise. Refresh the page and try again."),
+    );
+    return;
+  }
+
+  if (otpQs?.token && otpQs.email) {
+    const { error: verErr } = await supabase.auth.verifyOtp({
+      email: otpQs.email,
+      token: otpQs.token,
+      type: "recovery",
+    });
+    stripOtpParamsFromLocation();
+    if (!verErr) {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session?.user) {
+        revealPasswordCard(supabase);
+        return;
+      }
+    }
+    showFatal(
+      csEn(
+        "Kód nebo e-mail nejsou platné. Požádej prosím znovu o odkaz Zapomenuté heslo.",
+        "The code or email is not valid. Please request “Forgot password” again.",
+      ),
+    );
+    return;
+  }
+
+  const { session: sessionMl } = await waitForRecoverySession(supabase, hintMagic, hintMagic ? 6000 : 0);
+
+  if (!sessionMl?.user) {
+    if (otpQs?.token && !otpQs.email) {
+      showOtpEmailGate(otpQs.token);
+      hideFatal();
+
+      el("form-reset-otp")?.addEventListener(
+        "submit",
+        async (e) => {
+          e.preventDefault();
+          const st = el("reset-status");
+          const btn = el("reset-otp-submit");
+          const mail = (el("reset-otp-email-field")?.value || "").trim();
+          const tk = (el("reset-otp-token-hidden")?.value || "").replace(/\s+/g, "").trim();
+          if (!mail || !tk) {
+            if (st) st.textContent = csEn("Vyplň e-mail.", "Fill in email.");
+            return;
+          }
+          if (btn) btn.disabled = true;
+          if (st) st.textContent = csEn("Ověřuji…", "Verifying…");
+
+          const { error: verErr } = await supabase.auth.verifyOtp({
+            email: mail,
+            token: tk,
+            type: "recovery",
+          });
+          stripOtpParamsFromLocation();
+
+          if (verErr || !(await supabase.auth.getSession()).data.session?.user) {
+            if (st)
+              st.textContent =
+                verErr?.message ||
+                csEn(
+                  "Kód vypršel nebo nesedí. Požádej prosím nový odkaz z Zapomenuté heslo.",
+                  "Code expired or invalid. Request a new reset link.",
+                );
+            if (btn) btn.disabled = false;
+            return;
+          }
+
+          revealPasswordCard(supabase);
+          if (st) st.textContent = "";
+        },
+        { once: true },
+      );
+      return;
+    }
+
+    if (hintMagic) {
+      showFatal(
+        csEn(
+          "Tento odkaz už není platný nebo byl použit vícekrát. Požádejte o nový odkaz pro obnovení hesla.",
+          "This link expired or has already been used. Request a new password reset.",
+        ),
+      );
+    } else {
+      showFatal(
+        csEn(
+          "Pro nastavení hesla použij odkaz z e-mailu z položky „Zapomenuté heslo“ ve webové aplikaci.",
+          'Use the link from our email after "Forgot password" in the web app.',
+        ),
+      );
+    }
+    return;
+  }
+
+  revealPasswordCard(supabase);
 }
 
 document.addEventListener("DOMContentLoaded", () => boot());

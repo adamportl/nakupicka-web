@@ -9,6 +9,45 @@ function csEn(cs, en) {
   return lang === "en" ? en : cs;
 }
 
+/** Šestimístný OTP z šablony ({{ .Token }}), volitelně e-mail ({{ .Email }}). Parametry otp / token, e / email. */
+function readOtpFromSearch(search) {
+  const raw =
+    typeof search === "string"
+      ? search
+      : typeof window !== "undefined"
+        ? window.location.search || ""
+        : "";
+  const qs = new URLSearchParams(raw.replace(/^\?/, ""));
+  let token = (qs.get("token") || qs.get("otp") || "").replace(/\s+/g, "").trim();
+  if (!token || !/^\d{6,10}$/.test(token)) return null;
+  let email = (qs.get("email") || qs.get("e") || "").trim();
+  return { token, email: email.length > 0 ? email : null };
+}
+
+function stripOtpParamsFromLocation() {
+  try {
+    const u = new URL(window.location.href);
+    ["token", "otp", "email", "e"].forEach((k) => u.searchParams.delete(k));
+    const q = u.searchParams.toString();
+    window.history.replaceState(null, "", u.pathname + (q ? `?${q}` : "") + u.hash);
+  } catch (_) {}
+}
+
+async function verifySignupOtp(supabase, email, token) {
+  const types = ["signup", "email"];
+  let lastErr = null;
+  for (const type of types) {
+    const { data, error } = await supabase.auth.verifyOtp({
+      email,
+      token,
+      type,
+    });
+    if (!error && data?.session?.user) return { error: null };
+    lastErr = error ?? lastErr;
+  }
+  return { error: lastErr };
+}
+
 /** Chyba předaná v redirect URL (implicit / někdy query). */
 function readAuthRedirectError() {
   if (typeof window === "undefined") return null;
@@ -39,7 +78,9 @@ function hadEmailCallbackParams() {
     /type=magiclink/i.test(u) ||
     /access_token=/i.test(u) ||
     /refresh_token=/i.test(u) ||
-    /[&?]code=/.test(u)
+    /[#?&]code=/i.test(u) ||
+    /token_hash=/i.test(u) ||
+    /[?&](token|otp)=\d/.test(window.location.search || "")
   );
 }
 
@@ -73,6 +114,7 @@ function hideLoading() {
 
 function showSuccess() {
   hideLoading();
+  el("verified-otp-gate")?.setAttribute("hidden", "");
   el("verified-success")?.removeAttribute("hidden");
   el("verified-error")?.setAttribute("hidden", "");
   try {
@@ -83,6 +125,7 @@ function showSuccess() {
 
 function showError() {
   hideLoading();
+  el("verified-otp-gate")?.setAttribute("hidden", "");
   el("verified-error")?.removeAttribute("hidden");
   el("verified-success")?.setAttribute("hidden", "");
   try {
@@ -91,8 +134,20 @@ function showError() {
   } catch (_) {}
 }
 
+function showOtpEmailGate(token) {
+  hideLoading();
+  el("verified-error")?.setAttribute("hidden", "");
+  el("verified-success")?.setAttribute("hidden", "");
+  const gate = el("verified-otp-gate");
+  const hid = el("verified-otp-token-value");
+  if (hid) hid.value = token;
+  if (gate) gate.hidden = false;
+}
+
 async function boot() {
+  const otpFromUrl = typeof window !== "undefined" ? readOtpFromSearch(window.location.search) : null;
   const urlErr = readAuthRedirectError();
+  const hintFromUrl = hadEmailCallbackParams();
 
   const supabase = getSupabaseBrowserClient();
   if (!supabase) {
@@ -101,11 +156,76 @@ async function boot() {
       subtitle.textContent = csEn("Spojení nelze inicializovat. Obnov stránku.", "Could not connect. Refresh the page.");
       subtitle.removeAttribute("hidden");
     }
+    hideLoading();
     showError();
     return;
   }
 
+  if (otpFromUrl?.token && otpFromUrl.email) {
+    const { error: verErr } = await verifySignupOtp(supabase, otpFromUrl.email, otpFromUrl.token);
+    stripOtpParamsFromLocation();
+    if (!verErr) {
+      hideLoading();
+      showSuccess();
+      return;
+    }
+    const subtitle = el("verified-error-detail");
+    if (subtitle) {
+      subtitle.textContent =
+        verErr.message ||
+        csEn("Kód nebo e-mail nesedí — požádej o nový ověřovací mail.", "The code does not match. Request a new verification email.");
+      subtitle.removeAttribute("hidden");
+    }
+    hideLoading();
+    showError();
+    return;
+  }
+
+  if (otpFromUrl?.token && !otpFromUrl.email) {
+    showOtpEmailGate(otpFromUrl.token);
+
+    el("form-verified-otp-email")?.addEventListener(
+      "submit",
+      async (e) => {
+        e.preventDefault();
+        const status = el("verified-otp-status");
+        const btn = el("verified-otp-submit");
+        const mail = (el("verified-otp-email-field")?.value || "").trim();
+        const tk = (
+          el("verified-otp-token-value")?.value ||
+          otpFromUrl.token ||
+          ""
+        ).replace(/\s+/g, "").trim();
+        if (!mail || !tk) {
+          if (status) status.textContent = csEn("Vyplň e-mail.", "Fill in email.");
+          return;
+        }
+        if (btn) btn.disabled = true;
+        if (status) status.textContent = csEn("Ověřuji…", "Verifying…");
+
+        const { error: verErr } = await verifySignupOtp(supabase, mail, tk);
+        stripOtpParamsFromLocation();
+
+        if (verErr) {
+          if (status)
+            status.textContent =
+              verErr.message ||
+              csEn("Kód vypršel nebo nesedí. Požádej o nový e-mail.", "Code expired or invalid. Request a new email.");
+          if (btn) btn.disabled = false;
+          return;
+        }
+
+        hideLoading();
+        el("verified-otp-gate")?.setAttribute("hidden", "");
+        showSuccess();
+      },
+      { once: true },
+    );
+    return;
+  }
+
   if (urlErr) {
+    stripOtpParamsFromLocation();
     const subtitle = el("verified-error-detail");
     if (subtitle) {
       const extra = urlErr.description || urlErr.code || "";
@@ -118,8 +238,11 @@ async function boot() {
     return;
   }
 
-  const hint = hadEmailCallbackParams();
-  const { session, error: sessionErr } = await waitForAuthSession(supabase, hint, hint ? 6000 : 0);
+  const { session, error: sessionErr } = await waitForAuthSession(
+    supabase,
+    hintFromUrl,
+    hintFromUrl ? 6000 : 0,
+  );
 
   if (sessionErr) {
     const subtitle = el("verified-error-detail");
@@ -132,17 +255,15 @@ async function boot() {
   }
 
   if (session?.user) {
+    hideLoading();
     showSuccess();
     return;
   }
 
-  if (hint) {
+  if (hintFromUrl) {
     const subtitle = el("verified-error-detail");
     if (subtitle) {
-      subtitle.textContent = csEn(
-        "Odkaz je neplatný nebo vypršel.",
-        "The link is invalid or has expired.",
-      );
+      subtitle.textContent = csEn("Odkaz je neplatný nebo vypršel.", "The link is invalid or has expired.");
       subtitle.removeAttribute("hidden");
     }
     showError();
@@ -152,11 +273,12 @@ async function boot() {
   const subtitle = el("verified-error-detail");
   if (subtitle) {
     subtitle.textContent = csEn(
-      "Otevři ověřovací odkaz z e-mailu, který jsme poslali po registraci.",
-      "Open the verification link from the email we sent after you signed up.",
+      "Otevři odkaz z e-mailu po registraci, nebo zadej e-mail níže se žádostí o nový mail.",
+      "Open the signup email link, or enter your email below to request a new one.",
     );
     subtitle.removeAttribute("hidden");
   }
+  hideLoading();
   showError();
 }
 

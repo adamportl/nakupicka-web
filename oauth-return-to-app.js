@@ -16,7 +16,8 @@
     var looksAuth =
       (h &&
         /access_token|refresh_token|provider_token|error_code|error_description|type=recovery|type=signup|type=magiclink/.test(h)) ||
-      (s && /[?&]code=/.test(s));
+      (s && /[?&]code=/.test(s)) ||
+      (h && /[#&]code=/.test(h));
     if (!looksAuth) return;
 
     var u = new URL("app.html", window.location.href);
