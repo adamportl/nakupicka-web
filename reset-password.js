@@ -13,8 +13,8 @@ function hadMagicLinkRecoveryMarkers() {
   );
 }
 
-/** OTP ze šablony v query ({{ .Token }}) bez čekání na fragment. */
-function readOtpFromSearch(search) {
+/** Case-insensitive OTP / e-mail v query (Šablona: token, email). */
+function searchParamsMap(search) {
   const raw =
     typeof search === "string"
       ? search
@@ -22,16 +22,38 @@ function readOtpFromSearch(search) {
         ? window.location.search || ""
         : "";
   const qs = new URLSearchParams(raw.replace(/^\?/, ""));
-  let token = (qs.get("token") || qs.get("otp") || "").replace(/\s+/g, "").trim();
-  if (!token || !/^\d{6,10}$/.test(token)) return null;
-  let email = (qs.get("email") || qs.get("e") || "").trim();
+  const lower = Object.create(null);
+  for (const [k, v] of qs.entries()) {
+    const key = k.toLowerCase();
+    if (!(key in lower) && v.trim() !== "") lower[key] = v.trim();
+  }
+  return lower;
+}
+
+function pickParam(lower, aliases) {
+  for (const a of aliases) {
+    const v = lower[a.toLowerCase()];
+    if (v != null && String(v).trim() !== "") return String(v).trim();
+  }
+  return "";
+}
+
+function readOtpFromSearch(search) {
+  const lower =
+    typeof search === "string" ? searchParamsMap(search) : searchParamsMap(window.location.search);
+  let token = pickParam(lower, ["token", "otp"]).replace(/\s+/g, "").trim();
+  if (!token || !/^\d{6,14}$/.test(token)) return null;
+  const email = pickParam(lower, ["email", "e"]);
   return { token, email: email.length > 0 ? email : null };
 }
 
 function stripOtpParamsFromLocation() {
   try {
     const u = new URL(window.location.href);
-    ["token", "otp", "email", "e"].forEach((k) => u.searchParams.delete(k));
+    [...u.searchParams.keys()].forEach((k) => {
+      const l = k.toLowerCase();
+      if (["token", "otp", "email", "e", "reason"].includes(l)) u.searchParams.delete(k);
+    });
     const q = u.searchParams.toString();
     window.history.replaceState(null, "", u.pathname + (q ? `?${q}` : "") + u.hash);
   } catch (_) {}
@@ -169,6 +191,7 @@ function attachPasswordFormHandler(supabase) {
 }
 
 function revealPasswordCard(supabase) {
+  stripOtpParamsFromLocation();
   el("reset-otp-gate")?.setAttribute("hidden", "");
   el("reset-form-wrap")?.removeAttribute("hidden");
   attachPasswordFormHandler(supabase);

@@ -9,8 +9,8 @@ function csEn(cs, en) {
   return lang === "en" ? en : cs;
 }
 
-/** Šestimístný OTP z šablony ({{ .Token }}), volitelně e-mail ({{ .Email }}). Parametry otp / token, e / email. */
-function readOtpFromSearch(search) {
+/** Case-insensitive query (někdy šablona / rozšíření přidá např. `Email`). */
+function searchParamsMap(search) {
   const raw =
     typeof search === "string"
       ? search
@@ -18,16 +18,38 @@ function readOtpFromSearch(search) {
         ? window.location.search || ""
         : "";
   const qs = new URLSearchParams(raw.replace(/^\?/, ""));
-  let token = (qs.get("token") || qs.get("otp") || "").replace(/\s+/g, "").trim();
-  if (!token || !/^\d{6,10}$/.test(token)) return null;
-  let email = (qs.get("email") || qs.get("e") || "").trim();
+  const lower = Object.create(null);
+  for (const [k, v] of qs.entries()) {
+    const key = k.toLowerCase();
+    if (!(key in lower) && v.trim() !== "") lower[key] = v.trim();
+  }
+  return lower;
+}
+
+function pickParam(lower, aliases) {
+  for (const a of aliases) {
+    const v = lower[a.toLowerCase()];
+    if (v != null && String(v).trim() !== "") return String(v).trim();
+  }
+  return "";
+}
+
+/** OTP z šablony ({{ .Token }}): token / otp; e-mail: email / e. */
+function readOtpFromSearch(search) {
+  const lower = typeof search === "string" ? searchParamsMap(search) : searchParamsMap(window.location.search);
+  let token = pickParam(lower, ["token", "otp"]).replace(/\s+/g, "").trim();
+  if (!token || !/^\d{6,14}$/.test(token)) return null;
+  const email = pickParam(lower, ["email", "e"]);
   return { token, email: email.length > 0 ? email : null };
 }
 
 function stripOtpParamsFromLocation() {
   try {
     const u = new URL(window.location.href);
-    ["token", "otp", "email", "e"].forEach((k) => u.searchParams.delete(k));
+    [...u.searchParams.keys()].forEach((k) => {
+      const l = k.toLowerCase();
+      if (["token", "otp", "email", "e"].includes(l)) u.searchParams.delete(k);
+    });
     const q = u.searchParams.toString();
     window.history.replaceState(null, "", u.pathname + (q ? `?${q}` : "") + u.hash);
   } catch (_) {}
@@ -46,6 +68,32 @@ async function verifySignupOtp(supabase, email, token) {
     lastErr = error ?? lastErr;
   }
   return { error: lastErr };
+}
+
+/**
+ * Klasická registrace používá OTP typu signup; šablona pro reset někdy vede omylem sem — ten samý odkaz používá typ recovery.
+ */
+async function verifySignupOrRecoveryOtp(supabase, email, token) {
+  const sign = await verifySignupOtp(supabase, email, token);
+  if (!sign.error) return { outcome: "signup", error: null };
+
+  const { data, error } = await supabase.auth.verifyOtp({
+    email,
+    token,
+    type: "recovery",
+  });
+  if (!error && data?.session?.user) return { outcome: "recovery", error: null };
+  return { outcome: null, error: sign.error ?? error ?? null };
+}
+
+function redirectToResetPassword(reason) {
+  try {
+    const u = new URL("/reset-password/", window.location.origin);
+    if (reason) u.searchParams.set("reason", reason);
+    window.location.replace(u.href);
+  } catch (_) {
+    window.location.replace(`${window.location.origin.replace(/\/$/, "")}/reset-password/`);
+  }
 }
 
 /** Chyba předaná v redirect URL (implicit / někdy query). */
@@ -162,8 +210,16 @@ async function boot() {
   }
 
   if (otpFromUrl?.token && otpFromUrl.email) {
-    const { error: verErr } = await verifySignupOtp(supabase, otpFromUrl.email, otpFromUrl.token);
+    const { outcome, error: verErr } = await verifySignupOrRecoveryOtp(
+      supabase,
+      otpFromUrl.email,
+      otpFromUrl.token,
+    );
     stripOtpParamsFromLocation();
+    if (outcome === "recovery") {
+      redirectToResetPassword("from-verify");
+      return;
+    }
     if (!verErr) {
       hideLoading();
       showSuccess();
@@ -203,9 +259,13 @@ async function boot() {
         if (btn) btn.disabled = true;
         if (status) status.textContent = csEn("Ověřuji…", "Verifying…");
 
-        const { error: verErr } = await verifySignupOtp(supabase, mail, tk);
+        const { outcome, error: verErr } = await verifySignupOrRecoveryOtp(supabase, mail, tk);
         stripOtpParamsFromLocation();
 
+        if (outcome === "recovery") {
+          redirectToResetPassword("from-verify");
+          return;
+        }
         if (verErr) {
           if (status)
             status.textContent =
