@@ -123,6 +123,10 @@ const STR = {
     setupPremiumHtml:
       'Založení domácnosti na webu je součástí Premium. Stav se synchronizuje z aplikace — <a href="premium.html">Premium</a>.',
     errPremiumRequired: "Úpravy na webu vyžadují Premium.",
+    authOtpExpired:
+      "Odkaz z e-mailu už vypršel nebo není platný (přihlášení, obnova hesla nebo ověření účtu). Použij znovu „Zapomenuté heslo“ nebo požádej o nový ověřovací e-mail.",
+    authAccessDenied: "Přihlášení bylo zrušeno. Zkus se přihlásit znovu (Google nebo e-mail a heslo).",
+    authRedirectErrorFallback: "Odkaz pro přihlášení se nepovedl dokončit. Přihlas se prosím běžným způsobem.",
   },
   en: {
     cfgTitle: "Supabase setup",
@@ -201,11 +205,44 @@ const STR = {
     setupPremiumHtml:
       'Creating a household on the web requires Premium. Status is synced from the app — <a href="premium.html">Premium</a>.',
     errPremiumRequired: "Editing on the web requires Premium.",
+    authOtpExpired:
+      "The email link expired or is no longer valid (sign-in, password reset, or account verification). Use “Forgot password” or request a new verification email.",
+    authAccessDenied: "Sign-in was cancelled. Try again with Google or email and password.",
+    authRedirectErrorFallback: "The sign-in link could not be completed. Please sign in the usual way.",
   },
 };
 
 function t(key) {
   return STR[lang()][key] ?? STR.cs[key] ?? key;
+}
+
+/** Chyba z URL fragmentu po redirectu od Supabase (magic link, OAuth). */
+function parseAuthFragmentError(hash) {
+  if (!hash || hash.length < 2) return null;
+  const trimmed = hash.replace(/^#/, "");
+  if (!trimmed) return null;
+  const qp = new URLSearchParams(trimmed);
+  const err = qp.get("error");
+  const code = qp.get("error_code");
+  let description = qp.get("error_description") || "";
+  if (!err && !code && !description.trim()) return null;
+  try {
+    description = decodeURIComponent(description.replace(/\+/g, " "));
+  } catch (_) {
+    /* keep raw */
+  }
+  return { error: err, code: code || "", description };
+}
+
+function formatFragmentAuthErrorMessage(parsed) {
+  const code = (parsed.code || "").toLowerCase();
+  const oauthErr = (parsed.error || "").toLowerCase();
+  if (code === "otp_expired") return t("authOtpExpired");
+  if (oauthErr === "access_denied") return t("authAccessDenied");
+  if (parsed.description && parsed.description.length > 0 && parsed.description.length < 220) {
+    return parsed.description;
+  }
+  return t("authRedirectErrorFallback");
 }
 
 let supabase = null;
@@ -1398,8 +1435,9 @@ async function initCore() {
     return;
   }
 
-  const recoveryHash =
-    typeof window !== "undefined" && window.location.hash && /type=recovery/i.test(window.location.hash);
+  const rawHash = typeof window !== "undefined" ? window.location.hash || "" : "";
+  const recoveryHash = rawHash.length > 0 && /type=recovery/i.test(rawHash);
+  const fragmentErr = parseAuthFragmentError(rawHash);
 
   supabase = getSupabaseBrowserClient();
   if (!supabase) {
@@ -1446,6 +1484,16 @@ async function initCore() {
   const {
     data: { session },
   } = await supabase.auth.getSession();
+
+  if (fragmentErr) {
+    if (typeof window.history.replaceState === "function") {
+      window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+    if (!session?.user) {
+      const st = el("app-status");
+      if (st) st.textContent = formatFragmentAuthErrorMessage(fragmentErr);
+    }
+  }
 
   if (session?.user && recoveryHash) {
     showPanel("recovery");
