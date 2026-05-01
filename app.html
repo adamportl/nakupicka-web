@@ -2,8 +2,14 @@
 <html lang="cs" data-lang="cs" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
   <script src="oauth-return-to-app.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="canonical" href="https://nakupicka.vercel.app/app.html" />
+  <link rel="alternate" hreflang="cs" href="https://nakupicka.vercel.app/app.html" />
+  <link rel="alternate" hreflang="en" href="https://nakupicka.vercel.app/app.html?lang=en" />
+  <link rel="alternate" hreflang="x-default" href="https://nakupicka.vercel.app/app.html" />
   <meta
     name="description"
     id="metaDesc"
@@ -13,9 +19,20 @@
   />
   <meta name="theme-color" content="#ff2d55" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#0d0d0f" media="(prefers-color-scheme: dark)" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="NAKUPICKA" />
+  <meta property="og:title" content="Webová aplikace — NÁKUPIČKA" />
+  <meta property="og:description" content="Správa nákupů domácnosti v prohlížeči, synchronizovaná s iOS aplikací." />
+  <meta property="og:url" content="https://nakupicka.vercel.app/app.html" />
+  <meta property="og:image" content="https://nakupicka.vercel.app/images/app-icon.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="NÁKUPIČKA Web app" />
+  <meta name="twitter:description" content="Sign in and manage shared household purchases in browser." />
+  <meta name="twitter:image" content="https://nakupicka.vercel.app/images/app-icon.png" />
   <link rel="icon" type="image/png" href="images/app-icon.png" />
   <link rel="shortcut icon" type="image/png" href="images/app-icon.png" />
   <link rel="apple-touch-icon" href="images/app-icon.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
   <title data-title-cs="Webová aplikace — NÁKUPIČKA" data-title-en="Web app — NÁKUPIČKA">Webová aplikace — NÁKUPIČKA</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="app.css" />
@@ -50,7 +67,6 @@
         <a href="index.html"><span class="i18n-cs">Domů</span><span class="i18n-en">Home</span></a>
         <a href="premium.html">Premium</a>
         <a href="podpora.html"><span class="i18n-cs">Podpora</span><span class="i18n-en">Support</span></a>
-        <a href="privacy.html"><span class="i18n-cs">Soukromí</span><span class="i18n-en">Privacy</span></a>
       </nav>
       <div class="nav-user-wrap" id="navUserWrap">
         <button type="button" class="nav-user-trigger" id="navUserTrigger" aria-expanded="false" aria-haspopup="true" aria-label="Účet">
@@ -275,6 +291,25 @@
         <h2 id="purchases-heading" class="app-section-title">
           <span class="i18n-cs">Položky nákupů</span><span class="i18n-en">Purchases</span>
         </h2>
+        <div class="app-purchase-tools">
+          <label class="app-search">
+            <span class="i18n-cs">Hledat</span><span class="i18n-en">Search</span>
+            <input type="search" id="purchase-search" autocomplete="off" />
+          </label>
+          <label>
+            <span class="i18n-cs">Řazení</span><span class="i18n-en">Sort</span>
+            <select id="purchase-sort">
+              <option value="date-desc" data-cs="Nejnovější" data-en="Newest">Nejnovější</option>
+              <option value="date-asc" data-cs="Nejstarší" data-en="Oldest">Nejstarší</option>
+              <option value="price-desc" data-cs="Cena od nejvyšší" data-en="Price high-low">Cena od nejvyšší</option>
+              <option value="price-asc" data-cs="Cena od nejnižší" data-en="Price low-high">Cena od nejnižší</option>
+              <option value="name-asc" data-cs="Název A-Z" data-en="Name A-Z">Název A-Z</option>
+            </select>
+          </label>
+          <button type="button" class="btn btn-ghost" id="btn-bulk-delete" disabled>
+            <span class="i18n-cs">Smazat vybrané</span><span class="i18n-en">Delete selected</span>
+          </button>
+        </div>
         <div id="purchase-list" class="app-purchase-list"></div>
       </section>
 
@@ -311,6 +346,14 @@
         </h2>
         <div id="cloud-premium" class="app-cloud-block"></div>
         <div id="cloud-backup" class="app-cloud-block"></div>
+        <div class="app-cloud-block">
+          <a href="delete-account.html" class="btn btn-ghost">
+            <span class="i18n-cs">Jak smazat účet</span><span class="i18n-en">How to delete account</span>
+          </a>
+          <button type="button" class="btn btn-ghost" id="btn-delete-account">
+            <span class="i18n-cs">Smazat účet</span><span class="i18n-en">Delete account</span>
+          </button>
+        </div>
       </section>
 
       <section class="app-section-card" id="section-invites" aria-labelledby="invites-heading">
@@ -336,6 +379,42 @@
           </form>
         </div>
       </section>
+
+      <div class="app-modal-backdrop" id="purchase-edit-modal" hidden>
+        <div class="app-modal" role="dialog" aria-modal="true" aria-labelledby="purchase-edit-title">
+          <div class="app-modal-head">
+            <h3 id="purchase-edit-title"><span class="i18n-cs">Upravit položku</span><span class="i18n-en">Edit item</span></h3>
+            <button type="button" class="app-modal-close" id="purchase-edit-close" aria-label="Close">×</button>
+          </div>
+          <form id="form-edit-purchase" class="app-form-grid" novalidate>
+            <input type="hidden" id="edit-purchase-id" />
+            <label>
+              <span class="i18n-cs">Název</span><span class="i18n-en">Name</span>
+              <input type="text" id="edit-name" required autocomplete="off" />
+            </label>
+            <label>
+              <span class="i18n-cs">Cena (Kč)</span><span class="i18n-en">Price (CZK)</span>
+              <input type="text" id="edit-price" inputmode="decimal" required />
+            </label>
+            <label>
+              <span class="i18n-cs">Kategorie</span><span class="i18n-en">Category</span>
+              <select id="edit-category"></select>
+            </label>
+            <label>
+              <span class="i18n-cs">Profil / štítek</span><span class="i18n-en">Profile / label</span>
+              <input type="text" id="edit-profile" autocomplete="off" />
+            </label>
+            <div class="app-modal-actions">
+              <button type="button" class="btn btn-ghost" id="purchase-edit-cancel">
+                <span class="i18n-cs">Zrušit</span><span class="i18n-en">Cancel</span>
+              </button>
+              <button type="submit" class="btn btn-primary">
+                <span class="i18n-cs">Uložit</span><span class="i18n-en">Save</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
 
     <p class="back-link" style="margin-top: 2rem">
@@ -352,6 +431,7 @@
         <a href="premium.html">Premium</a>
         <a href="podpora.html"><span class="i18n-cs">Podpora</span><span class="i18n-en">Support</span></a>
         <a href="privacy.html"><span class="i18n-cs">Soukromí</span><span class="i18n-en">Privacy</span></a>
+        <a href="delete-account.html"><span class="i18n-cs">Smazání účtu</span><span class="i18n-en">Delete account</span></a>
         <a href="https://apps.apple.com/cz/app/n%C3%A1kupi%C4%8Dka/id6760430871" rel="noopener noreferrer" target="_blank"
           >App Store</a
         >
@@ -361,8 +441,9 @@
     </div>
   </footer>
 
-  <script src="vendor/supabase-umd.js"></script>
-  <script src="script.js"></script>
+  <script src="vendor/supabase-umd.js" defer></script>
+  <script src="analytics.js" defer></script>
+  <script src="script.js" defer></script>
   <script type="module" src="account-nav.js"></script>
   <script type="module" src="app.js"></script>
   <script>

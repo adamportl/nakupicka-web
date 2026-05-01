@@ -32,6 +32,9 @@
     try {
       localStorage.setItem(storageKey, theme);
     } catch (_) {}
+    if (window.nakupickaTrack) {
+      window.nakupickaTrack("theme_change", { theme: theme });
+    }
     syncThemeLabel();
   }
 
@@ -119,6 +122,9 @@
     setMetaAndTitle(lang);
     syncThemeLabel();
     refreshPreviewCaption();
+    if (window.nakupickaTrack) {
+      window.nakupickaTrack("language_change", { lang: lang });
+    }
     closeMenu();
   }
 
@@ -200,6 +206,9 @@
           const active = t === tab;
           t.setAttribute("aria-selected", active ? "true" : "false");
         });
+        if (window.nakupickaTrack) {
+          window.nakupickaTrack("preview_tab_change", { tab_id: tab.id || "unknown" });
+        }
       });
     });
   }
@@ -250,5 +259,18 @@
     revealEls.forEach((el) => observer.observe(el));
   } else {
     revealEls.forEach((el) => el.classList.add("revealed"));
+  }
+
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      const host = window.location.hostname;
+      if (host === "localhost" || host === "127.0.0.1") {
+        navigator.serviceWorker.getRegistrations().then((regs) => {
+          regs.forEach((reg) => reg.unregister());
+        });
+        return;
+      }
+      navigator.serviceWorker.register("/sw.js").then((reg) => reg.update()).catch(() => {});
+    });
   }
 })();

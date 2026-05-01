@@ -99,6 +99,25 @@ const STR = {
     noInvites: "Žádné pozvánky.",
     emailUnknown: "(e-mail jen pro správce)",
     inviteSent: "Pozvánka uložena.",
+    edit: "Upravit",
+    delete: "Smazat",
+    deleteSelected: "Smazat vybrané",
+    undo: "Vrátit zpět",
+    save: "Uložit",
+    cancel: "Zrušit",
+    searchPlaceholder: "Hledat podle názvu, profilu nebo kategorie",
+    noMatch: "Žádná položka neodpovídá filtru.",
+    confirmDelete: "Opravdu smazat tuto položku?",
+    confirmBulkDelete: "Smazat vybrané položky?",
+    selectedCount: "Vybráno: {count}",
+    undoDeleted: "Smazané položky můžeš vrátit.",
+    errInvalidPrice: "Cena musí být číslo.",
+    deleteAccount: "Smazat účet",
+    deleteAccountConfirm:
+      "Tímto nevratně smažete účet i data v cloudu. Opravdu pokračovat?",
+    deleteAccountDone: "Účet byl smazán. Byli jste odhlášeni.",
+    deleteAccountFailed:
+      "Smazání účtu se nepovedlo. Zkuste to později nebo kontaktujte podporu.",
     readonlyPremiumHtml:
       'Úpravy na webu vyžadují Premium (stav se synchronizuje z aplikace). <a href="premium.html">Informace o Premium</a>.',
     setupPremiumHtml:
@@ -158,6 +177,25 @@ const STR = {
     noInvites: "No invitations.",
     emailUnknown: "(email visible to owner only)",
     inviteSent: "Invitation saved.",
+    edit: "Edit",
+    delete: "Delete",
+    deleteSelected: "Delete selected",
+    undo: "Undo",
+    save: "Save",
+    cancel: "Cancel",
+    searchPlaceholder: "Search by name, profile, or category",
+    noMatch: "No items match the current filter.",
+    confirmDelete: "Delete this item?",
+    confirmBulkDelete: "Delete selected items?",
+    selectedCount: "Selected: {count}",
+    undoDeleted: "You can undo deleted items.",
+    errInvalidPrice: "Price must be a valid number.",
+    deleteAccount: "Delete account",
+    deleteAccountConfirm:
+      "This permanently deletes your account and cloud data. Continue?",
+    deleteAccountDone: "Account deleted. You have been signed out.",
+    deleteAccountFailed:
+      "Could not delete account. Please try again later or contact support.",
     readonlyPremiumHtml:
       'Editing on the web requires Premium (status is synced from the app). <a href="premium.html">About Premium</a>.',
     setupPremiumHtml:
@@ -173,6 +211,11 @@ function t(key) {
 let supabase = null;
 let currentHousehold = null;
 let purchases = [];
+let purchaseSearch = "";
+let purchaseSort = "date-desc";
+let selectedPurchaseIds = new Set();
+let undoStack = [];
+let lastModalFocus = null;
 let canEdit = false;
 /** Zda má uživatel podle domácnosti právo upravovat (bez ohledu na Premium). */
 let householdEditAllowed = false;
@@ -237,6 +280,7 @@ function showPanel(name) {
   document.querySelectorAll("[data-app-panel]").forEach((n) => {
     n.hidden = n.getAttribute("data-app-panel") !== name;
   });
+  if (name !== "dashboard") closePurchaseEditModal();
 }
 
 function formatMoney(n) {
@@ -255,22 +299,74 @@ function formatDateDisplay(wireDate) {
   }).format(d);
 }
 
+function toWireEpoch(value) {
+  return typeof value === "number" ? value : encodePurchaseDate(parsePurchaseDate(value));
+}
+
+function sortPurchaseList(list) {
+  const sorted = [...list];
+  if (purchaseSort === "date-asc") sorted.sort((a, b) => toWireEpoch(a.date) - toWireEpoch(b.date));
+  else if (purchaseSort === "price-desc") sorted.sort((a, b) => (b.price || 0) - (a.price || 0));
+  else if (purchaseSort === "price-asc") sorted.sort((a, b) => (a.price || 0) - (b.price || 0));
+  else if (purchaseSort === "name-asc")
+    sorted.sort((a, b) => String(a.name || "").localeCompare(String(b.name || ""), lang() === "en" ? "en" : "cs"));
+  else sorted.sort((a, b) => toWireEpoch(b.date) - toWireEpoch(a.date));
+  return sorted;
+}
+
+function filteredPurchases() {
+  const q = purchaseSearch.trim().toLowerCase();
+  const base = q
+    ? purchases.filter((p) =>
+        [p.name, p.profile, p.category, p.displayCategoryLabel]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase()
+          .includes(q)
+      )
+    : purchases;
+  return sortPurchaseList(base);
+}
+
+function renderUndoBar() {
+  const host = el("app-status");
+  if (!host || !undoStack.length) return;
+  const recent = undoStack[undoStack.length - 1];
+  if (!recent || recent.type !== "delete") return;
+  const button = `<button type="button" class="app-btn-inline" id="btn-undo-last">${escapeHtml(t("undo"))}</button>`;
+  host.innerHTML = `${escapeHtml(t("undoDeleted"))} ${button}`;
+  el("btn-undo-last")?.addEventListener("click", async () => {
+    const op = undoStack.pop();
+    if (!op) return;
+    const merged = [...purchases.map((p) => normalizeWirePurchase(p)), ...op.items.map((i) => normalizeWirePurchase(i))];
+    try {
+      await savePurchasesToServer(merged);
+      selectedPurchaseIds.clear();
+      host.textContent = t("saved");
+      if (window.nakupickaTrack) window.nakupickaTrack("purchase_undo", { restored_count: op.items.length });
+    } catch {
+      host.textContent = t("errSave");
+    }
+  });
+}
+
 function renderPurchases() {
   const list = el("purchase-list");
+  const bulkDelete = el("btn-bulk-delete");
   if (!list) return;
-  const sorted = [...purchases].sort((a, b) => {
-    const da = typeof a.date === "number" ? a.date : encodePurchaseDate(parsePurchaseDate(a.date));
-    const db = typeof b.date === "number" ? b.date : encodePurchaseDate(parsePurchaseDate(b.date));
-    return db - da;
-  });
+  const sorted = filteredPurchases();
+  if (bulkDelete) bulkDelete.disabled = !canEdit || selectedPurchaseIds.size === 0;
   if (!sorted.length) {
-    list.innerHTML = `<p class="app-empty">${t("empty")}</p>`;
+    list.innerHTML = `<p class="app-empty">${escapeHtml(purchases.length ? t("noMatch") : t("empty"))}</p>`;
     return;
   }
   list.innerHTML = sorted
     .map(
       (p) => `
     <article class="app-purchase-card">
+      <label class="app-purchase-check"><input type="checkbox" data-purchase-select="${escapeHtml(p.id)}" ${
+        selectedPurchaseIds.has(p.id) ? "checked" : ""
+      } ${canEdit ? "" : "disabled"} /></label>
       <div class="app-purchase-main">
         <span class="app-purchase-name">${escapeHtml(p.name)}</span>
         <span class="app-purchase-meta">${escapeHtml(p.displayCategoryLabel)} · ${escapeHtml(p.profile)}</span>
@@ -279,9 +375,18 @@ function renderPurchases() {
         <span class="app-purchase-price">${formatMoney(p.price)}&nbsp;Kč</span>
         <span class="app-purchase-date">${formatDateDisplay(p.date)}</span>
       </div>
+      <div class="app-purchase-actions">
+        <button type="button" class="app-btn-inline" data-edit-purchase="${escapeHtml(p.id)}" ${
+        canEdit ? "" : "disabled"
+      }>${escapeHtml(t("edit"))}</button>
+        <button type="button" class="app-btn-inline" data-delete-purchase="${escapeHtml(p.id)}" ${
+        canEdit ? "" : "disabled"
+      }>${escapeHtml(t("delete"))}</button>
+      </div>
     </article>`
     )
     .join("");
+  renderUndoBar();
 }
 
 function escapeHtml(s) {
@@ -520,6 +625,8 @@ async function loadHouseholdDetail(h) {
   currentHousehold = h;
   const raw = Array.isArray(h.purchases) ? h.purchases : [];
   purchases = raw.map((p) => enrichForDisplay(p));
+  selectedPurchaseIds.clear();
+  undoStack = [];
 
   await refreshPremiumFlag();
 
@@ -650,6 +757,7 @@ async function onCreateHousehold(e) {
   await refreshPremiumFlag();
   if (!hasPremium) {
     el("app-status").textContent = t("errPremiumRequired");
+    if (window.nakupickaTrack) window.nakupickaTrack("premium_gate_block", { action: "create_household" });
     syncSetupPremiumGate();
     return;
   }
@@ -696,6 +804,7 @@ async function onCreateHousehold(e) {
     }
     el("app-status").textContent = "";
     await loadHouseholdDetail(row);
+    if (window.nakupickaTrack) window.nakupickaTrack("household_create", {});
     return;
   }
   el("app-status").textContent = t("errGeneric");
@@ -707,7 +816,10 @@ async function onAddPurchase(e) {
   const name = (el("add-name").value || "").trim();
   const priceRaw = (el("add-price").value || "").replace(",", ".").trim();
   const price = parseFloat(priceRaw);
-  if (!name || Number.isNaN(price)) return;
+  if (!name || Number.isNaN(price)) {
+    el("app-status").textContent = t("errInvalidPrice");
+    return;
+  }
   const category = el("add-category").value || "Ostatní";
   const profile = (el("add-profile").value || "").trim() || currentHousehold.name || "Domácnost";
   const next = normalizeWirePurchase({
@@ -725,10 +837,91 @@ async function onAddPurchase(e) {
     await savePurchasesToServer(merged);
     el("add-name").value = "";
     el("add-price").value = "";
+    if (window.nakupickaTrack) window.nakupickaTrack("purchase_add", { category: category });
     el("app-status").textContent = t("saved");
     setTimeout(() => {
       el("app-status").textContent = "";
     }, 2000);
+  } catch {
+    el("app-status").textContent = t("errSave");
+  }
+}
+
+async function deletePurchases(ids) {
+  if (!currentHousehold || !ids.length) return;
+  const current = purchases.map((p) => normalizeWirePurchase(p));
+  const deleted = current.filter((p) => ids.includes(p.id));
+  const next = current.filter((p) => !ids.includes(p.id));
+  undoStack.push({ type: "delete", items: deleted });
+  await savePurchasesToServer(next);
+  ids.forEach((id) => selectedPurchaseIds.delete(id));
+  el("app-status").textContent = t("saved");
+  renderUndoBar();
+  if (window.nakupickaTrack) window.nakupickaTrack("purchase_delete", { count: ids.length });
+}
+
+async function onEditPurchase(id) {
+  if (!canEdit || !currentHousehold) return;
+  const item = purchases.find((p) => p.id === id);
+  if (!item) return;
+  openPurchaseEditModal(item);
+}
+
+function openPurchaseEditModal(item) {
+  const modal = el("purchase-edit-modal");
+  if (!modal) return;
+  lastModalFocus = document.activeElement;
+  el("edit-purchase-id").value = item.id || "";
+  el("edit-name").value = item.name || "";
+  el("edit-price").value = String(item.price || "");
+  el("edit-profile").value = item.profile || "";
+  const cat = el("edit-category");
+  if (cat) {
+    cat.innerHTML = CATEGORIES.map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("");
+    cat.value = item.category || "Ostatní";
+  }
+  modal.hidden = false;
+  document.body.style.overflow = "hidden";
+  setTimeout(() => el("edit-name")?.focus(), 0);
+}
+
+function closePurchaseEditModal() {
+  const modal = el("purchase-edit-modal");
+  if (!modal) return;
+  modal.hidden = true;
+  document.body.style.overflow = "";
+  if (lastModalFocus && lastModalFocus.focus) lastModalFocus.focus();
+}
+
+async function onEditPurchaseSubmit(e) {
+  e.preventDefault();
+  if (!canEdit || !currentHousehold) return;
+  const id = el("edit-purchase-id")?.value || "";
+  const nextName = (el("edit-name")?.value || "").trim();
+  const nextPrice = parseFloat(String(el("edit-price")?.value || "").replace(",", "."));
+  const nextCategory = el("edit-category")?.value || "Ostatní";
+  const nextProfile = (el("edit-profile")?.value || "").trim() || currentHousehold?.name || "Domácnost";
+  if (!id || !nextName || Number.isNaN(nextPrice)) {
+    el("app-status").textContent = t("errInvalidPrice");
+    return;
+  }
+  const next = purchases.map((p) =>
+    p.id === id
+      ? enrichForDisplay({
+          ...normalizeWirePurchase(p),
+          name: nextName,
+          price: nextPrice,
+          category: nextCategory,
+          profile: nextProfile,
+        })
+      : p
+  );
+  el("app-status").textContent = t("saving");
+  try {
+    await savePurchasesToServer(next);
+    closePurchaseEditModal();
+    if (window.nakupickaTrack) window.nakupickaTrack("purchase_edit", { item_id: id });
+    el("app-status").textContent = t("saved");
   } catch {
     el("app-status").textContent = t("errSave");
   }
@@ -752,16 +945,61 @@ async function onInviteEmailSubmit(e) {
     return;
   }
   el("app-status").textContent = t("inviteSent");
+  if (window.nakupickaTrack) window.nakupickaTrack("invite_send", {});
   if (el("invite-email-input")) el("invite-email-input").value = "";
   await loadInvitesSection(currentHousehold);
 }
 
+async function onDeleteAccount() {
+  if (!supabase) return;
+  if (!window.confirm(t("deleteAccountConfirm"))) return;
+  el("app-status").textContent = t("saving");
+  try {
+    const { error } = await supabase.rpc("delete_my_account");
+    if (error) throw error;
+    await supabase.auth.signOut();
+    currentHousehold = null;
+    purchases = [];
+    selectedPurchaseIds.clear();
+    undoStack = [];
+    showPanel("auth");
+    el("app-status").textContent = t("deleteAccountDone");
+    if (window.nakupickaTrack) window.nakupickaTrack("account_delete_success", {});
+  } catch (err) {
+    console.error(err);
+    el("app-status").textContent = t("deleteAccountFailed");
+    if (window.nakupickaTrack) window.nakupickaTrack("account_delete_failed", {});
+  }
+}
+
 async function onDashboardClick(e) {
+  const editBtn = e.target.closest("[data-edit-purchase]");
+  if (editBtn) {
+    e.preventDefault();
+    await onEditPurchase(editBtn.getAttribute("data-edit-purchase"));
+    return;
+  }
+
+  const delBtn = e.target.closest("[data-delete-purchase]");
+  if (delBtn) {
+    e.preventDefault();
+    const id = delBtn.getAttribute("data-delete-purchase");
+    if (!id || !canEdit) return;
+    if (!window.confirm(t("confirmDelete"))) return;
+    try {
+      await deletePurchases([id]);
+    } catch {
+      el("app-status").textContent = t("errSave");
+    }
+    return;
+  }
+
   const acc = e.target.closest("[data-accept-invite]");
   if (acc) {
     e.preventDefault();
     if (!hasPremium) {
       el("app-status").textContent = t("errPremiumRequired");
+      if (window.nakupickaTrack) window.nakupickaTrack("premium_gate_block", { action: "accept_invite" });
       return;
     }
     const id = acc.getAttribute("data-accept-invite");
@@ -782,6 +1020,7 @@ async function onDashboardClick(e) {
     e.preventDefault();
     if (!hasPremium) {
       el("app-status").textContent = t("errPremiumRequired");
+      if (window.nakupickaTrack) window.nakupickaTrack("premium_gate_block", { action: "decline_invite" });
       return;
     }
     const id = dec.getAttribute("data-decline-invite");
@@ -802,6 +1041,7 @@ async function onDashboardClick(e) {
     e.preventDefault();
     if (!hasPremium) {
       el("app-status").textContent = t("errPremiumRequired");
+      if (window.nakupickaTrack) window.nakupickaTrack("premium_gate_block", { action: "cancel_invite" });
       return;
     }
     const id = can.getAttribute("data-cancel-invite");
@@ -842,6 +1082,47 @@ async function readAuthInputsWithSafariRetry() {
 }
 
 function bindForms() {
+  function syncSortOptionLabels() {
+    const sortEl = el("purchase-sort");
+    if (!sortEl) return;
+    const currentLang = lang();
+    sortEl.querySelectorAll("option").forEach((opt) => {
+      const next = opt.getAttribute(currentLang === "en" ? "data-en" : "data-cs");
+      if (next) opt.textContent = next;
+    });
+  }
+
+  syncSortOptionLabels();
+
+  el("purchase-search")?.setAttribute("placeholder", t("searchPlaceholder"));
+  document.querySelectorAll(".lang-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      syncSortOptionLabels();
+      el("purchase-search")?.setAttribute("placeholder", t("searchPlaceholder"));
+      renderPurchases();
+    });
+  });
+  el("purchase-search")?.addEventListener("input", (e) => {
+    purchaseSearch = (e.target.value || "").trim();
+    renderPurchases();
+  });
+  el("purchase-sort")?.addEventListener("change", (e) => {
+    purchaseSort = e.target.value || "date-desc";
+    renderPurchases();
+  });
+  el("btn-bulk-delete")?.addEventListener("click", async () => {
+    if (!canEdit || selectedPurchaseIds.size === 0) return;
+    if (!window.confirm(t("confirmBulkDelete"))) return;
+    el("app-status").textContent = t("saving");
+    try {
+      await deletePurchases(Array.from(selectedPurchaseIds));
+      selectedPurchaseIds.clear();
+      renderPurchases();
+    } catch {
+      el("app-status").textContent = t("errSave");
+    }
+  });
+
   el("form-auth")?.addEventListener("submit", async (e) => {
     e.preventDefault();
     const { email, password } = await readAuthInputsWithSafariRetry();
@@ -866,6 +1147,7 @@ function bindForms() {
         }
         el("app-status").textContent =
           lang() === "en" ? "Check your email to confirm." : "Potvrď e-mail, pokud to projekt vyžaduje.";
+        if (window.nakupickaTrack) window.nakupickaTrack("auth_signup_submit", { method: "email" });
         return;
       }
 
@@ -873,6 +1155,7 @@ function bindForms() {
       const { data: signData, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
         el("app-status").textContent = error.message || t("errAuth");
+        if (window.nakupickaTrack) window.nakupickaTrack("auth_signin_failed", { method: "email" });
         return;
       }
 
@@ -911,6 +1194,7 @@ function bindForms() {
         el("app-status").textContent = t("errGeneric");
       }
       if (submitBtn) submitBtn.disabled = false;
+      if (window.nakupickaTrack) window.nakupickaTrack("auth_signin_success", { method: "email" });
     } catch (err) {
       console.error(err);
       el("app-status").textContent = (err && err.message) || t("errGeneric");
@@ -931,9 +1215,11 @@ function bindForms() {
       });
       if (error) {
         el("app-status").textContent = error.message || t("errGeneric");
+        if (window.nakupickaTrack) window.nakupickaTrack("auth_signin_failed", { method: "google" });
         return;
       }
       if (data?.url) {
+        if (window.nakupickaTrack) window.nakupickaTrack("auth_signin_start", { method: "google" });
         window.location.assign(data.url);
         return;
       }
@@ -948,6 +1234,7 @@ function bindForms() {
 
   el("btn-signout")?.addEventListener("click", async () => {
     await supabase.auth.signOut();
+    if (window.nakupickaTrack) window.nakupickaTrack("auth_signout", {});
     showPanel("auth");
   });
 
@@ -955,7 +1242,31 @@ function bindForms() {
   el("form-add-purchase")?.addEventListener("submit", onAddPurchase);
   el("btn-refresh")?.addEventListener("click", () => refreshHouseholdFromServer());
   el("form-invite-email")?.addEventListener("submit", onInviteEmailSubmit);
+  el("btn-delete-account")?.addEventListener("click", onDeleteAccount);
+  el("form-edit-purchase")?.addEventListener("submit", onEditPurchaseSubmit);
+  el("purchase-edit-cancel")?.addEventListener("click", closePurchaseEditModal);
+  el("purchase-edit-close")?.addEventListener("click", closePurchaseEditModal);
+  el("purchase-edit-modal")?.addEventListener("click", (e) => {
+    if (e.target && e.target.id === "purchase-edit-modal") closePurchaseEditModal();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !el("purchase-edit-modal")?.hidden) closePurchaseEditModal();
+  });
   el("dashboard-root")?.addEventListener("click", onDashboardClick);
+  el("dashboard-root")?.addEventListener("change", (e) => {
+    const target = e.target;
+    if (!target || !target.matches || !target.matches("[data-purchase-select]")) return;
+    const id = target.getAttribute("data-purchase-select");
+    if (!id) return;
+    if (target.checked) selectedPurchaseIds.add(id);
+    else selectedPurchaseIds.delete(id);
+    const bulkDelete = el("btn-bulk-delete");
+    if (bulkDelete) bulkDelete.disabled = !canEdit || selectedPurchaseIds.size === 0;
+    const status = el("app-status");
+    if (status && selectedPurchaseIds.size > 0) {
+      status.textContent = t("selectedCount").replace("{count}", String(selectedPurchaseIds.size));
+    }
+  });
 }
 
 function bindForgotPassword() {

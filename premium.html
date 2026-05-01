@@ -2,8 +2,14 @@
 <html lang="cs" data-lang="cs" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
   <script src="oauth-return-to-app.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="canonical" href="https://nakupicka.vercel.app/premium.html" />
+  <link rel="alternate" hreflang="cs" href="https://nakupicka.vercel.app/premium.html" />
+  <link rel="alternate" hreflang="en" href="https://nakupicka.vercel.app/premium.html?lang=en" />
+  <link rel="alternate" hreflang="x-default" href="https://nakupicka.vercel.app/premium.html" />
   <meta
     name="description"
     id="metaDesc"
@@ -13,9 +19,15 @@
   />
   <meta name="theme-color" content="#ff2d55" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#0d0d0f" media="(prefers-color-scheme: dark)" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Premium — NÁKUPIČKA" />
+  <meta property="og:description" content="Porovnání Free a Premium funkcí aplikace NÁKUPIČKA." />
+  <meta property="og:url" content="https://nakupicka.vercel.app/premium.html" />
+  <meta property="og:image" content="https://nakupicka.vercel.app/images/app-icon.png" />
   <link rel="icon" type="image/png" href="images/app-icon.png" />
   <link rel="shortcut icon" type="image/png" href="images/app-icon.png" />
   <link rel="apple-touch-icon" href="images/app-icon.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
   <title data-title-cs="Premium — NÁKUPIČKA" data-title-en="Premium — NÁKUPIČKA">Premium — NÁKUPIČKA</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -49,7 +61,6 @@
         <a href="index.html"><span class="i18n-cs">Domů</span><span class="i18n-en">Home</span></a>
         <a href="premium.html" aria-current="page">Premium</a>
         <a href="podpora.html"><span class="i18n-cs">Podpora</span><span class="i18n-en">Support</span></a>
-        <a href="privacy.html"><span class="i18n-cs">Soukromí</span><span class="i18n-en">Privacy</span></a>
       </nav>
       <div class="nav-user-wrap" id="navUserWrap">
         <button type="button" class="nav-user-trigger" id="navUserTrigger" aria-expanded="false" aria-haspopup="true" aria-label="Účet">
@@ -161,6 +172,7 @@
         <a href="premium.html">Premium</a>
         <a href="podpora.html"><span class="i18n-cs">Podpora</span><span class="i18n-en">Support</span></a>
         <a href="privacy.html"><span class="i18n-cs">Soukromí</span><span class="i18n-en">Privacy</span></a>
+        <a href="delete-account.html"><span class="i18n-cs">Smazání účtu</span><span class="i18n-en">Delete account</span></a>
         <a href="https://apps.apple.com/cz/app/n%C3%A1kupi%C4%8Dka/id6760430871" rel="noopener noreferrer" target="_blank"
           >App Store</a
         >
@@ -170,8 +182,9 @@
     </div>
   </footer>
 
-  <script src="vendor/supabase-umd.js"></script>
-  <script src="script.js"></script>
+  <script src="vendor/supabase-umd.js" defer></script>
+  <script src="analytics.js" defer></script>
+  <script src="script.js" defer></script>
   <script type="module" src="account-nav.js"></script>
   <!-- Smartsupp Live Chat script -->
   <script type="text/javascript">
