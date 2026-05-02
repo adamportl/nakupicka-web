@@ -623,6 +623,78 @@
   padding: 1rem;
 }
 
+/* Design upgrade alignment with landing */
+
+[data-app-panel="auth"] .page-hero,
+[data-app-panel="setup"] .page-hero,
+[data-app-panel="recovery"] .page-hero {
+  margin-bottom: 1.25rem;
+  padding: 1.6rem;
+  border-radius: 1.75rem;
+  background:
+    linear-gradient(180deg, rgba(255, 250, 252, 0.78), rgba(255, 239, 245, 0.44)),
+    var(--glass-surface-muted);
+  border: 1px solid rgba(255, 135, 170, 0.16);
+  box-shadow: 0 20px 56px rgba(123, 44, 81, 0.1);
+}
+
+[data-theme="dark"] [data-app-panel="auth"] .page-hero,
+[data-theme="dark"] [data-app-panel="setup"] .page-hero,
+[data-theme="dark"] [data-app-panel="recovery"] .page-hero {
+  background:
+    linear-gradient(180deg, rgba(44, 18, 31, 0.88), rgba(22, 11, 18, 0.8)),
+    var(--glass-surface-muted);
+}
+
+.app-auth-card,
+.app-setup-card,
+.app-dash-header,
+.app-section-card,
+.app-add-card {
+  border-radius: 1.75rem;
+  box-shadow: 0 22px 60px rgba(117, 45, 79, 0.1);
+}
+
+.app-auth-card,
+.app-setup-card,
+.app-dash-header,
+.app-section-card {
+  background:
+    linear-gradient(180deg, rgba(255, 252, 253, 0.72), rgba(255, 241, 245, 0.4)),
+    var(--glass-surface-muted);
+}
+
+[data-theme="dark"] .app-auth-card,
+[data-theme="dark"] .app-setup-card,
+[data-theme="dark"] .app-dash-header,
+[data-theme="dark"] .app-section-card {
+  background:
+    linear-gradient(180deg, rgba(44, 18, 31, 0.84), rgba(22, 11, 18, 0.76)),
+    var(--glass-surface-muted);
+}
+
+.app-form-grid input,
+.app-form-grid select,
+.app-add-grid input,
+.app-add-grid select,
+.app-purchase-tools input,
+.app-purchase-tools select,
+.app-household-picker select,
+#dashboard-root .household-select-field {
+  min-height: 3rem;
+  border-radius: 1rem;
+}
+
+.app-auth-tabs button,
+.btn-google {
+  min-height: 3rem;
+  border-radius: 1rem;
+}
+
+.app-purchase-card {
+  border-radius: 1.2rem;
+}
+
 .app-modal-head {
   display: flex;
   align-items: center;
@@ -1619,5 +1691,200 @@
   .page-main.app-page .dash-menu-item {
     flex: 1 1 calc(50% - 0.2rem);
     min-width: 7.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-main.app-page {
+    padding-top: calc(var(--header-bar) + 1rem);
+    padding-bottom: 2.5rem;
+    padding-left: max(0.9rem, var(--safe-left));
+    padding-right: max(0.9rem, var(--safe-right));
+  }
+
+  [data-app-panel="auth"] .page-hero,
+  [data-app-panel="setup"] .page-hero,
+  [data-app-panel="recovery"] .page-hero,
+  .app-auth-card,
+  .app-setup-card,
+  .app-dash-header,
+  .app-section-card,
+  .app-add-card,
+  .dash-left {
+    border-radius: 1.3rem;
+  }
+
+  .app-dashboard-v2 {
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+  }
+
+  .dash-left {
+    position: static;
+    top: auto;
+    padding: 0.9rem;
+  }
+
+  .dash-brand {
+    margin-bottom: 0.75rem;
+  }
+
+  .dash-user-card {
+    padding: 0.65rem;
+  }
+
+  .dash-menu {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .dash-menu-item {
+    min-height: 48px;
+    justify-content: center;
+    text-align: center;
+    padding: 0.7rem 0.75rem;
+  }
+
+  .app-dash-toolbar,
+  .app-user-bar,
+  .app-household-picker,
+  .app-toggle-row {
+    align-items: stretch;
+  }
+
+  .app-household-picker,
+  .app-toggle-row {
+    flex-direction: column;
+  }
+
+  .app-household-picker select,
+  #dashboard-root .household-select-field {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .app-purchase-tools {
+    grid-template-columns: 1fr;
+    gap: 0.7rem;
+    padding: 0.75rem;
+  }
+
+  .app-purchase-tools .btn,
+  .app-add-grid .btn,
+  .app-form-grid .btn,
+  .app-form-grid button[type="submit"] {
+    width: 100%;
+  }
+
+  .app-purchase-card {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+    padding: 0.9rem;
+  }
+
+  .app-purchase-check,
+  .app-purchase-right {
+    align-self: start;
+  }
+
+  .app-purchase-right {
+    text-align: left;
+  }
+
+  .app-purchase-actions {
+    justify-content: stretch;
+    flex-wrap: wrap;
+  }
+
+  .app-purchase-actions > * {
+    flex: 1 1 100%;
+  }
+
+  .app-members-list,
+  .app-invite-block,
+  .guide-table-wrap,
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 560px) {
+  .app-panel h1,
+  .page-hero h1 {
+    line-height: 1.05;
+    text-wrap: balance;
+  }
+
+  .app-auth-card,
+  .app-setup-card,
+  .app-dash-header,
+  .app-section-card,
+  .app-add-card {
+    padding: 1rem;
+  }
+
+  .app-auth-tabs {
+    flex-direction: column;
+  }
+
+  .app-auth-tabs button,
+  .btn-google,
+  .app-form-grid input,
+  .app-form-grid select,
+  .app-add-grid input,
+  .app-add-grid select,
+  .app-purchase-tools input,
+  .app-purchase-tools select,
+  .app-household-picker select,
+  #dashboard-root .household-select-field {
+    min-height: 48px;
+  }
+
+  .app-purchase-name {
+    font-size: 1rem;
+  }
+
+  .app-purchase-meta,
+  .app-purchase-date,
+  .app-empty,
+  .app-empty-soft,
+  .app-note {
+    font-size: 0.88rem;
+  }
+
+  .app-modal-backdrop {
+    padding: 0.75rem;
+  }
+
+  .app-modal {
+    width: 100%;
+    max-height: min(85vh, 720px);
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 400px) {
+  .page-main.app-page {
+    padding-left: max(0.75rem, var(--safe-left));
+    padding-right: max(0.75rem, var(--safe-right));
+  }
+
+  .dash-menu {
+    grid-template-columns: 1fr;
+  }
+
+  .dash-menu-item {
+    width: 100%;
+  }
+
+  .app-auth-card,
+  .app-setup-card,
+  .app-dash-header,
+  .app-section-card,
+  .app-add-card,
+  .dash-left {
+    border-radius: 1.1rem;
   }
 }

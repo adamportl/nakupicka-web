@@ -44,7 +44,7 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet" />
 </head>
 <body>
   <a class="skip-link" href="#main"
@@ -101,22 +101,45 @@
     </div>
   </header>
 
-  <main id="main" class="page-main">
-    <header class="page-hero">
-      <h1><span class="i18n-cs">Free a Premium</span><span class="i18n-en">Free and Premium</span></h1>
-      <p class="page-lead">
-        <span class="i18n-cs"
-          >Základní aplikace je zdarma. Premium přidá funkce pro ty, kdo chtějí hlídat rozpočet do hloubky nebo sdílet
-          nákupy v rodině. Přesnou cenu uvidíte v App Store — tam se bere z Apple.</span
-        >
-        <span class="i18n-en"
-          >The core app is free. Premium adds features for deeper budget tracking or sharing purchases with family. The
-          exact price is shown in the App Store — pricing comes from Apple.</span
-        >
-      </p>
+  <main id="main" class="page-main page-shell page-premium">
+    <header class="page-hero page-hero-split">
+      <div class="page-hero-copy">
+        <p class="hero-kicker">
+          <span class="i18n-cs">Vyšší úroveň přehledu</span>
+          <span class="i18n-en">A deeper level of control</span>
+        </p>
+        <h1><span class="i18n-cs">Free a Premium</span><span class="i18n-en">Free and Premium</span></h1>
+        <p class="page-lead">
+          <span class="i18n-cs"
+            >Základní aplikace je zdarma. Premium přidá funkce pro ty, kdo chtějí hlídat rozpočet do hloubky nebo sdílet
+            nákupy v rodině. Přesnou cenu uvidíte v App Store — tam se bere z Apple.</span
+          >
+          <span class="i18n-en"
+            >The core app is free. Premium adds features for deeper budget tracking or sharing purchases with family. The
+            exact price is shown in the App Store — pricing comes from Apple.</span
+          >
+        </p>
+      </div>
+      <aside class="page-summary-card">
+        <p class="page-summary-label"><span class="i18n-cs">Premium v kostce</span><span class="i18n-en">Premium at a glance</span></p>
+        <div class="page-summary-metrics">
+          <div class="page-summary-metric">
+            <strong>AI</strong>
+            <span><span class="i18n-cs">bez týdenního limitu</span><span class="i18n-en">without weekly cap</span></span>
+          </div>
+          <div class="page-summary-metric">
+            <strong><span class="i18n-cs">Rodina</span><span class="i18n-en">Family</span></strong>
+            <span><span class="i18n-cs">sdílené nákupy a role</span><span class="i18n-en">shared purchases and roles</span></span>
+          </div>
+          <div class="page-summary-metric">
+            <strong><span class="i18n-cs">Cloud</span><span class="i18n-en">Cloud</span></strong>
+            <span><span class="i18n-cs">záloha a synchronizace</span><span class="i18n-en">backup and sync</span></span>
+          </div>
+        </div>
+      </aside>
     </header>
 
-    <div class="compare-simple">
+    <section class="compare-simple page-card-cluster">
       <div class="compare-col">
         <h2>Free</h2>
         <ul>
@@ -158,22 +181,22 @@
           </li>
         </ul>
       </div>
-    </div>
+    </section>
 
-    <p class="page-note">
-      <span class="i18n-cs"
-        >Předplatné je měsíční a obnovuje se samo — přesně podle toho, jak to nastavíte v App Store.</span
-      >
-      <span class="i18n-en">Subscription is monthly and renews automatically — as you set in the App Store.</span>
-    </p>
-
-    <p class="page-cta-row">
-      <a class="btn btn-primary" href="https://apps.apple.com/cz/app/n%C3%A1kupi%C4%8Dka/id6760430871" rel="noopener noreferrer" target="_blank"
-        ><span class="i18n-cs">Otevřít v App Store</span><span class="i18n-en">Open in App Store</span></a
-      >
-    </p>
-
-    <p class="back-link"><a href="index.html"><span class="i18n-cs">← Zpět na úvod</span><span class="i18n-en">← Back to home</span></a></p>
+    <section class="page-info-band">
+      <p class="page-note">
+        <span class="i18n-cs"
+          >Předplatné je měsíční a obnovuje se samo — přesně podle toho, jak to nastavíte v App Store.</span
+        >
+        <span class="i18n-en">Subscription is monthly and renews automatically — as you set in the App Store.</span>
+      </p>
+      <p class="page-cta-row">
+        <a class="btn btn-primary" href="https://apps.apple.com/cz/app/n%C3%A1kupi%C4%8Dka/id6760430871" rel="noopener noreferrer" target="_blank"
+          ><span class="i18n-cs">Otevřít v App Store</span><span class="i18n-en">Open in App Store</span></a
+        >
+      </p>
+      <p class="back-link"><a href="index.html"><span class="i18n-cs">← Zpět na úvod</span><span class="i18n-en">← Back to home</span></a></p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -197,7 +220,7 @@
 
   <script src="vendor/supabase-umd.js" defer></script>
   <script src="analytics.js" defer></script>
-  <script src="script.js" defer></script>
+  <script type="module" src="script.js"></script>
   <script type="module" src="account-nav.js"></script>
   <!-- Smartsupp Live Chat script -->
   <script type="text/javascript">

@@ -1,3 +1,6 @@
+import { initLandingPreview } from "./src/landing/preview.js";
+import { registerServiceWorker } from "./src/landing/sw-register.js";
+
 (function () {
   const themeChoiceKey = "nakupicka-theme-choice";
   const langChoiceKey = "nakupicka-lang-choice";
@@ -282,32 +285,7 @@
   initTheme();
 
   /* Náhled obrazovek na úvodní stránce — klik na spodní lištu v náhledu */
-  const previewImg = document.getElementById("previewImage");
-  const previewCaption = document.getElementById("previewCaption");
-  const dockHits = document.querySelectorAll(".phone-dock-hit");
-
-  if (previewImg && dockHits.length) {
-    dockHits.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        const src = tab.getAttribute("data-src");
-        const lang = root.getAttribute("data-lang") || "cs";
-        const alt = tab.getAttribute("data-alt-" + lang) || tab.getAttribute("data-alt-cs") || "";
-        const cap = tab.getAttribute("data-caption-" + lang) || tab.getAttribute("data-caption-cs") || "";
-        if (src) {
-          previewImg.src = src;
-          previewImg.alt = alt;
-        }
-        if (previewCaption) previewCaption.textContent = cap;
-        dockHits.forEach((t) => {
-          const active = t === tab;
-          t.setAttribute("aria-selected", active ? "true" : "false");
-        });
-        if (window.nakupickaTrack) {
-          window.nakupickaTrack("preview_tab_change", { tab_id: tab.id || "unknown" });
-        }
-      });
-    });
-  }
+  initLandingPreview(root);
 
   /* Skrýt horní lištu při scrollu dolů, znovu zobrazit při scrollu nahoru */
   let lastScrollY = window.scrollY || 0;
@@ -357,16 +335,5 @@
     revealEls.forEach((el) => el.classList.add("revealed"));
   }
 
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      const host = window.location.hostname;
-      if (host === "localhost" || host === "127.0.0.1") {
-        navigator.serviceWorker.getRegistrations().then((regs) => {
-          regs.forEach((reg) => reg.unregister());
-        });
-        return;
-      }
-      navigator.serviceWorker.register("/sw.js").then((reg) => reg.update()).catch(() => {});
-    });
-  }
+  registerServiceWorker();
 })();

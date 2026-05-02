@@ -44,7 +44,7 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet" />
 </head>
 <body>
   <a class="skip-link" href="#main"
@@ -101,7 +101,35 @@
     </div>
   </header>
 
-  <main id="main" class="page-main legal-page">
+  <main id="main" class="page-main legal-page page-shell page-privacy">
+    <header class="page-hero page-hero-split legal-hero">
+      <div class="page-hero-copy">
+        <p class="hero-kicker"><span class="i18n-cs">Transparentně a srozumitelně</span><span class="i18n-en">Clear and transparent</span></p>
+        <h1><span class="i18n-cs">Soukromí</span><span class="i18n-en">Privacy</span></h1>
+        <p class="page-lead">
+          <span class="i18n-cs">Jak se nakládá s daty v iOS aplikaci, webové aplikaci a souvisejících službách. Přehledně, bez právnické mlhy navíc.</span>
+          <span class="i18n-en">How data is handled in the iOS app, web app, and related services. Clearly, without extra legal fog.</span>
+        </p>
+      </div>
+      <aside class="page-summary-card">
+        <p class="page-summary-label"><span class="i18n-cs">Hlavní oblasti</span><span class="i18n-en">Main areas</span></p>
+        <div class="page-summary-metrics">
+          <div class="page-summary-metric">
+            <strong><span class="i18n-cs">Zařízení</span><span class="i18n-en">Device</span></strong>
+            <span><span class="i18n-cs">lokální data a iCloud</span><span class="i18n-en">local data and iCloud</span></span>
+          </div>
+          <div class="page-summary-metric">
+            <strong>Supabase</strong>
+            <span><span class="i18n-cs">účet, domácnost, cloud</span><span class="i18n-en">account, household, cloud</span></span>
+          </div>
+          <div class="page-summary-metric">
+            <strong>AI</strong>
+            <span><span class="i18n-cs">fotky a síťové zpracování</span><span class="i18n-en">images and network processing</span></span>
+          </div>
+        </div>
+      </aside>
+    </header>
+
     <article class="legal-article i18n-cs">
       <h1>Zásady ochrany osobních údajů (Privacy Policy)</h1>
       <p class="legal-updated">Poslední aktualizace: duben 2026</p>
@@ -322,7 +350,9 @@
       </p>
     </article>
 
-    <p class="back-link"><a href="index.html"><span class="i18n-cs">← Zpět na úvod</span><span class="i18n-en">← Back to home</span></a></p>
+    <section class="page-info-band">
+      <p class="back-link"><a href="index.html"><span class="i18n-cs">← Zpět na úvod</span><span class="i18n-en">← Back to home</span></a></p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -346,7 +376,7 @@
 
   <script src="vendor/supabase-umd.js" defer></script>
   <script src="analytics.js" defer></script>
-  <script src="script.js" defer></script>
+  <script type="module" src="script.js"></script>
   <script type="module" src="account-nav.js"></script>
   <!-- Smartsupp Live Chat script -->
   <script type="text/javascript">

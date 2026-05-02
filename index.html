@@ -60,7 +60,7 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet" />
 </head>
 <body>
   <a class="skip-link" href="#main"
@@ -125,6 +125,10 @@
     <section class="hero hero-compact reveal" aria-labelledby="hero-title">
       <div class="hero-glow" aria-hidden="true"></div>
       <div class="hero-content">
+        <p class="hero-kicker">
+          <span class="i18n-cs">Rodinné nákupy bez chaosu</span>
+          <span class="i18n-en">Family shopping without chaos</span>
+        </p>
         <p class="eyebrow">
           <span class="i18n-cs">iPhone aplikace</span>
           <span class="i18n-en">iPhone app</span>
@@ -157,6 +161,72 @@
           <span class="i18n-cs">Na sítích:</span><span class="i18n-en">On social:</span>
           <span class="handle">@nakupickaapp</span>
         </p>
+        <div class="hero-trust">
+          <div class="hero-trust-item">
+            <strong><span class="i18n-cs">Jeden přehled</span><span class="i18n-en">One overview</span></strong>
+            <span><span class="i18n-cs">domov, rodina, sdílení</span><span class="i18n-en">home, family, sharing</span></span>
+          </div>
+          <div class="hero-trust-item">
+            <strong><span class="i18n-cs">Rychlé vyúčtování</span><span class="i18n-en">Fast billing</span></strong>
+            <span><span class="i18n-cs">bez tabulek a ručního počítání</span><span class="i18n-en">without spreadsheets and manual math</span></span>
+          </div>
+          <div class="hero-trust-item">
+            <strong><span class="i18n-cs">AI nad nákupy</span><span class="i18n-en">AI over purchases</span></strong>
+            <span><span class="i18n-cs">účtenky, odhady, dotazy</span><span class="i18n-en">receipts, estimates, questions</span></span>
+          </div>
+        </div>
+      </div>
+      <aside class="hero-editorial-card" aria-label="Product summary">
+        <p class="hero-card-label">
+          <span class="i18n-cs">Pro koho to je</span>
+          <span class="i18n-en">Who it is for</span>
+        </p>
+        <h2>
+          <span class="i18n-cs">Pro lidi, kteří nakupují i za ostatní a chtějí konečně klid.</span>
+          <span class="i18n-en">For people shopping for others who want calm instead of mess.</span>
+        </h2>
+        <p>
+          <span class="i18n-cs">NÁKUPIČKA spojuje denní nákupy, domácnost, exporty i přehled útrat do jedné vrstvy, která působí lehce a okamžitě.</span>
+          <span class="i18n-en">NiftySpend brings daily shopping, household sharing, exports, and spending overview into one layer that feels light and immediate.</span>
+        </p>
+        <div class="hero-card-metrics">
+          <div class="hero-metric">
+            <span class="hero-metric-value">4</span>
+            <span class="hero-metric-label"><span class="i18n-cs">hlavní pohledy</span><span class="i18n-en">main views</span></span>
+          </div>
+          <div class="hero-metric">
+            <span class="hero-metric-value">AI</span>
+            <span class="hero-metric-label"><span class="i18n-cs">pomocník</span><span class="i18n-en">assistant</span></span>
+          </div>
+          <div class="hero-metric">
+            <span class="hero-metric-value">Cloud</span>
+            <span class="hero-metric-label"><span class="i18n-cs">synchronizace</span><span class="i18n-en">sync</span></span>
+          </div>
+        </div>
+        <p class="hero-card-foot">
+          <span class="i18n-cs">Navrženo pro iPhone, přehledné i na webu.</span>
+          <span class="i18n-en">Designed for iPhone, clear on the web too.</span>
+        </p>
+      </aside>
+    </section>
+
+    <section class="section signal-strip reveal reveal-delay-1" aria-label="Key product values">
+      <div class="signal-grid">
+        <article class="signal-card">
+          <p class="signal-index">01</p>
+          <h2><span class="i18n-cs">Co jste koupili</span><span class="i18n-en">What you bought</span></h2>
+          <p><span class="i18n-cs">Jasný seznam nákupů, profily a kategorie bez zbytečné administrativy.</span><span class="i18n-en">A clear list of purchases, profiles, and categories without admin overhead.</span></p>
+        </article>
+        <article class="signal-card signal-card-accent">
+          <p class="signal-index">02</p>
+          <h2><span class="i18n-cs">Za koho jste koupili</span><span class="i18n-en">Who you bought for</span></h2>
+          <p><span class="i18n-cs">Rodina, prarodiče, domácnost. Všechno oddělené, ale stále pohromadě.</span><span class="i18n-en">Family, grandparents, household. Separate when needed, together when useful.</span></p>
+        </article>
+        <article class="signal-card">
+          <p class="signal-index">03</p>
+          <h2><span class="i18n-cs">Kolik to stálo</span><span class="i18n-en">How much it cost</span></h2>
+          <p><span class="i18n-cs">Grafy, souhrny a rychlé vyúčtování místo dohledávání v poznámkách.</span><span class="i18n-en">Charts, summaries, and fast billing instead of digging through notes.</span></p>
+        </article>
       </div>
     </section>
 
@@ -362,7 +432,7 @@
 
   <script src="vendor/supabase-umd.js" defer></script>
   <script src="analytics.js" defer></script>
-  <script src="script.js" defer></script>
+  <script type="module" src="script.js"></script>
   <script type="module" src="account-nav.js"></script>
   <!-- Smartsupp Live Chat script -->
   <script type="text/javascript">

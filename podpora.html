@@ -41,7 +41,7 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet" />
 </head>
 <body>
   <a class="skip-link" href="#main"><span class="i18n-cs">Přeskočit na obsah</span><span class="i18n-en">Skip to content</span></a>
@@ -90,16 +90,36 @@
     </div>
   </header>
 
-  <main id="main" class="page-main">
-    <header class="page-hero">
-      <h1><span class="i18n-cs">Podpora</span><span class="i18n-en">Support</span></h1>
-      <p class="page-lead">
-        <span class="i18n-cs">Něco nefunguje, nebo chcete nám napsat nápad? Použijte formulář — odpovíme, jak to půjde.</span>
-        <span class="i18n-en">Something broken or want to share an idea? Use the form — we will reply when we can.</span>
-      </p>
+  <main id="main" class="page-main page-shell page-support">
+    <header class="page-hero page-hero-split">
+      <div class="page-hero-copy">
+        <p class="hero-kicker"><span class="i18n-cs">Pomoc a kontakt</span><span class="i18n-en">Help and contact</span></p>
+        <h1><span class="i18n-cs">Podpora</span><span class="i18n-en">Support</span></h1>
+        <p class="page-lead">
+          <span class="i18n-cs">Něco nefunguje, nebo chcete nám napsat nápad? Použijte formulář — odpovíme, jak to půjde.</span>
+          <span class="i18n-en">Something broken or want to share an idea? Use the form — we will reply when we can.</span>
+        </p>
+      </div>
+      <aside class="page-summary-card">
+        <p class="page-summary-label"><span class="i18n-cs">Na této stránce</span><span class="i18n-en">On this page</span></p>
+        <div class="page-summary-metrics">
+          <div class="page-summary-metric">
+            <strong><span class="i18n-cs">Návod</span><span class="i18n-en">Guide</span></strong>
+            <span><span class="i18n-cs">jak funguje aplikace a web</span><span class="i18n-en">how the app and web work</span></span>
+          </div>
+          <div class="page-summary-metric">
+            <strong><span class="i18n-cs">Kontakt</span><span class="i18n-en">Contact</span></strong>
+            <span><span class="i18n-cs">formulář podpory</span><span class="i18n-en">support form</span></span>
+          </div>
+          <div class="page-summary-metric">
+            <strong><span class="i18n-cs">Účet</span><span class="i18n-en">Account</span></strong>
+            <span><span class="i18n-cs">smazání účtu a další kroky</span><span class="i18n-en">delete-account and follow-up steps</span></span>
+          </div>
+        </div>
+      </aside>
     </header>
 
-    <section class="support-block" id="navod" aria-labelledby="navod-heading">
+    <section class="support-block page-card-shell" id="navod" aria-labelledby="navod-heading">
       <h2 id="navod-heading"><span class="i18n-cs">Návod</span><span class="i18n-en">User guide</span></h2>
       <article class="guide-content i18n-cs" id="navodPlaceholder">
         <h3 class="guide-title">Návod na NÁKUPIČKU</h3>
@@ -507,7 +527,7 @@
       </article>
     </section>
 
-    <section class="support-block" aria-labelledby="form-heading">
+    <section class="support-block support-cta-shell" aria-labelledby="form-heading">
       <h2 id="form-heading"><span class="i18n-cs">Kontaktní formulář</span><span class="i18n-en">Contact form</span></h2>
       <p>
         <a class="btn btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSevSJwVzT_kjCpE96pwErJ9-OhNahWNejF4d_hK0AwURED2mA/viewform?usp=header" rel="noopener noreferrer">
@@ -522,7 +542,9 @@
       </p>
     </section>
 
-    <p class="back-link"><a href="index.html"><span class="i18n-cs">← Zpět na úvod</span><span class="i18n-en">← Back to home</span></a></p>
+    <section class="page-info-band">
+      <p class="back-link"><a href="index.html"><span class="i18n-cs">← Zpět na úvod</span><span class="i18n-en">← Back to home</span></a></p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -544,7 +566,7 @@
 
   <script src="vendor/supabase-umd.js" defer></script>
   <script src="analytics.js" defer></script>
-  <script src="script.js" defer></script>
+  <script type="module" src="script.js"></script>
   <script type="module" src="account-nav.js"></script>
   <!-- Smartsupp Live Chat script -->
   <script type="text/javascript">

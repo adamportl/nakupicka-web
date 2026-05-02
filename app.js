@@ -1,8 +1,6 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./supabase-config.js";
 import { getSupabaseBrowserClient } from "./supabase-browser.js";
-
-/** Stejný offset jako Swift JSONEncoder/Decoder pro `Date` (sekundy od 1. 1. 2001). */
-const REFERENCE_OFFSET = 978307200;
+import { encodePurchaseDate, parsePurchaseDate } from "./src/common/date-utils.js";
 
 const CATEGORIES = ["Potraviny", "Drogerie", "Nápoje", "Sladkosti", "Domácnost", "Ostatní"];
 
@@ -12,20 +10,6 @@ function randomInviteCode() {
   let s = "";
   for (let i = 0; i < 8; i++) s += INVITE_CHARS[Math.floor(Math.random() * INVITE_CHARS.length)];
   return s;
-}
-
-function parsePurchaseDate(raw) {
-  if (raw == null) return new Date();
-  if (typeof raw === "number") return new Date((raw + REFERENCE_OFFSET) * 1000);
-  if (typeof raw === "string") {
-    const d = new Date(raw);
-    return Number.isNaN(d.getTime()) ? new Date() : d;
-  }
-  return new Date();
-}
-
-function encodePurchaseDate(d) {
-  return d.getTime() / 1000 - REFERENCE_OFFSET;
 }
 
 function normalizeWirePurchase(p) {
