@@ -2,6 +2,9 @@ import globals from "globals";
 
 export default [
   {
+    ignores: ["vendor/**", "dist/**", "node_modules/**"],
+  },
+  {
     files: ["**/*.js"],
     languageOptions: {
       ecmaVersion: "latest",
