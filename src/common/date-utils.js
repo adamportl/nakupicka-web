@@ -1,7 +1,7 @@
 const REFERENCE_OFFSET = 978307200;
 
 export function parsePurchaseDate(raw) {
-  if (raw == null) return new Date();
+  if (raw === null || raw === undefined) return new Date();
   if (typeof raw === "number") return new Date((raw + REFERENCE_OFFSET) * 1000);
   if (typeof raw === "string") {
     const d = new Date(raw);

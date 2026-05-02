@@ -29,7 +29,7 @@ function searchParamsMap(search) {
 function pickParam(lower, aliases) {
   for (const a of aliases) {
     const v = lower[a.toLowerCase()];
-    if (v != null && String(v).trim() !== "") return String(v).trim();
+    if (v !== null && v !== undefined && String(v).trim() !== "") return String(v).trim();
   }
   return "";
 }

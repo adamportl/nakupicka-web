@@ -139,17 +139,17 @@ import { registerServiceWorker } from "./src/landing/sw-register.js";
     document.querySelectorAll('meta[property="og:title"][data-og-title-cs]').forEach((el) => {
       const cs = el.getAttribute("data-og-title-cs");
       const en = el.getAttribute("data-og-title-en");
-      if (cs != null && en != null) el.setAttribute("content", lang === "en" ? en : cs);
+      if (cs !== null && en !== null) el.setAttribute("content", lang === "en" ? en : cs);
     });
     document.querySelectorAll('meta[name="twitter:title"][data-twitter-title-cs]').forEach((el) => {
       const cs = el.getAttribute("data-twitter-title-cs");
       const en = el.getAttribute("data-twitter-title-en");
-      if (cs != null && en != null) el.setAttribute("content", lang === "en" ? en : cs);
+      if (cs !== null && en !== null) el.setAttribute("content", lang === "en" ? en : cs);
     });
     document.querySelectorAll('meta[property="og:site_name"][data-og-site-cs]').forEach((el) => {
       const cs = el.getAttribute("data-og-site-cs");
       const en = el.getAttribute("data-og-site-en");
-      if (cs != null && en != null) el.setAttribute("content", lang === "en" ? en : cs);
+      if (cs !== null && en !== null) el.setAttribute("content", lang === "en" ? en : cs);
     });
     const dock = document.querySelector(".phone-dock-overlay[data-dock-aria-cs]");
     if (dock) {

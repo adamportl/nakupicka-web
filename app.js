@@ -20,7 +20,7 @@ function normalizeWirePurchase(p) {
     price: typeof p.price === "number" && !Number.isNaN(p.price) ? p.price : Number(p.price) || 0,
     date: typeof p.date === "number" ? p.date : encodePurchaseDate(parsePurchaseDate(p.date)),
     category: String(p.category ?? "Ostatní"),
-    detailCategory: p.detailCategory == null ? null : String(p.detailCategory),
+    detailCategory: p.detailCategory === null || p.detailCategory === undefined ? null : String(p.detailCategory),
     profile: String(p.profile ?? "Domácnost"),
   };
 }
