@@ -2658,7 +2658,8 @@ body::after {
 }
 
 .hero h1 {
-  max-width: 8ch;
+  max-width: none;
+  padding-right: 0.08em;
   font-size: clamp(3.2rem, 8vw, 5.6rem);
   line-height: 0.94;
   letter-spacing: -0.04em;
