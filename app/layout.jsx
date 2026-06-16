@@ -1,4 +1,19 @@
 import Script from "next/script";
+import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
+
+const dmSans = DM_Sans({
+  subsets: ["latin", "latin-ext"],
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+  variable: "--font-dm-sans",
+});
+
+const bricolageGrotesque = Bricolage_Grotesque({
+  subsets: ["latin", "latin-ext"],
+  weight: ["500", "700", "800"],
+  display: "swap",
+  variable: "--font-bricolage",
+});
 
 export const metadata = {
   title: "NÁKUPIČKA | Přehled nákupů",
@@ -12,7 +27,13 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="cs" data-lang="cs" data-theme="dark" suppressHydrationWarning>
+    <html
+      lang="cs"
+      data-lang="cs"
+      data-theme="dark"
+      className={`${dmSans.variable} ${bricolageGrotesque.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
         <meta name="referrer" content="strict-origin-when-cross-origin" />
@@ -22,12 +43,6 @@ export default function RootLayout({ children }) {
         <link rel="shortcut icon" type="image/png" href="/images/app-icon.png" />
         <link rel="apple-touch-icon" href="/images/app-icon.png" />
         <link rel="stylesheet" href="/styles.css" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap"
-          rel="stylesheet"
-        />
         <Script src="/preferences-boot.js" strategy="beforeInteractive" />
         <Script src="/oauth-return-to-app.js" strategy="beforeInteractive" />
       </head>

@@ -12,7 +12,7 @@
   --shadow: 0 8px 32px rgba(28, 28, 30, 0.08);
   --radius: 20px;
   --radius-sm: 14px;
-  --font: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font: var(--font-dm-sans, "DM Sans"), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --header-h: 64px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -2577,7 +2577,7 @@ body {
    ============================================================ */
 
 :root {
-  --display-font: "Bricolage Grotesque", "DM Sans", sans-serif;
+  --display-font: var(--font-bricolage, "Bricolage Grotesque"), var(--font-dm-sans, "DM Sans"), sans-serif;
   --content-max: 1120px;
 }
 
@@ -2665,9 +2665,9 @@ body::after {
 
 .hero h1 {
   max-width: none;
-  padding-right: 0.08em;
+  padding: 0.08em 0.08em 0.12em 0;
   font-size: clamp(3.2rem, 8vw, 5.6rem);
-  line-height: 0.94;
+  line-height: 1.04;
   letter-spacing: -0.04em;
   text-wrap: balance;
 }
@@ -3035,7 +3035,7 @@ body::after {
 
   .hero h1 {
     font-size: clamp(2.7rem, 15vw, 4rem);
-    line-height: 0.96;
+    line-height: 1.04;
   }
 
   .hero-lead {
