@@ -7,7 +7,7 @@ export async function LegacyPage({ appCss = false, page }) {
   return (
     <>
       {appCss ? <link rel="stylesheet" href="/app.css" /> : null}
-      <div dangerouslySetInnerHTML={{ __html: legacyPage.bodyHtml }} />
+      <div className="legacy-page" dangerouslySetInnerHTML={{ __html: legacyPage.bodyHtml }} />
       <LegacyScripts scripts={legacyPage.scripts} />
     </>
   );

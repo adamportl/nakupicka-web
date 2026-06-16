@@ -97,14 +97,24 @@ body {
   padding-bottom: var(--safe-bottom);
 }
 
-body > main {
+.legacy-page {
+  flex: 1;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+body > main,
+.legacy-page > main {
   flex: 1;
   padding-top: var(--header-bar);
   transition: padding-top 0.28s ease;
 }
 
 /* Úvod — mezery mezi samostatnými skleněnými sekcemi */
-body > main#main:not(.page-main) {
+body > main#main:not(.page-main),
+.legacy-page > main#main:not(.page-main) {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -116,7 +126,8 @@ body > main#main:not(.page-main) {
   padding-bottom: 4.5rem;
 }
 
-body > main#main:not(.page-main) > * {
+body > main#main:not(.page-main) > *,
+.legacy-page > main#main:not(.page-main) > * {
   flex-shrink: 0;
 }
 
@@ -2544,7 +2555,8 @@ body {
     font-size: clamp(2.3rem, 10vw, 3.5rem);
   }
 
-  body > main#main:not(.page-main) {
+  body > main#main:not(.page-main),
+  .legacy-page > main#main:not(.page-main) {
     padding-top: 4.9rem;
   }
 }
@@ -2976,7 +2988,8 @@ body::after {
 }
 
 @media (max-width: 768px) {
-  body > main#main:not(.page-main) {
+  body > main#main:not(.page-main),
+  .legacy-page > main#main:not(.page-main) {
     gap: 1rem;
     padding-top: 4.85rem;
     padding-bottom: 3.5rem;
